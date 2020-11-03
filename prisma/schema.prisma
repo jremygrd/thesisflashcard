@@ -1,0 +1,100 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model answers {
+  id                       String    @id @default(dbgenerated())
+  type                     String?
+  content                  String?
+  results                  String?
+  rightanswer              Boolean?
+  fk_card                  String?
+  cards                    cards?    @relation(fields: [fk_card], references: [id])
+  results_answersToresults results[]
+}
+
+model cards {
+  id                     String         @id @default(dbgenerated())
+  question               String?
+  tip                    String?
+  bad_options            Json?
+  answer                 Json?
+  fk_user                String?
+  users                  users?         @relation(fields: [fk_user], references: [id])
+  answers_answersTocards answers[]
+  cards_stacks           cards_stacks[]
+}
+
+model cards_stacks {
+  id         String  @id @default(dbgenerated())
+  fk_cardid  String?
+  fk_stackid String?
+  cards      cards?  @relation(fields: [fk_cardid], references: [id])
+  stacks     stacks? @relation(fields: [fk_stackid], references: [id])
+}
+
+model keywords {
+  id              String            @id @default(dbgenerated())
+  keyword         String?
+  keywords_stacks keywords_stacks[]
+}
+
+model keywords_stacks {
+  id           String    @id @default(dbgenerated())
+  fk_keywordid String?
+  fk_stackid   String?
+  keywords     keywords? @relation(fields: [fk_keywordid], references: [id])
+  stacks       stacks?   @relation(fields: [fk_stackid], references: [id])
+}
+
+model results {
+  id        String   @id @default(dbgenerated())
+  fk_answer String?
+  fk_user   String?
+  answers   answers? @relation(fields: [fk_answer], references: [id])
+  users     users?   @relation(fields: [fk_user], references: [id])
+}
+
+model rights {
+  id      String  @id @default(dbgenerated())
+  type    String?
+  stack   String?
+  fk_user String?
+  users   users?  @relation(fields: [fk_user], references: [id])
+}
+
+model scores {
+  id      String  @id @default(dbgenerated())
+  fk_user String?
+  stack   String?
+  users   users?  @relation(fields: [fk_user], references: [id])
+}
+
+model stacks {
+  id              String            @id @default(dbgenerated())
+  title           String?
+  color           String?
+  emoji           String?
+  description     String?
+  fk_user         String?
+  users           users?            @relation(fields: [fk_user], references: [id])
+  cards_stacks    cards_stacks[]
+  keywords_stacks keywords_stacks[]
+}
+
+model users {
+  id                   String    @id @default(dbgenerated())
+  name                 String?
+  email                String?
+  rights               Int?
+  cards                cards[]
+  results              results[]
+  rights_rightsTousers rights[]
+  scores               scores[]
+  stacks               stacks[]
+}
