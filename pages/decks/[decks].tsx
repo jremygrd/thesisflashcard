@@ -61,7 +61,7 @@ export default function Deck({cardsData,deckData,shuffled, sessionUser}:any){
     const date = new Date();
     const opts = {status:true,
                   date : date,
-                  answerInputted:isChecked,
+                  answerInputted:{"array" : isChecked},
                   fk_card : questions[number].id,
                   fk_user : sessionUser};
 
