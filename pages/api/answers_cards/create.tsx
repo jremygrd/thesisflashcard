@@ -5,7 +5,7 @@ export default async function (req:NextApiRequest, res: NextApiResponse) {
     const prisma = new PrismaClient({log:["query"]});
     
     try{
-        console.log(req.body.status)
+        console.log(req.body.answerinputted)
         const answer = await prisma.answerofcard.create({
             data:{
                 status : req.body.status,

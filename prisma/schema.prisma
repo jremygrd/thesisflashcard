@@ -85,7 +85,7 @@ model answerofcard {
   id             String    @id @default(dbgenerated())
   status         Boolean?
   date           DateTime?
-  answerinputted String?
+  answerinputted String[]
   fk_card        String?
   fk_user        String?
   cards          cards?    @relation(fields: [fk_card], references: [id])
