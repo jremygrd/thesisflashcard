@@ -68,6 +68,7 @@ export default function Deck({cardsData,deckData,shuffled, sessionUser}:any){
     console.log(opts);
     const postdata = fetch ("http://localhost:3000/api/answers_cards/create",{
       method : 'post',
+      headers:{'Content-Type':'application/json'},
       body: JSON.stringify(opts)
     });
 
