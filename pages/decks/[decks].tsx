@@ -48,8 +48,12 @@ export default function Deck({cardsData,deckData,shuffled}:any){
     setFlip(!flip);
   }
 
-  const handleSingleCheck = e =>{
-    
+  const submitFlip = () =>{
+    setFlip(!flip);
+
+  }
+
+  const handleSingleCheck = (e: { target: { getAttribute: (arg0: string) => any; }; }) =>{
     const option = e.target.getAttribute('value');;
     if (isChecked.includes(option)) {
       setIsChecked(isChecked.filter(checked_option => checked_option !== option))
@@ -93,7 +97,7 @@ export default function Deck({cardsData,deckData,shuffled}:any){
               <div className = {styles.cardfront}>
                 <h1>{questions[number].question}</h1> 
                   <div>{
-                    shuffled[number].map((option: React.ReactNode)=>(
+                    shuffled[number].map((option:any)=>(
                       <div>
                         <p>
                         <input  type = "checkbox" 
@@ -105,7 +109,7 @@ export default function Deck({cardsData,deckData,shuffled}:any){
                         </p>                   
                       </div>))
                       } <div className = {styles.container}>
-                          <button className={styles.flipButton} onClick={changeFlip}>Flip</button></div>
+                          <button className={styles.flipButton} onClick={submitFlip}>Flip</button></div>
                         </div>
                     </div>
                 <div className = {styles.cardback}>

@@ -7,27 +7,16 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model answers {
-  id                       String    @id @default(dbgenerated())
-  type                     String?
-  content                  String?
-  results                  String?
-  rightanswer              Boolean?
-  fk_card                  String?
-  cards                    cards?    @relation(fields: [fk_card], references: [id])
-  results_answersToresults results[]
-}
-
 model cards {
-  id                     String         @id @default(dbgenerated())
-  question               String?
-  tip                    String?
-  bad_options            Json?
-  answer                 Json?
-  fk_user                String?
-  users                  users?         @relation(fields: [fk_user], references: [id])
-  answers_answersTocards answers[]
-  cards_stacks           cards_stacks[]
+  id           String         @id @default(dbgenerated())
+  question     String?
+  tip          String?
+  bad_options  Json?
+  answer       Json?
+  fk_user      String?
+  users        users?         @relation(fields: [fk_user], references: [id])
+  answerofcard answerofcard[]
+  cards_stacks cards_stacks[]
 }
 
 model cards_stacks {
@@ -50,14 +39,6 @@ model keywords_stacks {
   fk_stackid   String?
   keywords     keywords? @relation(fields: [fk_keywordid], references: [id])
   stacks       stacks?   @relation(fields: [fk_stackid], references: [id])
-}
-
-model results {
-  id        String   @id @default(dbgenerated())
-  fk_answer String?
-  fk_user   String?
-  answers   answers? @relation(fields: [fk_answer], references: [id])
-  users     users?   @relation(fields: [fk_user], references: [id])
 }
 
 model rights {
@@ -88,13 +69,32 @@ model stacks {
 }
 
 model users {
-  id                   String    @id @default(dbgenerated())
+  id                   String         @id @default(dbgenerated())
   name                 String?
   email                String?
   rights               Int?
+  answerofcard         answerofcard[]
   cards                cards[]
-  results              results[]
+  resultofdeck         resultofdeck[]
   rights_rightsTousers rights[]
   scores               scores[]
   stacks               stacks[]
+}
+
+
+model answerofcard {
+  id             String    @id @default(dbgenerated())
+  status         Boolean?
+  date           DateTime?
+  answerinputted String?
+  fk_card        String?
+  fk_user        String?
+  cards          cards?    @relation(fields: [fk_card], references: [id])
+  users          users?    @relation(fields: [fk_user], references: [id])
+}
+
+model resultofdeck {
+  id      String  @id @default(dbgenerated())
+  fk_user String?
+  users   users?  @relation(fields: [fk_user], references: [id])
 }
