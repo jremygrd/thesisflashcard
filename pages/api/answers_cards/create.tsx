@@ -3,20 +3,23 @@ import {PrismaClient} from "@prisma/client";
 
 export default async function (req:NextApiRequest, res: NextApiResponse) {
     const prisma = new PrismaClient({log:["query"]});
-
+    
     try{
-        const {answer:answerData} = req.body;
+        const answerData = req.body;
+        console.log("yooooooooooooooooooooo")
+        console.log(answerData);
+        console.log(answerData["status"])
         const answer = await prisma.answerofcard.create({
             data:{
                 status: answerData.status,
                 date:answerData.date,
-                answerInputted:answerData.answerInputted ,
+                answerinputted:answerData.answerinputted,
                 fk_card:answerData.fk_card,
-                fk_user:answerData.fk_user,
+                fk_user:answerData.fk_user
             }
         })
 
-
+        console.log("did we do it ???")
         res.status(201);//created
         res.json("Data submitted");
     }catch (e){

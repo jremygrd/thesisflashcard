@@ -7,10 +7,11 @@ export default async function (req:NextApiRequest, res: NextApiResponse) {
     const prisma = new PrismaClient({log:["query"]});
 
     try{
-        const {user:userData} = req.body;
+        //const {decka:deckData} = req.body;
+        console.log(req['query']['id'].toString())
         const user = await prisma.users.findOne({
             where:{
-                id : userData.id,
+                id : req['query']['id'].toString(),
             }
             
         })

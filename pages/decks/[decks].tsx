@@ -1,18 +1,23 @@
 import React, { useState,useEffect } from 'react';
 import { GetServerSideProps } from 'next';
 
+
+
 import Head from 'next/head'
 import styles from '../../styles/Home.module.css'
 import '../../styles/Home.module.css'
 export type Question = {
+  id: string;
   question: string;
   answer : string[];
 };
 
 
 
-export default function Deck({cardsData,deckData,shuffled}:any){
-  console.log(shuffled)
+export default function Deck({cardsData,deckData,shuffled, sessionUser}:any){
+  console.log(cardsData);
+  console.log(shuffled);
+
   const [number, setNumber] = useState(0);
   const [questions, setQuestions] = useState<Question[]>([]);
   const TOTAL_QUESTIONS = cardsData.length;
@@ -25,8 +30,9 @@ export default function Deck({cardsData,deckData,shuffled}:any){
     setFlip(false);
     setNumber(0);
     setQuestions(cardsData);
-
     }
+
+
 
   const nextQuestion = () => {
     // Move on to the next question if not the last question
@@ -46,10 +52,25 @@ export default function Deck({cardsData,deckData,shuffled}:any){
 
   const changeFlip = () =>{
     setFlip(!flip);
+
   }
 
   const submitFlip = () =>{
     setFlip(!flip);
+
+    const date = new Date();
+    const opts = {status:true,
+                  date : date,
+                  answerInputted:isChecked,
+                  fk_card : questions[number].id,
+                  fk_user : sessionUser};
+
+    console.log(opts);
+    const postdata = fetch ("http://localhost:3000/api/answers_cards/create",{
+      method : 'post',
+      body: JSON.stringify(opts)
+    });
+
 
   }
 
@@ -166,6 +187,8 @@ export const getServerSideProps: GetServerSideProps = async context =>  {
       }
     }
   }
+
+
 
   export const shuffle = (array: any[]) =>
   [...array].sort(() => Math.random() - 0.5);
