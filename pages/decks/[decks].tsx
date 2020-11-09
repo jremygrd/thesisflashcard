@@ -1,11 +1,11 @@
 import React, { useState,useEffect } from 'react';
-import { GetServerSideProps } from 'next';
-
+import next, { GetServerSideProps } from 'next';
 
 
 import Head from 'next/head'
 import styles from '../../styles/Home.module.css'
 import '../../styles/Home.module.css'
+import { Console } from 'console';
 export type Question = {
   id: string;
   question: string;
@@ -24,10 +24,15 @@ export default function Deck({cardsData,deckData,shuffled, sessionUser}:any){
   const [gameOver, setGameOver] = useState(true);
   const [flip, setFlip] = useState(false);
   const [isChecked, setIsChecked] = React.useState<string[]>([])
+  const [submitted, setSubmitted] = useState(false);
+  const [answerCorrect, setAnswerCorrect] = useState(false);
 
   const startTrivia = async () => {
     setGameOver(false);
     setFlip(false);
+    setSubmitted(false);
+    setAnswerCorrect(false);
+    setIsChecked([]);
     setNumber(0);
     setQuestions(cardsData);
     }
@@ -36,8 +41,11 @@ export default function Deck({cardsData,deckData,shuffled, sessionUser}:any){
 
   const nextQuestion = () => {
     // Move on to the next question if not the last question
+    postAnswer();
     setIsChecked([]);
     setFlip(false);
+    setSubmitted(false);
+    setAnswerCorrect(false);
     if (!gameOver){
       const nextQ = number + 1;
       setNumber(nextQ);
@@ -55,41 +63,59 @@ export default function Deck({cardsData,deckData,shuffled, sessionUser}:any){
 
   }
 
-  const submitFlip = () =>{
-    setFlip(!flip);
+  const postAnswer = () =>{
 
     const date = new Date();
-    const opts = {status:true,
+    const opts = {status:answerCorrect,
                   date : date,
-                  answerInputted:{"array" : isChecked},
+                  answerInputted:JSON.stringify({"array" : isChecked}),
                   fk_card : questions[number].id,
                   fk_user : sessionUser};
 
-    console.log(opts);
+    //console.log(opts);
     const postdata = fetch ("http://localhost:3000/api/answers_cards/create",{
       method : 'post',
       headers:{'Content-Type':'application/json'},
       body: JSON.stringify(opts)
     });
 
+  }
+
+  const submitFlip = ()=>{
+    
+    setFlip(!flip);
+
+    if (!submitted){
+      const answer = questions[number].answer;
+      answer.sort();
+      const isCheckedSorted = isChecked.sort();
+      if (JSON.stringify(answer) === JSON.stringify(isCheckedSorted)){
+        console.log(JSON.stringify(answer),JSON.stringify(isCheckedSorted));
+        setAnswerCorrect(true);
+      }
+    }
+    setSubmitted(true);
 
   }
 
   const handleSingleCheck = (e: { target: { getAttribute: (arg0: string) => any; }; }) =>{
-    const option = e.target.getAttribute('value');;
-    if (isChecked.includes(option)) {
-      setIsChecked(isChecked.filter(checked_option => checked_option !== option))
-    }
-    else{
-      isChecked.push(option);
-      setIsChecked([...isChecked]);
-      console.log(isChecked)
-    }
 
+    if(!submitted){
+      const option = e.target.getAttribute('value');;
+      if (isChecked.includes(option)) {
+        setIsChecked(isChecked.filter(checked_option => checked_option !== option))
+      }
+      else{
+        isChecked.push(option);
+        setIsChecked([...isChecked]);
+        console.log(isChecked)
+      }
+    }
   }
 
+
     return (
-    <div className={styles.container}>
+    <div className={styles.main}>
       <Head>
         <title>FlashCards - {deckData.title}</title>
         <link rel="icon" href="/favicon.ico" />
@@ -99,16 +125,12 @@ export default function Deck({cardsData,deckData,shuffled, sessionUser}:any){
         <h1 className={styles.title}>      
           {deckData.title}
         </h1>
-          <button className='start' onClick={startTrivia}>
-            Start
-          </button>
 
-          <button className='next' onClick={nextQuestion}>
-            Next
-          </button>
+
+
 
         <p className={styles.description}>
-          Contient les cartes suivantes :
+          {!gameOver? `${number+1}/${cardsData.length}` : ''}
         </p>
 
         <div className={`${styles.card} ${flip? `${styles.cardflip}`:''}`} >
@@ -127,21 +149,24 @@ export default function Deck({cardsData,deckData,shuffled, sessionUser}:any){
                                 name = {option}
                                 checked={isChecked.includes(option)}
                                 onChange={handleSingleCheck}
+                                
                         />  {option}                     
                         </p>                   
                       </div>))
-                      } <div className = {styles.container}>
+                      } <div className = {styles.main}>
                           <button className={styles.flipButton} onClick={submitFlip}>Flip</button></div>
                         </div>
                     </div>
                 <div className = {styles.cardback}>
-                <div>{               
-                  questions[number].answer.map((option)=>(
-                    <div>
-                      <p>{flip?  option : ''}</p> 
-                    </div>
-                  ))
-                }</div>
+                  <h1>{flip? questions[number].question: ''}</h1> 
+                  <div className = {styles.answerBack}>{               
+                    questions[number].answer.map((option)=>(
+                      <div>
+                        <p id = {option}>{flip?  option : ''}</p>     
+                      </div>
+                    ))
+                  }</div>
+                  <h2 className = {styles.answerBack} >{flip? answerCorrect? "Correct answer !":"Bad answer :(": ''}</h2>
                 <div className = {styles.container}>
                 <button className={styles.flipButton} onClick={changeFlip}>Flip</button>
                 </div>
@@ -150,15 +175,17 @@ export default function Deck({cardsData,deckData,shuffled, sessionUser}:any){
           </div>
           :null
         }
-              
+          <div className={styles.nextButton} onClick={gameOver ? startTrivia : nextQuestion}>
+          {gameOver ? "Start" :submitted? "→" : ""}
+          </div>
       </div>
-
-
       </div>
-
 
       </main>
+
     </div>
+
+    
   )
 
     
@@ -167,13 +194,31 @@ export default function Deck({cardsData,deckData,shuffled, sessionUser}:any){
 
 
 export const getServerSideProps: GetServerSideProps = async context =>  {
-
+    const sessionUser = "624d86f8-834d-4e3f-8488-c22dfdbaa15b" //JEAN 
     const  slug  = context.query.decks;
+
+
+
+    const opts = {fk_deck:slug,
+                  fk_user : sessionUser};
+    const setScores = await fetch (`http://localhost:3000/api/cards_users/updateScore`,{
+      method : 'post',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(opts)
+    });
+
+
     const deckById = await fetch (`http://localhost:3000/api/decks/${slug}`);
     const deckData = await deckById.json();
 
-    const cardsByIds = await fetch (`http://localhost:3000/api/cards_stacks/${slug}`);
+    const cardsByIds = await fetch (`http://localhost:3000/api/cards_stacks/${slug}`,{
+      method : 'post',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(opts)
+    });
+
     const cardsData = await cardsByIds.json();
+
     const len = cardsData.length;
     var d = []
     var shuffled = []
@@ -182,9 +227,12 @@ export const getServerSideProps: GetServerSideProps = async context =>  {
       shuffled.push(shuffle(d))
       d = []
     }
+
+    
+
     return {
       props: {
-        deckData,cardsData,shuffled
+        deckData,cardsData,shuffled,sessionUser
       }
     }
   }

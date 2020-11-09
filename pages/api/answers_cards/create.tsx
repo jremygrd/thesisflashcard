@@ -5,21 +5,41 @@ export default async function (req:NextApiRequest, res: NextApiResponse) {
     const prisma = new PrismaClient({log:["query"]});
     
     try{
-        console.log(req.body)
-        console.log(req.body.answerInputted)
         const answer = await prisma.answerofcard.create({
             data:{
                 status : req.body.status,
                 date : req.body.date,
                 answerinputted: req.body.answerInputted,
-                cards: req.body.cards,
-                users: req.body.users
+                cards: {
+                    connect : {id : req.body.fk_card}},
+                users: {
+                    connect : {id : req.body.fk_user}}
             }
         })
 
-        console.log("did we do it ???")
+        if (req.body.status){
+            const updatenbgood = await prisma.$queryRaw`update cards_users set nbgood = nbgood+1
+            where fk_card = ${req.body.fk_card} and fk_user = ${req.body.fk_user}`;
+
+            const updatestreak = await prisma.$queryRaw`update cards_users set streak = streak+1
+            where fk_card = ${req.body.fk_card} and fk_user = ${req.body.fk_user}`;
+        }else {
+
+            const updatestreak = await prisma.$queryRaw`update cards_users set streak = 0
+            where fk_card = ${req.body.fk_card} and fk_user = ${req.body.fk_user}`;
+
+            const updatenbbad = await prisma.$queryRaw`update cards_users set nbbad = nbbad+1
+            where fk_card = ${req.body.fk_card} and fk_user = ${req.body.fk_user}`;
+    
+        }
+
+        const now = Date.now()
+        const updatelasttry = await prisma.$queryRaw`update cards_users set lasttried = ${now}
+        where fk_card = ${req.body.fk_card} and fk_user = ${req.body.fk_user}`;
+
         res.status(201);//created
-        res.json(answer);
+        res.json("Changes submitted");
+
     }catch (e){
         console.log(e);
         res.status(500);

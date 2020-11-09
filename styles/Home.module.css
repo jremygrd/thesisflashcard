@@ -1,5 +1,6 @@
 .container {
   min-height: 100vh;
+  max-height: 200px;
   padding: 0 0.5rem;
   display: flex;
   flex-direction: column;
@@ -81,7 +82,11 @@
 }
 
 
-
+.nextButton{
+  text-align: right;
+  line-height: 1.15;
+  font-size: 2.5rem;
+}
 
 .cardinner{
   background: var(--bg);
@@ -115,7 +120,7 @@
   margin:auto;
   border-radius: 20px;
   background: var(--bg);
-  width: 10vw; height: 10vh;
+  width: 100px; height: 50px;
   position: absolute;
   bottom:0;
   
@@ -142,9 +147,12 @@
 .cardback{
   padding:1rem;
   transform:rotateY(-180deg);
-  text-align: center;
+  
 }
 
+.answerBack{
+  text-align: center;
+}
 
 
 .card:hover,

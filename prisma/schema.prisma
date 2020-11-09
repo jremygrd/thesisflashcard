@@ -11,8 +11,8 @@ model cards {
   id           String         @id @default(dbgenerated())
   question     String?
   tip          String?
-  bad_options  Json?
-  answer       Json?
+  bad_options  String?
+  answer       String?
   fk_user      String?
   users        users?         @relation(fields: [fk_user], references: [id])
   answerofcard answerofcard[]
