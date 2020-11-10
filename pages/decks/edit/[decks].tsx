@@ -172,7 +172,7 @@ export default function Deck({cardsData,deckData,shuffled, sessionUser}:any){
             { 
                 allOptions.map((val:any, idx:any) => (
                   <div>
-                  <label htmlFor="description">Description</label>
+                  <label htmlFor="description">Option </label>
                   <input
                       type="text"
                       name="description"
