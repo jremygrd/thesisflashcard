@@ -108,7 +108,7 @@ export default function Deck({cardsData,deckData,shuffled, sessionUser}:any){
       else{
         isChecked.push(option);
         setIsChecked([...isChecked]);
-        console.log(isChecked)
+        //console.log(isChecked)
       }
     }
   }

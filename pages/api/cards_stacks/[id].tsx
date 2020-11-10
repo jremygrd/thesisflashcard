@@ -27,7 +27,7 @@ export default async function (req:NextApiRequest, res: NextApiResponse) {
     }catch (e){
         console.log(e);
         res.status(500);
-        res.json({error:"An error occured"})       
+        res.json({error:"An error occured in cards_stacks [id]"})       
     }finally{
         await prisma.$disconnect()
 
