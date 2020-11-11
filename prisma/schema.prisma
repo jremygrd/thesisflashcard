@@ -11,12 +11,13 @@ model cards {
   id           String         @id @default(dbgenerated())
   question     String?
   tip          String?
-  bad_options  String?
-  answer       String?
+  bad_options  Json?
+  answer       Json?
   fk_user      String?
   users        users?         @relation(fields: [fk_user], references: [id])
   answerofcard answerofcard[]
   cards_stacks cards_stacks[]
+  cards_users  cards_users[]
 }
 
 model cards_stacks {
@@ -75,6 +76,7 @@ model users {
   rights               Int?
   answerofcard         answerofcard[]
   cards                cards[]
+  cards_users          cards_users[]
   resultofdeck         resultofdeck[]
   rights_rightsTousers rights[]
   scores               scores[]
@@ -96,4 +98,19 @@ model resultofdeck {
   id      String  @id @default(dbgenerated())
   fk_user String?
   users   users?  @relation(fields: [fk_user], references: [id])
+}
+
+model cards_users {
+  nbgood    Int?
+  nbbad     Int?
+  streak    Int?
+  diff      Float?
+  lasttried Int?
+  score     Float?
+  fk_card   String
+  fk_user   String
+  cards     cards  @relation(fields: [fk_card], references: [id])
+  users     users  @relation(fields: [fk_user], references: [id])
+
+  @@id([fk_card, fk_user])
 }
