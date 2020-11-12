@@ -32,8 +32,24 @@ export default function Home({deckData}) {
             </a>     
             </Link>
 
+            <Link as = {`/decks/edit/${id}`} href = "/decks/edit/[decks]">
+            <a>
+            <p>Edit deck</p>
+            </a>     
+            </Link>
+
           </div>
           ))}
+
+          <div >
+
+            <Link as = {`/decks/edit/new`} href = "/decks/edit/new">
+            <a>
+            <p>Create new deck</p>
+            </a>     
+            </Link>
+
+          </div>
           
                    
         </div>

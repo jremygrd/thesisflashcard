@@ -11,6 +11,8 @@ export default async function (req:NextApiRequest, res: NextApiResponse) {
     //Problème, postresql fais une différence entre les single et double quotes, là ou les double quotes sont 
     //détruites en passant en requête :(((
     //On doit reconstruire nos arrays
+    req.body.question.answer.filter((checked_option: any) => checked_option !== "");
+    req.body.question.bad_options.filter((checked_option: any) => checked_option !== "");
 
     var ans = '[';
 
@@ -28,7 +30,7 @@ export default async function (req:NextApiRequest, res: NextApiResponse) {
     }
     bad+=']'
 
-    console.log('ans',ans,bad);
+    //console.log('ans',ans,bad);
     const uuid = create_UUID();
     var c = ""
 
@@ -36,12 +38,12 @@ export default async function (req:NextApiRequest, res: NextApiResponse) {
     c+=`insert into cards values ('${uuid}',
     '${req.body.question.question}',
     '${req.body.question.tip}',
-    ARRAY ${ans},
     ARRAY ${bad},
+    ARRAY ${ans},
     '${req.body.user}')`;
 
 
-    console.log(req.body);
+    //console.log(req.body);
 
     try{
     
@@ -64,7 +66,6 @@ export default async function (req:NextApiRequest, res: NextApiResponse) {
 
             }
         })
-        console.log("ca se corse2",req.body.user);
         const cards_users = await prisma.cards_users.create({
             data:{
                nbgood:0,
@@ -107,7 +108,7 @@ export default async function (req:NextApiRequest, res: NextApiResponse) {
         //     )`);
 
         res.status(201);//created
-        res.json(stack);
+        res.json({uuid});
  
     }catch (e){
         console.log(e);

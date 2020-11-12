@@ -26,6 +26,8 @@ export default function Deck({cardsData,deckData,shuffled, sessionUser}:any){
   const [isChecked, setIsChecked] = React.useState<string[]>([])
   const [submitted, setSubmitted] = useState(false);
   const [answerCorrect, setAnswerCorrect] = useState(false);
+  const [cash, setCash] = useState("");
+
 
   const startTrivia = async () => {
     setGameOver(false);
@@ -46,6 +48,7 @@ export default function Deck({cardsData,deckData,shuffled, sessionUser}:any){
     setFlip(false);
     setSubmitted(false);
     setAnswerCorrect(false);
+    setCash("");
     if (!gameOver){
       const nextQ = number + 1;
       setNumber(nextQ);
@@ -108,7 +111,6 @@ export default function Deck({cardsData,deckData,shuffled, sessionUser}:any){
       else{
         isChecked.push(option);
         setIsChecked([...isChecked]);
-        //console.log(isChecked)
       }
     }
   }
@@ -153,7 +155,16 @@ export default function Deck({cardsData,deckData,shuffled, sessionUser}:any){
                         />  {option}                     
                         </p>                   
                       </div>))
-                      } <div className = {styles.main}>
+                      } 
+                          <input
+                          type="text"
+                          name="proposal"
+                          id="proposal"
+                          value={cash}
+                          onChange={(e) => setCash(e.target.value)}
+                          />
+
+                        <div className = {styles.main}>
                           <button className={styles.flipButton} onClick={submitFlip}>Flip</button></div>
                         </div>
                     </div>

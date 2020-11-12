@@ -145,6 +145,7 @@ export default function Deck({
     //Check that we have at least 2 options
     //Check that we have at least one good answer
 
+
     if (allOptions.includes("")) {
       setAllOptions(
         allOptions.filter((checked_option: any) => checked_option !== "")
@@ -157,7 +158,6 @@ export default function Deck({
       );
     }else{
     }
-
     if (allOptions.length > 0 && answers.length > 0) {
       const update = questions;
       update[number].answer = answers;
@@ -165,25 +165,25 @@ export default function Deck({
       update[number].question = quest;
       update[number].tip = tip;
       setQuestions(update);
-      // console.log(questions);
-      //  console.log("data submitted");
-      //  console.log("ans",answers);
-      //  console.log("bad",bad_options);
 
       if (questions[number].id != "new"){
+        
         const upload = await fetch(`http://localhost:3000/api/editDeck/submitChanges`,
         {
           method: "post",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(questions[number]),
         });
+        
       }else{
         const upload = await fetch(`http://localhost:3000/api/editDeck/addcard`,
         {
           method: "post",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({question : questions[number],user : sessionUser,deck :deckData}),
-        });
+        }).then(res => res.json()).then(res=> questions[number].id=res.uuid);
+        //console.log(upload,upload.json);
+       
       }
       
 

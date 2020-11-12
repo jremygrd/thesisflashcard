@@ -12,6 +12,8 @@ export default async function (req:NextApiRequest, res: NextApiResponse) {
     //détruites en passant en requête :(((
     //On doit reconstruire nos arrays
 
+    req.body.answer.filter((checked_option: any) => checked_option !== "");
+    req.body.bad_options.filter((checked_option: any) => checked_option !== "");
 
     var ans = '[';
 
@@ -28,6 +30,9 @@ export default async function (req:NextApiRequest, res: NextApiResponse) {
     if (i != req.body.bad_options.length-1){bad+=","}
     }
     bad+=']'
+
+    if(ans == "[]"){ans = "['']"}
+    if(bad == "[]"){bad = "['']"}
 
     console.log('ans',req.body);
     var c = ""
