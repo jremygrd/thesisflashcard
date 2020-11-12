@@ -12,42 +12,41 @@ export default async function (req:NextApiRequest, res: NextApiResponse) {
     //détruites en passant en requête :(((
     //On doit reconstruire nos arrays
 
-    console.log("BODYY",req.body);
-
     var ans = '[';
 
     for(var i =0;i<req.body.question.answer.length;i++){
-    ans = ans+'"'+req.body.question.answer[i]+'"';
+    ans = ans+"'"+req.body.question.answer[i]+"'";
     if (i != req.body.question.answer.length-1){ans+=","}
-    };
-    ans+=']';
+    }
+    ans+=']'
     
     var bad = '[';
 
     for(var i =0;i<req.body.question.bad_options.length;i++){
-    bad = bad+'"'+req.body.question.bad_options[i]+'"';
+    bad = bad+"'"+req.body.question.bad_options[i]+"'";
     if (i != req.body.question.bad_options.length-1){bad+=","}
-    };
-    bad+=']';
+    }
+    bad+=']'
+
+    console.log('ans',ans,bad);
+    const uuid = create_UUID();
+    var c = ""
+
+
+    c+=`insert into cards values ('${uuid}',
+    '${req.body.question.question}',
+    '${req.body.question.tip}',
+    ARRAY ${ans},
+    ARRAY ${bad},
+    '${req.body.user}')`;
+
+
+    console.log(req.body);
 
     try{
-        const uuid = create_UUID();
+    
+        const stack= await prisma.$queryRaw(c);
 
-        const stack = await prisma.cards.create({
-            data:{
-                id: uuid,
-                question:req.body.question.question,
-                tip:req.body.question.tip,
-                answer:ans,
-                bad_options:bad,
-                users : {
-                    connect :{
-                        id : '624d86f8-834d-4e3f-8488-c22dfdbaa15b'
-                    }
-                }
-
-            }
-        })
 
         const cards_stacks = await prisma.cards_stacks.create({
             data:{
@@ -68,7 +67,12 @@ export default async function (req:NextApiRequest, res: NextApiResponse) {
         console.log("ca se corse2",req.body.user);
         const cards_users = await prisma.cards_users.create({
             data:{
-               
+               nbgood:0,
+               nbbad:0,
+               streak:0,
+               diff:1,
+               lasttried:1605137172227,
+               score:0.5,
                 cards : {
                     connect :{
                         id : uuid

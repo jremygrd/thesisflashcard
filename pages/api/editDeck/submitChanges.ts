@@ -16,7 +16,7 @@ export default async function (req:NextApiRequest, res: NextApiResponse) {
     var ans = '[';
 
     for(var i =0;i<req.body.answer.length;i++){
-    ans = ans+'"'+req.body.answer[i]+'"';
+    ans = ans+"'"+req.body.answer[i]+"'";
     if (i != req.body.answer.length-1){ans+=","}
     }
     ans+=']'
@@ -24,20 +24,23 @@ export default async function (req:NextApiRequest, res: NextApiResponse) {
     var bad = '[';
 
     for(var i =0;i<req.body.bad_options.length;i++){
-    bad = bad+'"'+req.body.bad_options[i]+'"';
+    bad = bad+"'"+req.body.bad_options[i]+"'";
     if (i != req.body.bad_options.length-1){bad+=","}
     }
     bad+=']'
 
+    console.log('ans',req.body);
+    var c = ""
+    c+=`update cards set 
+    question = '${req.body.question}',
+    tip = '${req.body.tip}',
+    answer = ARRAY ${ans},
+    bad_options = ARRAY ${bad}
+    where id = '${req.body.id}'`;
+
 
     try{
-
-        const quest = await prisma.$queryRaw`update cards set 
-        question = ${req.body.question},
-        tip = ${req.body.tip},
-        answer = ${ans},
-        bad_options = ${bad}
-        where id = ${req.body.id}`
+        const quest = await prisma.$queryRaw(c);
 
         res.status(201);//created
         res.json(quest);

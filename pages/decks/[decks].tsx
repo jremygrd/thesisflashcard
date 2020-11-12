@@ -218,8 +218,9 @@ export const getServerSideProps: GetServerSideProps = async context =>  {
     });
 
     const cardsData = await cardsByIds.json();
-
     const len = cardsData.length;
+
+    
     var d = []
     var shuffled = []
     for(var i =0;i<len;i++){
