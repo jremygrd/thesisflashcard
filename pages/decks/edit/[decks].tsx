@@ -282,6 +282,8 @@ export default function Deck({
   );
 }
 
+
+
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const sessionUser = "624d86f8-834d-4e3f-8488-c22dfdbaa15b"; //JEAN
   const slug = context.query.decks;
@@ -301,6 +303,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   );
 
   const cardsData = await cardsByIds.json();
+  
   return {
     props: {
       deckData,
