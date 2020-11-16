@@ -12,10 +12,10 @@ export default function Home({deckData,sessionUser}:any) {
   return (
     
     <div className={styles.container}>
-      <p>a</p>
-      <p>a</p>
-      <p>a</p>
-      <p>a</p>
+      <p>temp</p>
+      <p>temp</p>
+      <p>temp</p>
+      <p>temp</p>
 
       <Head>
         <title>Create Next App</title>

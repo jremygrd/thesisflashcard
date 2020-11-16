@@ -38,9 +38,11 @@ export default function Deck({
   );
   const [prevIdx,setprevidx]= useState(0);
 
+
   useEffect(() => {
     startPage();
   });
+
 
   const startPage = async () => {
     setQuestions(cardsData);
@@ -58,6 +60,7 @@ export default function Deck({
     setBadOptions(cardsData[idx].bad_options);
     setAllOptions(cardsData[idx].answer.concat(cardsData[idx].bad_options));
     setprevidx(idx);
+    
   };
 
   const addCat = () => {
@@ -195,6 +198,7 @@ export default function Deck({
   }
 
   const addCard = () => {
+    
     const questionsArr = questions;
     const blank = {
       id: "new",
@@ -221,7 +225,9 @@ export default function Deck({
         {questions.map((val, idx) => (
           <p onClick={() => changForm(idx)}>{val.question}</p>
         ))}
+        <p>{questions[number].id =='new' ?quest:""}</p>
       </div>
+      
       <div onClick={() => addCard()}>Ajouter une carte</div>
       <main className={styles.main}>
         <form key={number}>
