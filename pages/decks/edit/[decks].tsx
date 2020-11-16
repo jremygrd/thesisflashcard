@@ -71,7 +71,6 @@ export default function Deck({
     }
   };
 
-
   function changeBad(idx: any, e: any, val: any) {
     const updatedAll = [...allOptions];
     updatedAll[idx] = e.target.value;
@@ -195,13 +194,11 @@ export default function Deck({
     }
   }
 
-  
-
   const addCard = () => {
     const questionsArr = questions;
     const blank = {
       id: "new",
-      question: "Nouvelle question",
+      question: "",
       tip: "",
       bad_options: ["", ""],
       answer: [],
@@ -220,6 +217,7 @@ export default function Deck({
       </Head>
 
       <div>
+        
         {questions.map((val, idx) => (
           <p onClick={() => changForm(idx)}>{val.question}</p>
         ))}
@@ -232,6 +230,7 @@ export default function Deck({
             type="text"
             name="owner"
             id="owner"
+            placeholder = "Question"
             value={quest}
             onChange={(e) => setQuest(e.target.value)}
           />
@@ -241,6 +240,7 @@ export default function Deck({
             type="text"
             name="description"
             id="description"
+            placeholder = "Indice"
             value={tip}
             onChange={(e) => setTip(e.target.value)}
           />
@@ -252,6 +252,7 @@ export default function Deck({
                 type="text"
                 name="description"
                 id="description"
+                placeholder = "Option"
                 value={val}
                 onChange={
                   answers.includes(val)
