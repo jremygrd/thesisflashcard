@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css?family=Quicksand&display=swap");
 .container {
   min-height: 100vh;
   max-height: 200px;
@@ -178,6 +179,144 @@
   height: 1em;
 }
 
+.bodylogin {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #ffffff;
+  
+}
+.containerlogin {
+  position: relative;
+  width: 420px;
+  min-height: 550px;
+  height: auto;
+  max-height: 600px;
+  background-color: #ffffff;
+  padding: 15px 25px;
+  font-size: 18px;
+  font-family: "Quicksand", sans-serif;
+  box-shadow: 0 5px 5px #7c8395;
+  border-radius: 10%;
+}
+
+.logologin {
+  position: absolute;
+  top: 2%;
+  left: 50%;
+  transform: translate(-50%, 0);
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  box-shadow: 0 5px 5px #7c8395;
+  font-size: 1.8em;
+  background-color:  #ffffff;
+  color: #1d10d1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-color: #1d10d1;
+}
+
+.tabbody {
+  position: relative;
+
+  height: auto;
+  max-height: 400px;
+  padding: 15% 5%;
+  margin-top: 15%;
+  background-color: #ffffff;
+  color:  #1d10d1;
+  box-shadow: 0px 5px 10px #7c8395;
+  border-radius: 30px;
+  font-size: 1rem;
+}
+.tabbody.active {
+  display: block;
+}
+
+.rowlogin {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid  #1d10d1;
+  padding: 1.8% 0;
+  margin: 20px 0;
+}
+
+.rowlogin .input {
+  width: 90%;
+  border: none;
+  outline: none;
+  color:  #1d10d1;
+  font-weight: 550;
+}
+.input::placeholder {
+  color: #2619e2;
+}
+
+.link {
+  display: inline-block;
+  font-size: 0.8em;
+  width: 100%;
+  text-decoration: none;
+  color: #2b384f;
+  text-align: right;
+}
+.link:hover {
+  text-decoration: underline;
+}
+
+.btnlogin {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translate(-50%, 50%);
+  width: 120px;
+  height: 45px;
+  border-radius: 50px;
+  background-color: #1d10d1;
+  border: none;
+  outline: none;
+  color: #ffffff;
+  cursor: pointer;
+  box-shadow: #7c8395;
+}
+
+.tabfooter {
+  position: absolute;
+  bottom: 5%;
+  left: 50%;
+  transform: translate(-50%, 0);
+  height: 30px;
+  display: flex;
+}
+
+.tablink {
+  text-decoration: none;
+  color: #1d10d1;
+  margin: 0 3%;
+}
+
+.tablink.active {
+  font-weight: bold;
+}
+
+@media screen and (max-width: 520px) {
+  .containerlogin {
+    width: 80%;
+    min-width: 380px;
+    min-height: 490px;
+  }
+  .tabbody {
+    width: 100%;
+    padding: 15% 5%;
+    margin-top: 25%;
+    max-height: 420px;
+  }
+}
 @media (max-width: 600px) {
   .grid {
     width: 100%;
