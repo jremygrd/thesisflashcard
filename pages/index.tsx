@@ -1,6 +1,5 @@
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
-import 'reactjs-popup/dist/index.css';
 import React, { useState,useEffect } from 'react';
 import DeckList from '../pages/components/DeckList'
 import TransitionsModal from './components/ModalCreateDeck'

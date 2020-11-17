@@ -22,8 +22,9 @@ const CardQuiz = ( children:any) => {
     const [cash, setCash] = useState("");
     
 useEffect(() => {
-  startTrivia();
+    startTrivia();
 },[children]);
+      
 
 const startTrivia = async () => {
   setGameOver(false);
@@ -119,7 +120,7 @@ const startTrivia = async () => {
           {!gameOver? `${number+1}/${totalQuests}` : ''}
         </p>
         <div className={`${styles.card} ${flip? `${styles.cardflip}`:''}`} >
-        <div >
+    <div >
         {gameOver? <p>Chargement</p> : 
           questions.length >0 && !gameOver ? 
           <div className = {styles.cardinner}>
@@ -159,7 +160,7 @@ const startTrivia = async () => {
                       </div>
                     ))
                   }</div>
-                  <h2 className = {styles.answerBack} >{flip? answerCorrect? "Correct answer !":"Bad answer :(": ''}</h2>
+                  <h2 className = {styles.answerBack} >{flip? answerCorrect? "Correct answer !":"Bad answer :( Paris, France's capital, is a major European city and a global center for art, fashion, gastronomy and culture. Its 19th-century cityscape is crisscrossed by wide boulevards and the River Seine. Beyond such landmarks as the Eiffel Tower and the 12th-century, Gothic Notre-Dame cathedral, the city is known for its cafe culture and designer boutiques along the Rue ": ''}</h2>
                 <div className = {styles.container}>
                 <button className={styles.flipButton} onClick={changeFlip}>Flip</button>
                 </div>
