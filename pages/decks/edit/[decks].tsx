@@ -225,7 +225,7 @@ export default function Deck({
         {questions.map((val, idx) => (
           <p onClick={() => changForm(idx)}>{val.question}</p>
         ))}
-        <p>{questions[number].id =='new' ?quest:""}</p>
+        <p>{questions.length > 0 ?questions[number].id =='new' ?quest:"" : ""}</p>
       </div>
       
       <div onClick={() => addCard()}>Ajouter une carte</div>
