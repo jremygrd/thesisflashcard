@@ -10,12 +10,7 @@ export default function Home({deckData,sessionUser}:any) {
   
   return (
     
-    <div className={styles.container}>
-      <p>temp</p>
-      <p>temp</p>
-      <p>temp</p>
-      <p>temp</p>
-
+    <div>
       <Head>
         <title>Create Next App</title>
         <link rel="icon" href="/favicon.ico" />
@@ -31,22 +26,14 @@ export default function Home({deckData,sessionUser}:any) {
           It's very nice
         </p>
 
-        <div className={styles.grid}>
-
-          <DeckList>
-          {deckData}
-          </DeckList>
-
+          <div className={styles.grid}>
+            <DeckList>
+              {deckData}
+            </DeckList>
+          </div>       
           <TransitionsModal>
             {sessionUser}
-          </TransitionsModal>
-          
-        <div >         
-
-          </div>
-          
-                   
-        </div>
+          </TransitionsModal>  
       </main>
         
 

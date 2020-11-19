@@ -11,88 +11,18 @@
 
 
 .main {
-  padding: 5rem 0;
   flex: 1;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  margin-top: auto;
+  margin-bottom: auto;
 }
 
-.footer {
-  width: 100%;
-  height: 100px;
-  border-top: 1px solid #eaeaea;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.footer img {
-  margin-left: 0.5rem;
-}
-
-.footer a {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.title a {
-  color: #0070f3;
-  text-decoration: none;
-}
-
-.title a:hover,
-.title a:focus,
-.title a:active {
-  text-decoration: underline;
-}
-
-.title {
-  margin: 0;
-  line-height: 1.15;
-  font-size: 4rem;
-}
-
-.title,
-.description {
-  text-align: center;
-}
-
-.description {
-  line-height: 1.5;
-  font-size: 1.5rem;
-}
-
-.code {
-  background: #fafafa;
-  border-radius: 5px;
-  padding: 0.75rem;
-  font-size: 1.1rem;
-  font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono,
-    Bitstream Vera Sans Mono, Courier New, monospace;
-}
-
-.grid {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  max-width: 800px;
-  margin-top: 3rem;
-}
-
-
-.nextButton{
-  text-align: right;
-  line-height: 1.15;
-  font-size: 2.5rem;
-}
 
 .cardinner{
   background: var(--bg);
-  border-radius: 20px;
   box-shadow: var(--shadowBig);
   margin: 1rem;
   flex-basis: 45%;
@@ -139,7 +69,7 @@
   width: 100%;
   height: 100%;
   -webkit-backface-visibility: hidden; /* Safari */
-  backface-visibility: hidden;
+  backface-visibility: visible;
 }
 
 .cardfront{
@@ -322,4 +252,221 @@
     width: 100%;
     flex-direction: column;
   }
+}
+
+
+.wrapperCard {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  perspective: 1000px;
+}
+
+.QuestionCard {
+  margin-top : 1rem;
+  padding:1rem;
+  font-weight: bold;
+  font-size: 1.5rem;
+  text-align:left; 
+  word-wrap: break-word;
+}
+
+.bannerimgCardInit {
+  position: absolute;
+  /* background-image: url(https://images.unsplash.com/photo-1582727657635-c771002bdada?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max&ixid=eyJhcHBfaWQiOjE0NTg5fQ);  */
+  height: 10rem;
+  width: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+}
+
+.profileImgCard {
+  width: 5rem;
+  clip-path: circle(30px at center);
+  margin-top: 4.5rem;
+
+}
+
+.nameCard {
+  font-weight: bold;
+  font-size: 1.5rem;
+
+}
+
+.descriptionCard {
+  margin-top: 2rem;
+  margin-left: 2rem;
+  margin-right: 2rem;
+  margin-bottom: 2rem;
+  font-size: 1rem;
+
+}
+
+.btnCard {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  border: black;
+  font-size: 1rem;
+  font-weight: bold;
+  color: white;
+  padding: 1rem;
+  background-color: black;
+  border-radius: 0px 0px 20px 20px;
+}
+
+.btnCardBack {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  border: black;
+  font-size: 1rem;
+  font-weight: bold;
+  color: white;
+  padding: 1rem;
+  background-color: black;
+  border-radius: 0px 0px 20px 20px;
+}
+
+.btnKeepGoing
+{
+  margin-top: 4rem;
+  border-radius: 20px;
+  width: 100%;
+  border: black;
+  font-size: 1rem;
+  font-weight: bold;
+  color: white;
+  padding: 1rem;
+  background-color: black;
+}
+
+.carda {
+  box-shadow: var(--shadowBig);
+  position: relative; /* Required to absolutely position the child faces */
+  width: 480px;
+  height:550px;
+  margin-bottom: 1rem;
+  margin-left: 1rem;
+  text-align: center;
+  border-radius: 1rem;
+  display:flex;
+  flex-direction: column;
+
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+  transform : perspective(700px) rotateY(var(--rotate-y,0));
+  -webkit-transform:rotateY(0deg);
+}
+
+.flipme .carda {
+  transform: rotateY(180deg);
+}
+
+.cardaface, .cardaback{
+  position: absolute;
+  border-radius: 20px;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(255, 255, 255);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  
+ 
+}
+
+.cardaface{
+  overflow-y: hidden;
+  overflow-y: scroll;
+  padding-bottom: 4rem;
+}
+.cardaface::-webkit-scrollbar {
+  display: none;
+}
+
+.insidecardaback{
+  position: absolute;
+  border-radius: 20px;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(255, 255, 255);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  overflow:scroll;
+  padding-bottom: 4rem;
+}
+.insidecardaback::-webkit-scrollbar {
+  display: none;
+}
+
+
+.cardaback {
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+  transform: rotateY(-180deg);
+  
+}
+
+.cardAroundSettings{
+  position:relative;
+
+  width:380px;
+  height:550px;
+
+  margin: auto auto;
+  padding:10px;
+
+}
+
+.sideButtons{
+
+  position:absolute;
+  top:1rem;
+  left:100%;
+  background:rgb(226, 226, 255); 
+  border-radius: 20px;
+  padding:10px;
+}
+
+.nextCardButton{
+
+  position:absolute;
+  top:31rem;
+  left:100%;
+  background:rgb(226, 226, 255); 
+  border-radius: 20px;
+  padding:10px;
+}
+
+.checkboxesCard{
+margin-left : 1rem;
+padding:0.5rem;
+font-weight: bold;
+font-size: 1.2rem;
+text-align: left;
+
+
+}
+
+.inputAnswerCard{
+  margin-top: 60%;
+  word-wrap: break-word;
+}
+
+.goodAnswerText{
+  border-radius: 20px;
+  background-color: chartreuse;
+}
+
+.badAnswerText{
+  border-radius: 20px;
+  background-color: rgb(224, 92, 92);
+}
+
+.noMoreCards{
+  text-align: center;
+
 }

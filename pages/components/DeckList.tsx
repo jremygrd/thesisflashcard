@@ -18,7 +18,7 @@ const DeckList = ( deckData :any) => {
 
   
   return (
-    <div>
+    <>
       
         {decks.map(({title,id,description}:any) => (
           <div className={styles.deck} key = {id}>
@@ -38,7 +38,7 @@ const DeckList = ( deckData :any) => {
           </div>
     ))}
 
-  </div>
+  </>
   )
 }
 export default DeckList

@@ -20,7 +20,7 @@ export default function Deck({cardsData,deckData,shuffled, sessionUser}:any){
 
 
     return (
-    <div className={styles.main}>
+    <div >
       <Head>
         <title>FlashCards - {deckData.title}</title>
         <link rel="icon" href="/favicon.ico" />
@@ -30,14 +30,12 @@ export default function Deck({cardsData,deckData,shuffled, sessionUser}:any){
         <h1 className={styles.title}>      
           {deckData.title}
         </h1>
-
-        {/* Create a menu here ? so they can choose their gamemode */}
+        
         <CardQuiz>
           {cardsData}
-          {sessionUser}
           {shuffled}
+          {deckData}
         </CardQuiz>
-        
       </main>
     </div>
 

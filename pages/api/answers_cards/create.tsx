@@ -39,7 +39,7 @@ export default async function (req:NextApiRequest, res: NextApiResponse) {
         where fk_card = ${req.body.fk_card} and fk_user = ${req.body.fk_user}`;
 
         res.status(201);//created
-        res.json("Changes submitted");
+        res.json({success:"success of answer upload"});
 
     }catch (e){
         console.log(e);
@@ -49,8 +49,6 @@ export default async function (req:NextApiRequest, res: NextApiResponse) {
         await prisma.$disconnect()
 
     }
-    
-    res.json({decks:"Done"});
     
 }
 
