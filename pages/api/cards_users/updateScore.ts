@@ -26,7 +26,7 @@ export default async function (req:NextApiRequest, res: NextApiResponse) {
             where fk_card = ${toUpdate[i].fk_card} and fk_user = ${toUpdate[i].fk_user}`;
 
             const result2 = await prisma.$queryRaw`update cards_users set score = 
-            (1.0/(2-(nbGood/(nbBad+nbGood+1)))*exp(-(1.0/((streak+1)*(nbBad+nbGood+1)))*diff))
+            exp(-1 / (5 * streak/(nbGood+nbBad+1) + nbGood + 1))
             where fk_card = ${toUpdate[i].fk_card} and fk_user = ${toUpdate[i].fk_user}`;
         
         }   
