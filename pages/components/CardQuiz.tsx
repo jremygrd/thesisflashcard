@@ -15,6 +15,7 @@ import TextFieldsIcon from '@material-ui/icons/TextFields';
 import TextField from '@material-ui/core/TextField';
 import Indice from './Indice';
 import { start } from 'repl';
+import { QuestionAnswerRounded } from '@material-ui/icons';
 
 
 export type Question = {
@@ -22,6 +23,10 @@ export type Question = {
     question: string;
     answer : string[];
     tip : string;
+    streak:number;
+    nbGood:number;
+    nbBad:number;
+
   };
 
 const CardQuiz = ( children:any) => {
@@ -56,8 +61,15 @@ const CardQuiz = ( children:any) => {
         setIsChecked(isChecked);
     },[isChecked]);
 
+    useEffect(() => {   
+        setAnswerCorrect(answerCorrect);
+    },[answerCorrect]);
+
+
+
     //Initialisation
     const startQuiz = async () => { 
+        setAnswerCorrect(false);
         setNoMoreCards(false);
         setFlip(false);
         setSubmitted(false);
@@ -84,7 +96,7 @@ const CardQuiz = ( children:any) => {
     }
 
     //Upload la réponse de l'user
-    const postAnswer = () =>{   
+    const postAnswer = (isCorrect:boolean) =>{  
     const date = new Date();
     var answer = null;
     if(checkboxes){
@@ -92,19 +104,21 @@ const CardQuiz = ( children:any) => {
     }else{
         answer = inputText
     }
-    const opts = {status:answerCorrect,
+    const opts = {status:isCorrect,
                 date : date,
                 answerInputted:JSON.stringify({"answerInputted" : answer}),
                 fk_card : questions[number].id,
                 fk_user : sessionUser,
                 indiceOpened:indiceOpened,
                 qcmOpened : checkboxes};
+
         const postdata = fetch ("http://localhost:3000/api/answers_cards/create",{
             method : 'post',
             headers:{'Content-Type':'application/json'},
             body: JSON.stringify(opts)
         });
 
+        
     }
 
     //Tourner la carte, conditions si c'est la 1ère fois pour ne pas upload 2fois, 
@@ -114,29 +128,35 @@ const CardQuiz = ( children:any) => {
     setFlip(!flip);
 
     if (!submitted){
+        var isCorrect = false;
         if (checkboxes){
             const answer = questions[number].answer;
             answer.sort();
             const isCheckedSorted = isChecked.sort();
             if (JSON.stringify(answer) === JSON.stringify(isCheckedSorted)){
               setAnswerCorrect(true);
+              isCorrect = true
+
             }
         }else{
             const levenshteinDist = (levenshtein(String(inputText).toUpperCase(),String(questions[number].answer).toUpperCase()))
             if (levenshteinDist < String(inputText).length/3){
                 setAnswerCorrect(true);
+                isCorrect = true
             }else{setAnswerCorrect(false)}
         }
-      
-      postAnswer();
+        setSubmitted(true); 
+         setTimeout(() => {
+       postAnswer(isCorrect) ; },800)
+    
     }
-    setSubmitted(true);
-
+    
   }
 
     //Réinitialisation, passage à la question suivante
     const nextQuestion = () => {
         // Move on to the next question if not the last question
+
         setCheckboxes(false);
         setFlip(false);
         setIsChecked([]);
@@ -230,7 +250,7 @@ const CardQuiz = ( children:any) => {
                             </p>
                                 <div className={styles.QuestionCard}> {questions[number].question} </div>
                                 {/* Choisir entre l'affichage checkbox ou input */}
-                                {checkboxes ?
+                                {questions[number].streak<3 ? // Choisir quand montrer le QCM par défaut
                                 <div className={styles.checkboxesCard}>
                                     {shuffled[number].map((option:any)=>(
                                     <p key = {option}>

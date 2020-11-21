@@ -14,15 +14,20 @@ export default async function (req:NextApiRequest, res: NextApiResponse) {
         //const result2 = await prisma.$queryRaw`SELECT * FROM cards WHERE id in (SELECT fk_cardid FROM cards_stacks WHERE fk_stackid = ${req.query.id})`;
         
         //Get by score - only first x rows
-        const topx = await prisma.$queryRaw`select * from cards where id in (select fk_card from cards_users where fk_card in
+        const topx = await prisma.$queryRaw`select * from cards where id in 
+            (select fk_card from cards_users where fk_card in
             (select fk_cardid from cards_stacks where fk_stackID = ${req.query.id})
             and fk_user = ${req.body.fk_user} order by score asc limit 20);`
 
-        //console.log("TOOOOOOPXXX",topx);
-        //console.log("result2",result2);
+        const topx2 = await prisma.$queryRaw`select cards.id,question,tip,bad_options,answer,cards.fk_user,streak from cards
+            join cards_users cu on cards.id = cu.fk_card
+            join cards_stacks cs on cards.id = cs.fk_cardID
+        where cs.fk_stackid = ${req.query.id}
+        and cu.fk_user = ${req.body.fk_user}
+        order by cu.score limit 20;`   
 
         res.status(201);//created
-        res.json(topx);
+        res.json(topx2);
  
     }catch (e){
         console.log(e);
