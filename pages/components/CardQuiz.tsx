@@ -14,6 +14,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import TextFieldsIcon from '@material-ui/icons/TextFields';
 import TextField from '@material-ui/core/TextField';
 import Indice from './Indice';
+import { start } from 'repl';
 
 
 export type Question = {
@@ -208,7 +209,7 @@ const CardQuiz = ( children:any) => {
       const appendedShuffled = shuffled.concat(newshuffled) //Erreur signalée mais fonctionne très bien
       setTotalQuests(appended.length)
       setShuffled(appendedShuffled);
-      setNoMoreCards(false)
+      setNoMoreCards(false);
   }
 
 
@@ -321,12 +322,12 @@ const CardQuiz = ( children:any) => {
                     </IconButton>
                 </div>
             </>:
-            <div className={styles.main}>
+            <div className={styles.carda}>
                 <div className={styles.descriptionCard}>Séance de révision terminée !</div>
                 <div className={styles.descriptionCard}>Vous avez fini les cartes que vous deviez revoir aujourd'hui !</div>
                 <div className={styles.descriptionCard}>Si vous le souhaitez vous pouvez néanmoins continuer pour prendre de l'avance</div>
-
                 <button className={styles.btnKeepGoing}  onClick={fetchMore}>Continuer</button>
+                <button className={styles.btnKeepGoing}  onClick={startQuiz}>Recommencer ces cartes</button>
             </div>}
         </>
         :<div>Loading...</div>}

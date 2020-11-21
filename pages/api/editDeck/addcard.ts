@@ -74,6 +74,7 @@ export default async function (req:NextApiRequest, res: NextApiResponse) {
                diff:1,
                lasttried:1605137172227,
                score:0.5,
+               score_ct:0.5,
                 cards : {
                     connect :{
                         id : uuid

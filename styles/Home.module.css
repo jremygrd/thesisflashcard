@@ -347,7 +347,7 @@
 .carda {
   box-shadow: var(--shadowBig);
   position: relative; /* Required to absolutely position the child faces */
-  width: 480px;
+  width: 380px;
   height:550px;
   margin-bottom: 1rem;
   margin-left: 1rem;
