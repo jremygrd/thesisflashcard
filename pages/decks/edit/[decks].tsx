@@ -7,8 +7,7 @@ import Head from "next/head";
 import styles from "../../../styles/Home.module.css";
 import "../../../styles/Home.module.css";
 
-import { Console } from "console";
-import { start } from "repl";
+import Drawer from "../../components/Drawer";
 export type Question = {
   id: string;
   question: string;
@@ -221,7 +220,9 @@ export default function Deck({
       </Head>
 
       <div>
-        
+        <Drawer>
+          {questions}
+        </Drawer>
         {questions.map((val, idx) => (
           <p onClick={() => changForm(idx)}>{val.question}</p>
         ))}
