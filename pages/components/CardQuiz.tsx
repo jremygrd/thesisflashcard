@@ -15,8 +15,8 @@ import TextFieldsIcon from '@material-ui/icons/TextFields';
 import TextField from '@material-ui/core/TextField';
 import Indice from './Indice';
 import { start } from 'repl';
-import { QuestionAnswerRounded } from '@material-ui/icons';
-
+import { ChildCare, QuestionAnswerRounded } from '@material-ui/icons';
+import FutureSeance from './futureSeances';
 
 export type Question = {
     id: string;
@@ -126,7 +126,6 @@ const CardQuiz = ( children:any) => {
     const submitFlip = ()=>{
     
     setFlip(!flip);
-
     if (!submitted){
         var isCorrect = false;
         if (checkboxes){
@@ -178,7 +177,8 @@ const CardQuiz = ( children:any) => {
     };
 
     //Gérer un checkbox check
-    const handleSingleCheck = (e:any) =>{
+    const handleSingleCheck = (e:any) =>{  
+        {setCheckboxes(true)}
         if(!submitted){
         const option = e.target.getAttribute('value');;
         if (isChecked.includes(option)) {
@@ -189,6 +189,7 @@ const CardQuiz = ( children:any) => {
             setIsChecked([...isChecked]);
         }
         }
+
     }
 
     //Permettre à l'user de charger plus de questions. 
@@ -345,9 +346,20 @@ const CardQuiz = ( children:any) => {
             <div className={styles.carda}>
                 <div className={styles.descriptionCard}>Séance de révision terminée !</div>
                 <div className={styles.descriptionCard}>Vous avez fini les cartes que vous deviez revoir aujourd'hui !</div>
+                
+                <div>
+                    <FutureSeance>
+                        {children.children[2]}
+                    </FutureSeance>
+                </div>
+                
                 <div className={styles.descriptionCard}>Si vous le souhaitez vous pouvez néanmoins continuer pour prendre de l'avance</div>
-                <button className={styles.btnKeepGoing}  onClick={fetchMore}>Continuer</button>
-                <button className={styles.btnKeepGoing}  onClick={startQuiz}>Recommencer ces cartes</button>
+                
+                <button className={styles.btnCard}  onClick={fetchMore}>Continuer</button>
+                {/* <button className={styles.btnKeepGoing}  onClick={startQuiz}>Recommencer ces cartes</button> */}
+                
+
+
             </div>}
         </>
         :<div>Loading...</div>}

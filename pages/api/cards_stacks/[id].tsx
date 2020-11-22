@@ -19,7 +19,7 @@ export default async function (req:NextApiRequest, res: NextApiResponse) {
             (select fk_cardid from cards_stacks where fk_stackID = ${req.query.id})
             and fk_user = ${req.body.fk_user} order by score asc limit 20);`
 
-        const topx2 = await prisma.$queryRaw`select cards.id,question,tip,bad_options,answer,cards.fk_user,streak from cards
+        const topx2 = await prisma.$queryRaw`select cards.id,question,tip,bad_options,answer,cards.fk_user,streak,nbGood,nbBad from cards
             join cards_users cu on cards.id = cu.fk_card
             join cards_stacks cs on cards.id = cs.fk_cardID
         where cs.fk_stackid = ${req.query.id}
