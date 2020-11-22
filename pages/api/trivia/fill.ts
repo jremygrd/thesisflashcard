@@ -31,7 +31,7 @@ export default async function (req:NextApiRequest, res: NextApiResponse) {
         'gt': '>',
         'nbsp': ' ',
         'quot': '"',
-        "039":"'",
+        "#039":"'",
         "eacute":"é"
       }
       
