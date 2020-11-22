@@ -14,9 +14,8 @@ import Checkbox from '@material-ui/core/Checkbox';
 import TextFieldsIcon from '@material-ui/icons/TextFields';
 import TextField from '@material-ui/core/TextField';
 import Indice from './Indice';
-import { start } from 'repl';
-import { ChildCare, QuestionAnswerRounded } from '@material-ui/icons';
 import FutureSeance from './futureSeances';
+import ReplayIcon from '@material-ui/icons/Replay';
 
 export type Question = {
     id: string;
@@ -352,12 +351,17 @@ const CardQuiz = ( children:any) => {
                         {children.children[2]}
                     </FutureSeance>
                 </div>
-                
+
                 <div className={styles.descriptionCard}>Si vous le souhaitez vous pouvez néanmoins continuer pour prendre de l'avance</div>
                 
                 <button className={styles.btnCard}  onClick={fetchMore}>Continuer</button>
-                {/* <button className={styles.btnKeepGoing}  onClick={startQuiz}>Recommencer ces cartes</button> */}
-                
+
+                <div className = {styles.sideButtons}>
+                    <IconButton aria-label="grid" onClick = {startQuiz}>
+                        <ReplayIcon fontSize="small"/>
+                    </IconButton>
+                </div>
+               
 
 
             </div>}
