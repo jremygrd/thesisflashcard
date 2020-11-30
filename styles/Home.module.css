@@ -222,12 +222,16 @@
   transform: translate(-50%, 0);
   height: 30px;
   display: flex;
+  color: #1d10d1;
 }
 
-.tablink {
-  text-decoration: none;
-  color: #1d10d1;
-  margin: 0 3%;
+.tablinkConnexion {
+  margin: 0;
+  padding-right: 10px;
+}
+.tablinkInscription {
+  margin: 0;
+  padding-left: 10px;
 }
 
 .tablink.active {

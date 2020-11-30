@@ -36,7 +36,7 @@ export default async function (req:NextApiRequest, res: NextApiResponse) {
       }
       
       function decodeString (text:any) {
-        return text.replace(/&([^;]+);/gm, function (match, entity) {
+        return text.replace(/&([^;]+);/gm, function (match:any, entity:any) {
           return entities[entity] || match
         })
       }

@@ -70,7 +70,7 @@ model stacks {
 }
 
 model users {
-  id                   String         @id @default(dbgenerated())
+  id                   String         @id
   name                 String?
   email                String?
   rights               Int?

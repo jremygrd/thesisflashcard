@@ -8,36 +8,28 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Link from 'next/link';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      flexGrow: 1,
-    },
-    menuButton: {
-      marginRight: theme.spacing(2),
-    },
-    title: {
-      flexGrow: 1,
-    },
-  }),
-);
 
 export default function ButtonAppBar() {
-  const classes = useStyles();
 
   return (
-    <div className={classes.root}>
+    <div >
       <AppBar position="static">
         <Toolbar>
-          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+          <IconButton edge="start"  color="inherit" aria-label="menu">
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" className={classes.title}>
-            News
+          <Typography variant="h6" >
+            Flashcard
           </Typography>
           <Link href="/login">
           <Button color="inherit">Login</Button>
-          </Link>   
+          </Link>
+          <Link href="/">
+          <Button color="inherit">Accueil</Button>
+          </Link>  
+          <Link href="/myprofile">
+          <Button color="inherit">Mon profil</Button>
+          </Link> 
         </Toolbar>
       </AppBar>
     </div>
