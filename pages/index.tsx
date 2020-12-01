@@ -55,7 +55,7 @@ export default function Home({deckData,sessionUser}:any) {
 export async function getServerSideProps() {
   const allDecks = await fetch ("http://localhost:3000/api/decks/findAll"); //à remplacer par findAllOfUser selon les tables du genre User_Rights
   const deckData = await allDecks.json();
-  const sessionUser = "624d86f8-834d-4e3f-8488-c22dfdbaa15b"; //JEAN
+  const sessionUser = "1w7K30BqJFTR6rJLKdAP9aasoKM2"; //JEAN
   return {
     props: {
       deckData,sessionUser

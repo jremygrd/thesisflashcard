@@ -86,7 +86,7 @@ export default async function (req:NextApiRequest, res: NextApiResponse) {
 
                 users : {
                     connect :{
-                        id : "624d86f8-834d-4e3f-8488-c22dfdbaa15b"
+                        id : "1w7K30BqJFTR6rJLKdAP9aasoKM2"
                     }
                 }
             }
@@ -100,7 +100,7 @@ export default async function (req:NextApiRequest, res: NextApiResponse) {
            null,
            ARRAY ${formatAns(questArray[i].incorrect_answers)}, 
            ARRAY ${formatAns2(questArray[i].correct_answer)},
-           '624d86f8-834d-4e3f-8488-c22dfdbaa15b')`
+           '1w7K30BqJFTR6rJLKdAP9aasoKM2')`
         const update= await prisma.$queryRaw(c);
         
         
@@ -138,7 +138,7 @@ export default async function (req:NextApiRequest, res: NextApiResponse) {
                 },
                 users :{
                     connect :{
-                        id : "624d86f8-834d-4e3f-8488-c22dfdbaa15b"
+                        id : "1w7K30BqJFTR6rJLKdAP9aasoKM2"
                     }
                 }
 

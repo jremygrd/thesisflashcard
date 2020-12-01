@@ -9,6 +9,9 @@
   align-items: center;
 }
 
+.myh1 {
+  color: red;
+}
 
 .main {
   flex: 1;

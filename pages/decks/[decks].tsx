@@ -48,7 +48,7 @@ export default function Deck({cardsData,deckData,shuffled, sessionUser}:any){
 
 
 export const getServerSideProps: GetServerSideProps = async context =>  {
-    const sessionUser = "624d86f8-834d-4e3f-8488-c22dfdbaa15b" //JEAN 
+    const sessionUser = "1w7K30BqJFTR6rJLKdAP9aasoKM2" //JEAN 
     const  slug  = context.query.decks;
 
 

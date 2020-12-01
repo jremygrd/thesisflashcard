@@ -58,11 +58,26 @@ const updateUser=async (firstName:any,email:any) => {
 }
 
 export default function Home({userData}:any) {
+  const [email, setEmail] = useState(userData.email);  
+  const [name, setName] = useState(userData.name);  
+
   return (  
     <div>
     <form className={useStyles().root} noValidate autoComplete="off">
-      <TextField id="emailBox" label="Email" variant="outlined" value={userData.email} ></TextField>
-      <TextField id="nameBox" label="Prénom" variant="outlined" value="Grogro" ></TextField>
+      <TextField 
+        id="emailBox" 
+        label="Email"
+        onChange={(e) => setEmail(e.target.value)}  
+        variant="outlined" 
+        value={email} >
+
+      </TextField>
+      <TextField 
+      id="nameBox" 
+      label="Prénom" 
+      variant="outlined" 
+      onChange={(e) => setName(e.target.value)}
+      value={name} ></TextField>
       <Button 
         variant="contained" 
         color="primary"
