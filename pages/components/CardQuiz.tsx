@@ -215,7 +215,7 @@ const CardQuiz = ( children:any) => {
       const len = cardsData.length;
   
       var d = []
-      var newshuffled = []
+      var newshuffled :any[] = []
       for(var i =0;i<len;i++){
         d = (cardsData[i].bad_options.concat(cardsData[i].answer));
         newshuffled.push(shuffle(d))
@@ -224,8 +224,9 @@ const CardQuiz = ( children:any) => {
 
       const appended = questions.concat(cardsData)
       setQuestions(appended)
-      
 
+
+      
       const appendedShuffled = shuffled.concat(newshuffled) //Erreur signalée mais fonctionne très bien
       setTotalQuests(appended.length)
       setShuffled(appendedShuffled);
