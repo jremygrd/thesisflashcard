@@ -2,12 +2,21 @@ import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import React, { useState,useEffect } from 'react';
 import DeckList from '../pages/components/DeckList'
-import TransitionsModal from './components/ModalCreateDeck'
+import ExamList from '../pages/components/ExamList'
+import ModalCreateDeck from './components/ModalCreateDeck'
+import ModalCreateExam from './components/ModalCreateExam'
+
+export default function Home({deckData,sessionUser,examList}:any) {
+  
+
+  const [decksHook, setDecks] = useState(deckData)
+  
+
+  useEffect(() => {
+    setDecks(deckData);
+  }, [deckData])
 
 
-export default function Home({deckData,sessionUser}:any) {
-  
-  
   return (
     
     <div>
@@ -26,14 +35,27 @@ export default function Home({deckData,sessionUser}:any) {
           It's very nice
         </p>
 
+          <h2>Examens</h2>
+          <div className={styles.grid}>
+            <ExamList>
+              {examList}
+              {decksHook}
+            </ExamList>
+          </div>   
+
+          <h2>Mes decks</h2>
           <div className={styles.grid}>
             <DeckList>
-              {deckData}
+              {decksHook}
             </DeckList>
-          </div>       
-          <TransitionsModal>
+          </div>     
+
+          <ModalCreateDeck>
             {sessionUser}
-          </TransitionsModal>  
+          </ModalCreateDeck>  
+
+
+
       </main>
         
 
@@ -55,10 +77,14 @@ export default function Home({deckData,sessionUser}:any) {
 export async function getServerSideProps() {
   const allDecks = await fetch ("http://localhost:3000/api/decks/findAll"); //à remplacer par findAllOfUser selon les tables du genre User_Rights
   const deckData = await allDecks.json();
-  const sessionUser = "1w7K30BqJFTR6rJLKdAP9aasoKM2"; //JEAN
+
+  const allExams = await fetch ("http://localhost:3000/api/exams/findAll"); //à remplacer par findAllOfUser 
+  const examList = await allExams.json();
+
+  const sessionUser = "624d86f8-834d-4e3f-8488-c22dfdbaa15b"; //JEAN
   return {
     props: {
-      deckData,sessionUser
+      deckData,sessionUser,examList
     }
   }
 }

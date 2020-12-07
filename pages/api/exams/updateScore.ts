@@ -9,14 +9,19 @@ export default async function (req:NextApiRequest, res: NextApiResponse) {
 
 
     try{
-        const now = Date.now()
 
-        if (req.body.isLongTerme)
+        if(req.body.isLongTerme)
         {
-            const toUpdate = await prisma.$queryRaw`select fk_card,lasttried,fk_user from cards_users 
-            where fk_card in 
-            (select fk_cardid from cards_stacks where fk_stackID = ${req.body.fk_deck}) 
-            and fk_user =  ${req.body.fk_user};`;
+
+       
+            const now = Date.now()
+            const toUpdate = await prisma.$queryRaw`select cards.id,lasttried from cards
+                join cards_users cu on cards.id = cu.fk_card
+            where id in (select fk_cardID from cards_stacks where fk_stackID in
+                    (select fk_stackID from exam_list where exam_list.fk_examId = ${req.body.fk_deck}))
+            and cu.fk_user = ${req.body.fk_user}
+            order by cu.score,cu.score_ct ;`   
+
 
             for(var i =0;i<toUpdate.length;i++){
 
@@ -25,15 +30,16 @@ export default async function (req:NextApiRequest, res: NextApiResponse) {
                 diffe = Number((diffe).toFixed(2));
 
                 const updateTimeDiff = await prisma.$queryRaw`update cards_users set diff = ${diffe}
-                where fk_card = ${toUpdate[i].fk_card} and fk_user = ${toUpdate[i].fk_user}`;
+                where fk_card = ${toUpdate[i].id} and fk_user = ${req.body.fk_user}`;
 
                 const updateScore = await prisma.$queryRaw`update cards_users set score = 
                 exp(- diff / (5 * streak/(nbGood+nbBad+1) + nbGood + 1))
-                where fk_card = ${toUpdate[i].fk_card} and fk_user = ${toUpdate[i].fk_user}`;
-            
+                where fk_card = ${toUpdate[i].id} and fk_user = ${req.body.fk_user}`;
+
+
+        
             }   
         }
-
         res.status(201);//created
         res.json("Scores of this deck calculated");
  

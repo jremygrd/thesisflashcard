@@ -66,7 +66,9 @@ model stacks {
   fk_user         String?
   users           users?            @relation(fields: [fk_user], references: [id])
   cards_stacks    cards_stacks[]
+  exam_list       exam_list[]
   keywords_stacks keywords_stacks[]
+  stack_list      stack_list[]
 }
 
 model users {
@@ -81,6 +83,7 @@ model users {
   resultofdeck         resultofdeck[]
   rights_rightsTousers rights[]
   scores               scores[]
+  stack_list           stack_list[]
   stacks               stacks[]
 }
 
@@ -105,6 +108,9 @@ model cards_users {
   nbgood    Int?
   nbbad     Int?
   streak    Int?
+  nbgoodct  Int?
+  nbbadct   Int?
+  streakct  Int?
   diff      Float?
   lasttried Int?
   score     Float?
@@ -118,9 +124,28 @@ model cards_users {
 }
 
 model exam {
-  id         String    @id @default(dbgenerated())
-  fk_stackid String[]
+  id           String      @id @default(dbgenerated())
+  fk_userid    String?
+  exam_date    Int?
+  next_session Int?
+  seuil        Float?
+  title        String?
+  users        users?      @relation(fields: [fk_userid], references: [id])
+  exam_list    exam_list[]
+}
+
+model stack_list {
+  id         String  @id @default(dbgenerated())
   fk_userid  String?
-  exam_date  DateTime?
-  users      users?    @relation(fields: [fk_userid], references: [id])
+  fk_stackid String?
+  stacks     stacks? @relation(fields: [fk_stackid], references: [id])
+  users      users?  @relation(fields: [fk_userid], references: [id])
+}
+
+model exam_list {
+  id         String  @id @default(dbgenerated())
+  fk_examid  String?
+  fk_stackid String?
+  exam       exam?   @relation(fields: [fk_examid], references: [id])
+  stacks     stacks? @relation(fields: [fk_stackid], references: [id])
 }
