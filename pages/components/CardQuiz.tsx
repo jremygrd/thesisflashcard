@@ -16,6 +16,10 @@ import TextField from '@material-ui/core/TextField';
 import Indice from './Indice';
 import FutureSeance from './futureSeances';
 import ReplayIcon from '@material-ui/icons/Replay';
+import { startOfDecade } from 'date-fns/esm';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
+import { makeStyles, Theme } from '@material-ui/core/styles';
 
 export type Question = {
     id: string;
@@ -23,10 +27,25 @@ export type Question = {
     answer : string[];
     tip : string;
     streak:number;
+    streakct:number;
     nbGood:number;
     nbBad:number;
 
   };
+
+
+  function Alert(props: AlertProps) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+  }
+  
+  const useStyles = makeStyles((theme: Theme) => ({
+    root: {
+      width: '100%',
+      '& > * + *': {
+        marginTop: theme.spacing(2),
+      },
+    },
+  }));
 
 const CardQuiz = ( children:any) => {
     const option = "Test"
@@ -42,16 +61,41 @@ const CardQuiz = ( children:any) => {
 
     const [flip, setFlip] = useState(false);    //Tourner la carte
     const [plusButton, setPlusButton] = useState(false);    //Ouvrir les options
-    const [checkboxes, setCheckboxes] = useState(false);    //Afficher le QCM
+    const [checkboxes, setCheckboxes] = useState(true);    //Afficher le QCM
     const [isChecked, setIsChecked] = React.useState<string[]>([])  //Options cochées
     const [inputText, setInputText] = useState(""); //La réponse que l'user a écrit
 
     const [number, setNumber] = useState(0);    //Numéro de la carte
     const [indiceOpened, setIndiceOpened] = useState(false);    //Savoir si l'indice a été ouvert
 
+    const [isExam, setIsExam] = useState(false);
+    const [isLongTerme, setIsLongTerme] = useState(false);
+
+
+    //SNACKBAR
+    const classes = useStyles();
+    const [open, setOpen] = React.useState(false);
+  
+    const handleClick = () => {
+      setOpen(true);
+    };
+  
+    const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
+      if (reason === 'clickaway') {
+        return;
+      }
+  
+      setOpen(false);
+    };
+    //SNACKBAR
+
+
     // Quand children est chargé, lancer le quiz (i.e. au chargement du composant)
     useEffect(() => {   
         startQuiz(); 
+        setIsExam((children.children[3]));
+        setIsLongTerme(children.children[4]);
+        handleClick()
     },[children]);
 
     //Quand isChecked est actualisé, le réactualiser 
@@ -64,6 +108,11 @@ const CardQuiz = ( children:any) => {
         setAnswerCorrect(answerCorrect);
     },[answerCorrect]);
 
+    useEffect(() => {   
+        if(totalQuests-number == 5 && !isLongTerme){
+            fetchMore()
+        };
+    },[number]);
 
 
     //Initialisation
@@ -78,6 +127,10 @@ const CardQuiz = ( children:any) => {
         setTotalQuests(children.children[0].length);
         setQuestions(children.children[0]);
         setShuffled(children.children[1]); 
+        if(children.children[0].length==0){
+            setNoMoreCards(true)
+        }
+        
     }
 
     //Ouvir le bouton +
@@ -115,15 +168,12 @@ const CardQuiz = ( children:any) => {
             method : 'post',
             headers:{'Content-Type':'application/json'},
             body: JSON.stringify(opts)
-        });
-
-        
+        });   
     }
 
     //Tourner la carte, conditions si c'est la 1ère fois pour ne pas upload 2fois, 
     //calcul de si la réponse est bonne
     const submitFlip = ()=>{
-    
     setFlip(!flip);
     if (!submitted){
         var isCorrect = false;
@@ -131,10 +181,10 @@ const CardQuiz = ( children:any) => {
             const answer = questions[number].answer;
             answer.sort();
             const isCheckedSorted = isChecked.sort();
+            
             if (JSON.stringify(answer) === JSON.stringify(isCheckedSorted)){
               setAnswerCorrect(true);
               isCorrect = true
-
             }
         }else{
             const levenshteinDist = (levenshtein(String(inputText).toUpperCase(),String(questions[number].answer).toUpperCase()))
@@ -146,16 +196,13 @@ const CardQuiz = ( children:any) => {
         setSubmitted(true); 
          setTimeout(() => {
        postAnswer(isCorrect) ; },800)
-    
     }
-    
   }
 
     //Réinitialisation, passage à la question suivante
     const nextQuestion = () => {
         // Move on to the next question if not the last question
-
-        setCheckboxes(false);
+        
         setFlip(false);
         setIsChecked([]);
         setFlip(false);
@@ -166,6 +213,10 @@ const CardQuiz = ( children:any) => {
         if (!noMoreCards){
         const nextQ = number + 1;
         setNumber(nextQ);
+        if(questions[number].streak > 3 && questions[number].streakct > 3){
+            setCheckboxes(false);
+        }else{ setCheckboxes(true)}
+        
         }
 
         if (number+1 === totalQuests) {
@@ -176,8 +227,7 @@ const CardQuiz = ( children:any) => {
     };
 
     //Gérer un checkbox check
-    const handleSingleCheck = (e:any) =>{  
-        {setCheckboxes(true)}
+    const handleSingleCheck = (e:any) =>{
         if(!submitted){
         const option = e.target.getAttribute('value');;
         if (isChecked.includes(option)) {
@@ -193,43 +243,86 @@ const CardQuiz = ( children:any) => {
 
     //Permettre à l'user de charger plus de questions. 
     //Recalcul des scores avec les cartes jouées + import des nouvelles
+
+    //Répétition de code ! Un cas si c'est un examen, un cas si ça n'est pas un examen
+    //La différence ? l'api utilisée pour fetch les données
+    //Mais pour ne pas avoir de pb de synchro j'ai carrément dupliqué tout le bloc
     const fetchMore = async ()=>{
 
     const  slug  = children.children[2].id;
-    const opts = {fk_deck:slug,
-        fk_user : sessionUser};
+    const opts = {
+        fk_deck:slug,
+        fk_user : sessionUser,
+        isLongTerme : isLongTerme};
 
-    const setScores = await fetch (`http://localhost:3000/api/cards_users/updateScore`,{
-        method : 'post',
-        headers:{'Content-Type':'application/json'},
-        body: JSON.stringify(opts)
-      });
+    if (!isExam){
+        const setscoreurl = `http://localhost:3000/api/cards_users/updateScore`
+        const getCardsurl = `http://localhost:3000/api/cards_stacks/${slug}`
+        const setScores = await fetch (setscoreurl,{
+            method : 'post',
+            headers:{'Content-Type':'application/json'},
+            body: JSON.stringify(opts)
+        });
+        
+        const cardsByIds = await fetch (getCardsurl,{
+            method : 'post',
+            headers:{'Content-Type':'application/json'},
+            body: JSON.stringify(opts)
+        });
+        const cardsData = await cardsByIds.json();
+        const len = cardsData.length;
     
-    const cardsByIds = await fetch (`http://localhost:3000/api/cards_stacks/${slug}`,{
-        method : 'post',
-        headers:{'Content-Type':'application/json'},
-        body: JSON.stringify(opts)
-      });
+        var d = []
+        var newshuffled :any[] = []
+        for(var i =0;i<len;i++){
+          d = (cardsData[i].bad_options.concat(cardsData[i].answer));
+          newshuffled.push(shuffle(d))
+          d = []
+        }
   
-      const cardsData = await cardsByIds.json();
-      const len = cardsData.length;
+        const appended = questions.concat(cardsData)
+        setQuestions(appended)
   
-      var d = []
-      var newshuffled = []
-      for(var i =0;i<len;i++){
-        d = (cardsData[i].bad_options.concat(cardsData[i].answer));
-        newshuffled.push(shuffle(d))
-        d = []
-      }
+        const appendedShuffled = shuffled.concat(newshuffled) //Erreur signalée mais fonctionne très bien
+        setTotalQuests(appended.length)
+        setShuffled(appendedShuffled);
+        setNoMoreCards(false);
 
-      const appended = questions.concat(cardsData)
-      setQuestions(appended)
-      
+    }else{
+        const setscoreurl = `http://localhost:3000/api/exams/updateScore`
+        const getCardsurl = `http://localhost:3000/api/exams/getMoreCards`
+        const setScores = await fetch (setscoreurl,{
+            method : 'post',
+            headers:{'Content-Type':'application/json'},
+            body: JSON.stringify(opts)
+        });
+        
+        const cardsByIds = await fetch (getCardsurl,{
+            method : 'post',
+            headers:{'Content-Type':'application/json'},
+            body: JSON.stringify(opts)
+        });
 
-      const appendedShuffled = shuffled.concat(newshuffled) //Erreur signalée mais fonctionne très bien
-      setTotalQuests(appended.length)
-      setShuffled(appendedShuffled);
-      setNoMoreCards(false);
+        const cardsData = await cardsByIds.json();
+        const len = cardsData.length;
+    
+        var d = []
+        var newshuffled = []
+        for(var i =0;i<len;i++){
+          d = (cardsData[i].bad_options.concat(cardsData[i].answer));
+          newshuffled.push(shuffle(d))
+          d = []
+        }
+  
+        const appended = questions.concat(cardsData)
+        setQuestions(appended)
+  
+        const appendedShuffled = shuffled.concat(newshuffled) //Erreur signalée mais fonctionne très bien
+        setTotalQuests(appended.length)
+        setShuffled(appendedShuffled);
+        setNoMoreCards(false);
+    }
+
   }
 
 
@@ -237,7 +330,7 @@ const CardQuiz = ( children:any) => {
     <div className = {styles.cardAroundSettings}>
         
         {/* Ne charger que si la question est chargée */}
-        {questions[totalQuests-1]?
+        {children.children?
         <>
             {!noMoreCards?
             <>
@@ -247,10 +340,13 @@ const CardQuiz = ( children:any) => {
                             <div className= {styles.cardaface}>
                                 <p className={styles.description}>
                                 {!noMoreCards? `${number+1}/${totalQuests}` : ''}
+                                {isLongTerme?"lt":"ct"}
                             </p>
                                 <div className={styles.QuestionCard}> {questions[number].question} </div>
+                                <p>streakct {questions[number].streakct} ,streaklt {questions[number].streak}</p>
                                 {/* Choisir entre l'affichage checkbox ou input */}
-                                {questions[number].streak<3 ? // Choisir quand montrer le QCM par défaut
+                                {(questions[number].streak<3 && questions[number].streakct<3) || 
+                                ((questions[number].streak>3 || questions[number].streakct<3)) && questions[number].answer.length !=1? // Choisir quand montrer le QCM par défaut
                                 <div className={styles.checkboxesCard}>
                                     {shuffled[number].map((option:any)=>(
                                     <p key = {option}>
@@ -292,7 +388,7 @@ const CardQuiz = ( children:any) => {
                                             </div>
                                             ))}
                                             </div>
-                                        <p className={styles.descriptionCard}>Hi there! This is the description of the answer that the creator of the card might have written</p>
+                                        <p className={styles.descriptionCard}>This is the description of the answer that the creator of the card might have written</p>
                                     </>:null}
                                 </div>
                                 <button className={styles.btnCardBack}  onClick={submitFlip}>Flip</button>
@@ -343,30 +439,45 @@ const CardQuiz = ( children:any) => {
                 </div>
             </>:
             <div className={styles.carda}>
-                <div className={styles.descriptionCard}>Séance de révision terminée !</div>
-                <div className={styles.descriptionCard}>Vous avez fini les cartes que vous deviez revoir aujourd'hui !</div>
-                
-                <div>
-                    <FutureSeance>
-                        {children.children[2]}
-                    </FutureSeance>
-                </div>
+                <div className={styles.cardaface}>
+                {isExam?
+                <>
+                    <div className={styles.descriptionCard}>Séance de révision terminée !</div>
+                    <div className={styles.descriptionCard}>Vous avez fini les cartes que vous deviez revoir aujourd'hui !</div>
+                    
+                    <div>
+                        <FutureSeance>
+                            {children.children[2]}
+                        </FutureSeance>
+                    </div>
 
-                <div className={styles.descriptionCard}>Si vous le souhaitez vous pouvez néanmoins continuer pour prendre de l'avance</div>
-                
-                <button className={styles.btnCard}  onClick={fetchMore}>Continuer</button>
+                    <div className={styles.descriptionCard}>Si vous le souhaitez vous pouvez toujours continuer pour prendre de l'avance</div>
+                </>
+                : 
+                <div className={styles.descriptionCard}>Charger plus de cartes ?</div>
+                }
+               
+               
+
+                </div>
+                <button className={styles.btnCardBack}  onClick={fetchMore}>Continuer</button>
 
                 <div className = {styles.sideButtons}>
                     <IconButton aria-label="grid" onClick = {startQuiz}>
                         <ReplayIcon fontSize="small"/>
                     </IconButton>
                 </div>
-               
-
-
-            </div>}
+            </div>
+            }
         </>
         :<div>Loading...</div>}
+
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="success">
+          Cartes chargées!
+        </Alert>
+      </Snackbar>
+
     </div>
   )
 }

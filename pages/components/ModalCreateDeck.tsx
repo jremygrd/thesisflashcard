@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-export default function TransitionsModal(sessionUser:any) {
+export default function ModalCreateDeck(sessionUser:any) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => {

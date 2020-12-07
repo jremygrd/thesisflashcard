@@ -7,7 +7,6 @@ export default async function (req:NextApiRequest, res: NextApiResponse) {
     try{
         
         const stackData = req.body;
-        console.log("LALALALA",stackData.fk_user);
 
         const uuidstack = create_UUID();
 
@@ -58,8 +57,11 @@ export default async function (req:NextApiRequest, res: NextApiResponse) {
                nbgood:0,
                nbbad:0,
                streak:0,
+               nbgoodct:0,
+               nbbadct:0,
+               streakct:0,
                diff:1,
-               lasttried:1605137172227,
+               lasttried:new Date().getTime(),
                score:0.5,
                 cards : {
                     connect :{
