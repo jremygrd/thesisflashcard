@@ -31,9 +31,9 @@ export default function PopMail() {
 
   const [open, setOpen] = React.useState(false);
   const [openSucces, setOpenSucces] = React.useState(false);
-  const [openErrorMailMatch, setOpenErrorMailMatch] = React.useState(false);
+  const [openError,setOpenError] = React.useState(false);
+  const [myerrorText, setMyerrorText] = useState(''); 
 
-  var myerrorText = "";
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -41,19 +41,19 @@ export default function PopMail() {
   const handleClickOpenSucces = () => {
     setOpenSucces(true);
   };
-  const handleClickOpenErrorMailMatch = () => {
-    setOpenErrorMailMatch(true);
+  const handleClickOpenError = () => {
+   setOpenError(true);
   };
 
   const handleClose = () => {
     setOpen(false);
   }; 
-  const handleCloseErrorMailMatch = (event?: React.SyntheticEvent, reason?: string) => {
+  const handleCloseError = (event?: React.SyntheticEvent, reason?: string) => {
     if (reason === 'clickaway') {
       return;
     }
 
-    setOpenErrorMailMatch(false);
+   setOpenError(false);
   };
   const handleCloseSucces = (event?: React.SyntheticEvent, reason?: string) => {
     if (reason === 'clickaway') {
@@ -84,19 +84,37 @@ export default function PopMail() {
             body: JSON.stringify(myuser),
           });
         }).catch(function(error:any) {
-          // An error happened.
-          console.log("Error occured in update mail")
+          // error in new mail
+          if(error.code == "auth/email-already-in-use") {
+            setMyerrorText("Cette adresse mail est déjà utilisée");
+           setOpenError(true);
+          }
+          else if(error.code == "auth/invalid-email") {
+            setMyerrorText("Format de l'adresse mail invalide");
+           setOpenError(true);
+          }
           console.log(error)
         });
       }).catch(function(error:any) {
-        // An error happened.
-        console.log("Error occured in re auth profil")
-        console.log(error)
+        // Error in re-auth
+        if(error.code == "auth/wrong-password") {
+          setMyerrorText("Mot de passe invalide");
+         setOpenError(true);
+        }
+        if(error.code == "auth/invalid-email") {
+          setMyerrorText("Adresse mail incorrecte");
+         setOpenError(true);
+        }
+        if(error.code == "auth/user-mismatch") {
+          setMyerrorText("L'adresse mail indiquée ne correspond pas avec l'adresse mail sur laquel vous êtes connecté");
+         setOpenError(true);
+        }
+        console.log(error);
       });
     }
     else{
-      myerrorText = "Les 2 adresses mails ne correspondent pas";
-      setOpenErrorMailMatch(true);
+      setMyerrorText("Les 2 adresses mails ne correspondent pas");
+     setOpenError(true);
     }
   }
 
@@ -162,8 +180,8 @@ export default function PopMail() {
             Votre adresse mail a bien été changée
           </Alert>
         </Snackbar>
-        <Snackbar open={openErrorMailMatch} autoHideDuration={6000} onClose={handleCloseErrorMailMatch}>
-          <Alert onClose={handleCloseErrorMailMatch} severity="error">
+        <Snackbar open={openError} autoHideDuration={6000} onClose={handleCloseError}>
+          <Alert onClose={handleCloseError} severity="error">
             {myerrorText}
           </Alert>
         </Snackbar>

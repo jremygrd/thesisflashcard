@@ -29,25 +29,38 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function PopMail() {
 
-  const [open2, setOpen2] = React.useState(false);
-  const [open3, setOpen3] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
+  const [openSucces, setOpenSucces] = React.useState(false);
+  const [openError,setOpenError] = React.useState(false);
+  const [myerrorText, setMyerrorText] = useState(''); 
 
-  const handleClickOpen2 = () => {
-    setOpen2(true);
+
+  const handleClickOpen = () => {
+    setOpen(true);
   };
-  const handleClose2 = () => {
-    setOpen2(false);
+  const handleClickOpenSucces = () => {
+    setOpenSucces(true);
+  };
+  const handleClickOpenError = () => {
+   setOpenError(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
   }; 
-  const handleClick3 = () => {
-    setOpen3(true);
-  };
-
-  const handleClose3 = (event?: React.SyntheticEvent, reason?: string) => {
+  const handleCloseError = (event?: React.SyntheticEvent, reason?: string) => {
     if (reason === 'clickaway') {
       return;
     }
 
-    setOpen3(false);
+   setOpenError(false);
+  };
+  const handleCloseSucces = (event?: React.SyntheticEvent, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpenSucces(false);
   };
 
   const updatePassword=async (email:any,password:any,newPassword:any,newPassword2:any) => {
@@ -57,30 +70,48 @@ export default function PopMail() {
       userAuth?.reauthenticateWithCredential(credential).then(function() {
         // User re-authenticated.
         userAuth?.updatePassword(newPassword).then (async function() {
-          setOpen3(true);
+          setOpen(false);
+          setOpenSucces(true);
           console.log("Password update succesfull")
           // Update successful.
         }).catch(function(error) {
-          // An error happened.
-          console.log("Error occured in update password")
+          // error in new password
+          if(error.code == "auth/weak-password") {
+            setMyerrorText("Le nouveau mot de passe doit comporter au moins 6 caractères");
+           setOpenError(true);
+          }
           console.log(error)
         });
       }).catch(function(error) {
-        // An error happened.
-        console.log("Error occured in re auth profil")
-        console.log(error)
+        // error in re-auth
+        if(error.code == "auth/wrong-password") {
+          setMyerrorText("Mot de passe invalide");
+         setOpenError(true);
+        }
+        if(error.code == "auth/invalid-email") {
+          setMyerrorText("Adresse mail incorrecte");
+         setOpenError(true);
+        }
+        if(error.code == "auth/user-mismatch") {
+          setMyerrorText("L'adresse mail indiquée ne correspond pas avec l'adresse mail sur laquel vous êtes connecté");
+         setOpenError(true);
+        }
+        console.log(error);
       });
     }
-    else{console.log("Erreur : Les 2 adresses mails ne sont pas les mêmes");}
+    else{
+      setMyerrorText("Les 2 mots de passe ne correspondent pas");
+      setOpenError(true);  
+    }
   }
 
   return (
     <div>
-      <Button variant="contained" color="secondary" onClick={handleClickOpen2}>
+      <Button variant="contained" color="secondary" onClick={handleClickOpen}>
         Changer Mot de passe
       </Button>
       {/* Pop up to change password */}
-      <Dialog open={open2} onClose={handleClose2} aria-labelledby="form-dialog-title">
+      <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
         <DialogContent>
           <DialogContentText>
@@ -117,23 +148,28 @@ export default function PopMail() {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose2} color="primary">
+          <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
           <Button 
           onClick={() => {updatePassword((document.getElementById("actualMailPop2") as HTMLInputElement).value,
           (document.getElementById("passwordPop2") as HTMLInputElement).value,
           (document.getElementById("newPasswordPop2") as HTMLInputElement).value,
-          (document.getElementById("newPassword2Pop2") as HTMLInputElement).value);handleClose2()}} 
+          (document.getElementById("newPassword2Pop2") as HTMLInputElement).value)}} 
           color="primary">
             Sauvegarder
           </Button>
         </DialogActions>
       </Dialog>
       <div className={useStyles().root}>
-        <Snackbar open={open3} autoHideDuration={6000} onClose={handleClose3}>
-          <Alert onClose={handleClose3} severity="success">
-            Votre mot de passe a bien été changée
+        <Snackbar open={openSucces} autoHideDuration={6000} onClose={handleCloseSucces}>
+          <Alert onClose={handleCloseSucces} severity="success">
+            Votre mot de passe a bien été changé
+          </Alert>
+        </Snackbar>
+        <Snackbar open={openError} autoHideDuration={6000} onClose={handleCloseError}>
+          <Alert onClose={handleCloseError} severity="error">
+            {myerrorText}
           </Alert>
         </Snackbar>
       </div>
