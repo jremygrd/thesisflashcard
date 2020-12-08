@@ -524,3 +524,26 @@ text-align: left;
   position: relative;
   text-align: center;
 }
+
+.search{
+  background: whitesmoke;
+  border-radius: 5%;
+  width: 80%;
+  font-size: 25px;
+
+}
+
+.containersearch{
+  width: 70%;
+  margin: 100px auto;
+}
+
+.suggestion{
+  font-size: 22px;
+  width: 60%;
+  color : red;
+}
+
+.suggestion:hover{
+  background-color: cornflowerblue;
+}
