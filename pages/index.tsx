@@ -81,7 +81,7 @@ export async function getServerSideProps() {
   const allExams = await fetch ("http://localhost:3000/api/exams/findAll"); //à remplacer par findAllOfUser 
   const examList = await allExams.json();
 
-  const sessionUser = "624d86f8-834d-4e3f-8488-c22dfdbaa15b"; //JEAN
+  const sessionUser = "1w7K30BqJFTR6rJLKdAP9aasoKM2"; //JEAN
   return {
     props: {
       deckData,sessionUser,examList

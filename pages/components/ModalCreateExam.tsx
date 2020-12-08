@@ -74,7 +74,7 @@ export default function ModalCreateExam(decks:any) {
             method: "post",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({title : inputText, 
-              fk_user : "624d86f8-834d-4e3f-8488-c22dfdbaa15b",
+              fk_user : "1w7K30BqJFTR6rJLKdAP9aasoKM2",
               decks:isChecked,
               date : newDate.getTime()}),
           }).then(handleClose);

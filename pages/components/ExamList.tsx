@@ -88,7 +88,7 @@ const ExamList = ( examList:any) => {
             method: "post",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({title : inputText, 
-              fk_user : "624d86f8-834d-4e3f-8488-c22dfdbaa15b",
+              fk_user : "1w7K30BqJFTR6rJLKdAP9aasoKM2",
               decks:isChecked,
               date : newDate.getTime()}),
           }).then(handleClose).then(refreshExams);
@@ -121,6 +121,8 @@ const ExamList = ( examList:any) => {
     useEffect(() => {
       setDecks(examList.children[0])
       setDecksHook(examList.children[1])
+      console.log(examList,"OEIDJEO")
+      console.log(getTime(new Date().getTime()))
     }, [examList])
 
 
@@ -204,7 +206,7 @@ const ExamList = ( examList:any) => {
               !next_session ?
                 "Commencez dès aujourd'hui"
                 :
-                getTime(next_session) <= getTime(new Date().getTime()) ?
+                (next_session) <= (new Date().getTime()) ?
                 "Dès aujourd'hui"
                 :
                 next_session > exam_date ?

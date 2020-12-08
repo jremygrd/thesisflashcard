@@ -11,7 +11,7 @@ export default async function (req:NextApiRequest, res: NextApiResponse) {
         join cards_users cu on cards.id = cu.fk_card
     where id in (select fk_cardID from cards_stacks where fk_stackID in
             (select fk_stackID from exam_list where exam_list.fk_examId = ${req.body}))
-    and cu.fk_user = '624d86f8-834d-4e3f-8488-c22dfdbaa15b'
+    and cu.fk_user = '1w7K30BqJFTR6rJLKdAP9aasoKM2'
     and cu.score <0.6`   
 
     const examupdate = await prisma.$queryRaw`update exam set cardsToDo = ${cards.length}
