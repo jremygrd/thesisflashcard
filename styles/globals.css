@@ -1,4 +1,6 @@
 body {
+  margin: 0px;
+  padding: 0px;
   --text: #050000 !important;
   --lightText: #697386 !important;
   --bg: white !important;

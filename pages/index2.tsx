@@ -12,29 +12,19 @@ export default function Home({deckData}:any) {
 
   const [decksHook, setDecks] = useState(deckData)
   const [result, setresult] = useState([])
-  const test = deckData[1].title
-  if (typeof document !== 'undefined'){
-  const searchinput = document.getElementById('searchInput') as HTMLTextAreaElement;
-
-  searchinput?.addEventListener('keyup' ,function(){
-      const input = searchinput.value;
-      
-      const result = deckData.filter((item: { title: string; })  => item.title.toLocaleLowerCase().includes(input.toLocaleLowerCase()))
-      setresult(result)
-      // let suggestion ='';
-
-      // result.forEach((resultItem: { title: any; }) => 
-      //   suggestion += `
-      //       <div className=${styles.search}>${resultItem.title}</div>
-      //   `   
-      // )
-
-      // document.getElementById('suggestions').innerHTML = suggestion
-  })}
-
+  const [inputText, setInputText] = useState('')
   
+  
+  const changeSearch = (input: any) =>{
+    setInputText(input);
+    console.log(input)
+    const result = deckData.filter((item: { title: string; })  => item.title.toLocaleLowerCase().includes(input.toLocaleLowerCase()))
+      setresult(result)
+
+  }
 
   useEffect(() => {
+    
     setDecks(deckData);
   }, [deckData])
 
@@ -59,7 +49,7 @@ export default function Home({deckData}:any) {
 
           <h2>Recherche</h2>
           <div >
-            <input className={styles.search} id="searchInput" type="search" placeholder="search .." />
+            <input className={styles.search} id="searchInput" type="search" placeholder="search .." value={inputText} onChange={(e) => changeSearch(e.target.value)}/>
             <div id="suggestions">
 
             </div>
