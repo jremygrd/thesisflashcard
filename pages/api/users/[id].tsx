@@ -15,10 +15,8 @@ export default async function (req:NextApiRequest, res: NextApiResponse) {
             }
             
         })
-
-
         res.status(201);//created
-        res.json({user});
+        res.json(user);
     }catch (e){
         console.log(e);
         res.status(500);

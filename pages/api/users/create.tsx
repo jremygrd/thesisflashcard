@@ -25,6 +25,4 @@ export default async function (req:NextApiRequest, res: NextApiResponse) {
         await prisma.$disconnect()
     }
     
-    res.json({decks:"Done"});
-    
 }
