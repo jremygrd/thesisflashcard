@@ -23,7 +23,6 @@ import { Email } from '@material-ui/icons';
 export async function getServerSideProps(ctx: GetServerSidePropsContext) {
   try {
     const cookies = nookies.get(ctx);
-    console.log(cookies.token)
     const token = await firebaseAdmin.auth().verifyIdToken(cookies.token);
     const myuser = await fetch ("http://localhost:3000/api/users/" + token.uid);
     const userData = await myuser.json();
@@ -33,7 +32,6 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
       }
     };
   } catch (err) {
-    console.log(err)
     return {
       redirect: {
         permanent: false,

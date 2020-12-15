@@ -504,7 +504,7 @@ function levenshtein(a:String, b:String) {
     for(j = 0; j <= a.length; j++){
       matrix[0][j] = j;
     }
-  
+    
     // Fill in the rest of the matrix
     for(i = 1; i <= b.length; i++){
       for(j = 1; j <= a.length; j++){
