@@ -30,7 +30,6 @@ export type Question = {
     streakct:number;
     nbGood:number;
     nbBad:number;
-
   };
 
 

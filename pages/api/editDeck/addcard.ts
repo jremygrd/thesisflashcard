@@ -22,24 +22,26 @@ export default async function (req:NextApiRequest, res: NextApiResponse) {
     }
     ans+=']'
     
-    var bad = '[';
-
-    for(var i =0;i<req.body.question.bad_options.length;i++){
-    bad = bad+"'"+req.body.question.bad_options[i]+"'";
-    if (i != req.body.question.bad_options.length-1){bad+=","}
+    var bad = '[]';
+    if( req.body.question.bad_options.length!=0){
+         bad = '[';
+        for(var i =0;i<req.body.question.bad_options.length;i++){
+        bad = bad+"'"+req.body.question.bad_options[i]+"'";
+        if (i != req.body.question.bad_options.length-1){bad+=","}
+        }
+        bad+=']'
     }
-    bad+=']'
+
 
     //console.log('ans',ans,bad);
-    const uuid = create_UUID();
+    const uuid = req.body.question.id//create_UUID();
     var c = ""
-
 
     c+=`insert into cards values ('${uuid}',
     '${req.body.question.question}',
     '${req.body.question.tip}',
-    ARRAY ${bad},
-    ARRAY ${ans},
+    ARRAY ${bad}::text[],
+    ARRAY ${ans}::text[],
     '${req.body.user}')`;
 
 
@@ -90,23 +92,6 @@ export default async function (req:NextApiRequest, res: NextApiResponse) {
         })
 
 
-
-
-       
-        // const addCard = await prisma.$queryRaw(`INSERT INTO cards values( 
-        // id = '${uuid}',
-        // question = '${req.body.question.question}',
-        // tip = '${req.body.question.tip}',
-        // answer = '${ans}',
-        // bad_options = '${bad}',
-        // fk_user = '${req.body.question.user}'
-        // );`);
-
-        // const addCards_stacks = await prisma.$queryRaw(`INSERT INTO cards_stacks values( 
-        //     id = '${uuid}',
-        //     fk_cardid = '${req.body.question.id}',
-        //     fk_stackid = '${req.body.deck.id}'
-        //     )`);
 
         res.status(201);//created
         res.json({uuid});
