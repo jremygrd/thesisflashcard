@@ -11,6 +11,7 @@ export default async function (req:NextApiRequest, res: NextApiResponse) {
         nbOfCards += cards.length
     }
 
+    console.log(req.body.fk_user,"ct b1 la")
     
     const examuuid = create_UUID()
     try{
