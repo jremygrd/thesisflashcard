@@ -408,6 +408,8 @@ const [openModal, setOpenModal] = React.useState(false);
     }
     if (allOptions.length > 0 && answers.length > 0) {
       const update = questions;
+      console.log("IUFGIUF",update);
+      console.log("IUFGIUFOEINDEIDEIDHN");
       update[number].answer = answers;
       update[number].bad_options = bad_options;
       update[number].question = quest;
@@ -457,23 +459,17 @@ const [openModal, setOpenModal] = React.useState(false);
 
   return (
   <>
-    <div className={isMobile ? styles.splitbottom:styles.splitleft}>
-
     {!isMobile?
-    <div className={styles.stickyTop}>
-    <div key="DeckInfo" 
-    onClick={DeckSettings}
-    className = {isMobile ? styles.listDeckMobile:styles.listDeck}> {deckData.title.slice(0,25) +" ⚙️"}
-    </div>
-    
-    <input className={styles.search} id="searchInput" type="search" placeholder="🔍 Search" 
+    <>
+    <div className={styles.deckSettings} onClick={DeckSettings} >{deckData.title.slice(0,25) +" ⚙️"}</div>
+    <input className={styles.searchBar} id="searchInput" type="search" placeholder="🔍 Search" 
     value = {search}
     onChange={
       (e) => searcher(e.target.value)
-    }/>
+    }/></>
+    :null}
 
-  </div>
-  :null}
+    <div className={isMobile ? styles.splitbottom:styles.splitleft}>
 
   {questions[0]?
     <>

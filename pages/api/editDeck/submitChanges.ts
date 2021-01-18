@@ -16,29 +16,31 @@ export default async function (req:NextApiRequest, res: NextApiResponse) {
     req.body.bad_options.filter((checked_option: any) => checked_option !== "");
 
     var ans = '[';
-
+    console.log(req.body)
     for(var i =0;i<req.body.answer.length;i++){
-    ans = ans+"'"+req.body.answer[i]+"'";
+        ans = ans+"'"+doubleQuotes(req.body.answer[i])+"'";
     if (i != req.body.answer.length-1){ans+=","}
     }
     ans+=']'
     
     var bad = '[';
 
+    console.log("frof2")
     for(var i =0;i<req.body.bad_options.length;i++){
-    bad = bad+"'"+req.body.bad_options[i]+"'";
+        bad = bad+"'"+doubleQuotes(req.body.bad_options[i])+"'";
     if (i != req.body.bad_options.length-1){bad+=","}
     }
     bad+=']'
 
     if(ans == "[]"){ans = "['']"}
     if(bad == "[]"){bad = "['']"}
+    console.log("frof3")
 
     console.log('ans',req.body);
     var c = ""
     c+=`update cards set 
-    question = '${req.body.question}',
-    tip = '${req.body.tip}',
+    question = '${doubleQuotes(req.body.question)}',
+    tip = '${doubleQuotes(req.body.tip)}',
     answer = ARRAY ${ans},
     bad_options = ARRAY ${bad}
     where id = '${req.body.id}'`;
@@ -59,4 +61,9 @@ export default async function (req:NextApiRequest, res: NextApiResponse) {
 
     }
     
+
+    function doubleQuotes(str : string){
+        str = str.replace("'","''")
+        return str;
+    }
 }

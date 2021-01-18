@@ -17,7 +17,7 @@ export default async function (req:NextApiRequest, res: NextApiResponse) {
     var ans = '[';
 
     for(var i =0;i<req.body.question.answer.length;i++){
-    ans = ans+"'"+req.body.question.answer[i]+"'";
+    ans = ans+"'"+doubleQuotes(req.body.question.answer[i])+"'";
     if (i != req.body.question.answer.length-1){ans+=","}
     }
     ans+=']'
@@ -26,7 +26,7 @@ export default async function (req:NextApiRequest, res: NextApiResponse) {
     if( req.body.question.bad_options.length!=0){
          bad = '[';
         for(var i =0;i<req.body.question.bad_options.length;i++){
-        bad = bad+"'"+req.body.question.bad_options[i]+"'";
+        bad = bad+"'"+doubleQuotes(req.body.question.bad_options[i])+"'";
         if (i != req.body.question.bad_options.length-1){bad+=","}
         }
         bad+=']'
@@ -38,8 +38,8 @@ export default async function (req:NextApiRequest, res: NextApiResponse) {
     var c = ""
 
     c+=`insert into cards values ('${uuid}',
-    '${req.body.question.question}',
-    '${req.body.question.tip}',
+    '${doubleQuotes(req.body.question.question)}',
+    '${doubleQuotes(req.body.question.tip)}',
     ARRAY ${bad}::text[],
     ARRAY ${ans}::text[],
     '${req.body.user}')`;
@@ -113,6 +113,12 @@ export default async function (req:NextApiRequest, res: NextApiResponse) {
             return (c=='x' ? r :(r&0x3|0x8)).toString(16);
         });
         return uuid;
+    }
+
+
+    function doubleQuotes(str : string){
+        str = str.replace("'","''")
+        return str;
     }
     
 }
