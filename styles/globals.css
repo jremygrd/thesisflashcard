@@ -279,7 +279,11 @@ figure {
 
 img {
   vertical-align: middle;
+  max-width: 100%;
+  height: auto;
+  width: auto\9; /* ie8 */
   border-style: none;
+  
 }
 
 svg:not(:root) {
@@ -2570,15 +2574,8 @@ svg.shinePurpleSmall g {
 }
 
 
-
-
-
-
-
-
-
 .wrapper {
-  display: flex;
+  display: flex;  
   flex-flow: row wrap;
   flex-wrap: wrap;
   text-align: center;
@@ -2618,8 +2615,12 @@ svg.shinePurpleSmall g {
   margin-left: 1rem;
 }
 .mybar {
-  display: flex;
+  display: flex;  
   flex-flow: row wrap;
   flex-wrap: wrap;
   width: 100%;
 }
+
+
+
+

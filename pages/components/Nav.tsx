@@ -12,7 +12,7 @@ import Link from 'next/link';
 export default function ButtonAppBar() {
 
   return (
-    <div >
+    <div className="mybar">
       <AppBar position="static">
         <Toolbar>
           <IconButton edge="start"  color="inherit" aria-label="menu">
@@ -29,6 +29,12 @@ export default function ButtonAppBar() {
           </Link>  
           <Link href="/myprofile">
           <Button color="inherit">Mon profil</Button>
+          </Link> 
+          <Link href="/test">
+          <Button color="inherit">Test</Button>
+          </Link>  
+          <Link href="/decks/details/e6c3ee74-0678-44dc-a0a9-90e81ada8fc3">
+          <Button color="inherit">ok</Button>
           </Link> 
         </Toolbar>
       </AppBar>
