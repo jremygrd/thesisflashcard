@@ -16,7 +16,6 @@ export default async function (req:NextApiRequest, res: NextApiResponse) {
     req.body.bad_options.filter((checked_option: any) => checked_option !== "");
 
     var ans = '[';
-    console.log(req.body)
     for(var i =0;i<req.body.answer.length;i++){
         ans = ans+"'"+doubleQuotes(req.body.answer[i])+"'";
     if (i != req.body.answer.length-1){ans+=","}
@@ -24,8 +23,6 @@ export default async function (req:NextApiRequest, res: NextApiResponse) {
     ans+=']'
     
     var bad = '[';
-
-    console.log("frof2")
     for(var i =0;i<req.body.bad_options.length;i++){
         bad = bad+"'"+doubleQuotes(req.body.bad_options[i])+"'";
     if (i != req.body.bad_options.length-1){bad+=","}
@@ -34,9 +31,6 @@ export default async function (req:NextApiRequest, res: NextApiResponse) {
 
     if(ans == "[]"){ans = "['']"}
     if(bad == "[]"){bad = "['']"}
-    console.log("frof3")
-
-    console.log('ans',req.body);
     var c = ""
     c+=`update cards set 
     question = '${doubleQuotes(req.body.question)}',

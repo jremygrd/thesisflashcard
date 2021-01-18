@@ -725,6 +725,22 @@ text-align: left;
   transform: translate(-50%, -50%);
 }
 
+.listCardAddCardMobile{
+  background:  #e7e9ff;
+  border-radius: 20px;
+  box-shadow: var(--shadowBig);
+  margin: 0.5rem;
+  padding:1rem;
+  position: relative;
+  
+  cursor: pointer;
+  text-align: center;
+  color: rgb(0, 0, 0);
+
+  position: sticky;
+  right:0.5rem;
+  z-index: 1;
+}
 
 .searchMobile{
   
@@ -773,7 +789,7 @@ text-align: left;
 
 .fixlastelem{
   border-radius: 20px;
-  margin: 2rem;
+  margin: 1rem;
   color: transparent;
 }
 
@@ -828,15 +844,15 @@ text-align: left;
 .inputQuestionCard{
   margin-left: 10%;
   margin-right: 10%;
-  margin-bottom: 2rem;
-  margin-top:10%;
+  margin-bottom: 1rem;
+  margin-top:15%;
   word-wrap: break-word;
 }
 
 .optionEdit{
   margin-left: 1rem;
   margin-right: 10%;
-  margin-top:10%;
+  margin-top:1rem;
   word-wrap: break-word;
 
 }
@@ -871,7 +887,7 @@ text-align: left;
 .addOptionCard{
   background: #ffffff;
   border-radius: 20px;
-  box-shadow: var(--shadowBig);
+  border:1px solid #e0e0e0;
   margin: 0.5rem;
   padding:0.2rem;
   margin-top: 2rem;
