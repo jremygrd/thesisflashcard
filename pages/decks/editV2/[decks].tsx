@@ -423,6 +423,7 @@ export default function Deck({ cardsData, deckData, sessionUser }: any) {
     <>
       {!isMobile ? (
         <>
+        {/* version ordi, le deck et la search bar en haut à gauche */}
           <div className={styles.deckSettings} onClick={DeckSettings}>
             {deckData.title.slice(0, 25) + " ⚙️"}
           </div>
@@ -437,9 +438,14 @@ export default function Deck({ cardsData, deckData, sessionUser }: any) {
         </>
       ) : null}
 
+        {/* 
+        La barre scrollable avec les cartes à l'intérieur,
+        2 styles selon pc ou mobile
+         */}
       <div className={isMobile ? styles.splitbottom : styles.splitleft}>
         {questions[0] ? (
           <>
+          {/* On affiche les résultats de la recherche (qui affiche toutes les cartes par défaut) */}
             {searchResults.map(
               (questionsMapped: { question: string; id: string }, idx) => (
                 <div
@@ -466,6 +472,7 @@ export default function Deck({ cardsData, deckData, sessionUser }: any) {
           </>
         ) : null}
 
+        {/* A la fin de la liste des cartes on met la case ajouter une carte */}
         <div
           key="AddCard"
           onClick={() => addCard()}
@@ -476,13 +483,21 @@ export default function Deck({ cardsData, deckData, sessionUser }: any) {
           {isMobile ? "➕" : "Ajouter une carte"}
         </div>
 
+
+      
+        {/* C'était pour fixer un bug (à supprimer ?)*/}
         <div className={styles.fixlastelem}>f</div>
+        
       </div>
+
+      {/* La partie Carte, à droite de l'écran, (ou en haut sur mobile) */}
       <div className={isMobile ? styles.splitupper : styles.splitright}>
         <div className={isMobile ? styles.cardeditMobile : styles.cardedit}>
           {!deckSettingsView ? (
             <>
               <div className={styles.inputQuestionCard}>
+
+                {/* Le rond "sauvegarder" */}
                 <div className={styles.circledivSave}>
                   <IconButton
                     aria-label="grid"
@@ -492,6 +507,8 @@ export default function Deck({ cardsData, deckData, sessionUser }: any) {
                   </IconButton>
                 </div>
 
+
+                 {/* L'input text de la question */}
                 <TextField
                   id="standard-multiline-static"
                   multiline
@@ -504,11 +521,15 @@ export default function Deck({ cardsData, deckData, sessionUser }: any) {
                 />
               </div>
 
+
+              {/*On map la liste de nos réponses possibles */}
               {allOptions.map((val: any, idx: any) => (
                 <div className={styles.addOptionCard}>
                   <div className={styles.optionWrapper} key={idx}>
                     <div className={styles.supprEdit}>
-                      <IconButton
+
+                      {/*Delete l'option*/}
+                      <IconButton 
                         key={idx}
                         aria-label="grid"
                         onClick={() => deleteOption(val)}
@@ -517,6 +538,7 @@ export default function Deck({ cardsData, deckData, sessionUser }: any) {
                       </IconButton>
                     </div>
 
+                     {/*Input text de l'option*/}
                     <div className={styles.optionEdit}>
                       <TextField
                         id="standard-multiline-static"
@@ -534,6 +556,8 @@ export default function Deck({ cardsData, deckData, sessionUser }: any) {
                         }
                       />
                     </div>
+
+                     {/*checkbox de l'option*/}
                     <input
                       type="checkbox"
                       id="subscribeNews"
@@ -548,6 +572,8 @@ export default function Deck({ cardsData, deckData, sessionUser }: any) {
                 </div>
               ))}
 
+               {/*Bouton ajouter réponse*/}
+
               <div className={styles.addOptionCard}>
                 Ajouter une réponse
                 <IconButton aria-label="grid" onClick={addOption}>
@@ -556,7 +582,7 @@ export default function Deck({ cardsData, deckData, sessionUser }: any) {
               </div>
 
               {
-                // On affiche l'input texte d'indice si clic sur le bouton
+                // On affiche l'input texte de l'indice si clic sur le bouton
                 //(pour l'instant on met juste un espace dans le tip), mais on pourrait faire un hook pour être plus propre
                 tip.length == 0 ? (
                   <div className={styles.addOptionCard}>
@@ -566,6 +592,7 @@ export default function Deck({ cardsData, deckData, sessionUser }: any) {
                     </IconButton>
                   </div>
                 ) : (
+                  //Emoji ampoule
                   <div className={styles.addOptionCard}>
                     <div className={styles.optionWrapper}>
                       <div className={styles.supprEdit}>
@@ -573,7 +600,7 @@ export default function Deck({ cardsData, deckData, sessionUser }: any) {
                           <EmojiObjectsIcon fontSize="small" />
                         </IconButton>
                       </div>
-
+                      {/* Input text de l'indice */}
                       <div className={styles.optionEdit}>
                         <TextField
                           id="standard-multiline-static"
@@ -590,7 +617,7 @@ export default function Deck({ cardsData, deckData, sessionUser }: any) {
                   </div>
                 )
               }
-
+              {/* Bouton supprimer la carte */}
               <div className={styles.delOptionCard}>
                 Supprimer la carte
                 <IconButton
@@ -603,7 +630,11 @@ export default function Deck({ cardsData, deckData, sessionUser }: any) {
               </div>
             </>
           ) : (
+
+             
             <>
+            {/* ATTENTION, après ce "ou (:)", on est dans l'edit des paramètres du deck */}
+
               <div className={styles.inputQuestionCard}>
                 <TextField
                   id="standard-multiline-static"
@@ -618,6 +649,8 @@ export default function Deck({ cardsData, deckData, sessionUser }: any) {
               </div>
             </>
           )}
+
+          {/* Snackbar affichant une erreur */}
           <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
             <Alert onClose={handleClose} severity="error">
               {message}
@@ -625,6 +658,8 @@ export default function Deck({ cardsData, deckData, sessionUser }: any) {
           </Snackbar>
         </div>
       </div>
+
+      {/* Pour la version mobile, la search bar et le clic paramètres du deck */}
       {isMobile ? (
         <>
           <div
@@ -647,6 +682,8 @@ export default function Deck({ cardsData, deckData, sessionUser }: any) {
         </>
       ) : null}
 
+
+        {/*  Peut être placé presque n'importe ou, le modal de recherche en version mobile*/}
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
