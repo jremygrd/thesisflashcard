@@ -32,37 +32,55 @@ import { Menu } from '@material-ui/core';
 import { MenuItem } from '@material-ui/core';
 import PopShareDeck from '../../components/PopShareDeck';
 
+import Router, { useRouter } from 'next/router'
+import Link from 'next/link';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const slug = context.query.decks;
   const myDeck = await fetch(`http://localhost:3000/api/decks/${slug}`);
   const deckData = await myDeck.json();
-  const myCards = await fetch(`http://localhost:3000/api/cardsFromDeck/${slug}`);
+
+  const opts = { fk_deck: slug, fk_user: sessionUser };
+  const isFavorite = await fetch(
+    `http://localhost:3000/api/decks/isFavorite`,
+    {
+      method: "post",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(opts),
+    }
+  );
+
+  const isFavjson = await isFavorite.json();
+  const isFav= isFavjson[0].favorite;
+  const myCards = await fetch(`http://localhost:3000/api/allcards_stacks/${slug}`);
   const cardsData = await myCards.json();
+
   cardsData.forEach((element: any) => {
     if (element.answer.length == 1 && element.bad_options.length == 0) {
-      element.qcm = 'Question réponse libre';
+      element.qcm = 'Une bonne réponse avec saisie manuelle';
     }
     else if (element.answer.length > 1) {
-      element.qcm = 'Question réponses multiples';
+      element.qcm = 'Plusieurs bonnes réponses';
     }
     else {
-      element.qcm = 'Question réponse simple';
+      element.qcm = 'Une bonne réponse';
     }
 
   });
   return {
     props: {
-      deckData, cardsData
+      deckData, cardsData,isFav
     }
   }
 }
 
-export default function mytest({ deckData, cardsData }: any) {
+const sessionUser = "1w7K30BqJFTR6rJLKdAP9aasoKM2"
 
+export default function mytest({ deckData, cardsData,isFav }: any) {
+  console.log(isFav,'AFTER')
   // const classes = useStyles();
-  console.log(cardsData);
-
+ // console.log(cardsData);
+  const [isFavorite, setIsFavorite] = React.useState(isFav);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -73,6 +91,33 @@ export default function mytest({ deckData, cardsData }: any) {
     setAnchorEl(null);
   };
 
+  const handleCheckFav = async() => {
+    const isFavNow = !isFavorite;
+
+    const opts = { fk_deck: deckData.id, fk_user: sessionUser,favorite:isFavNow };
+    const changeFavorite = await fetch(
+      `http://localhost:3000/api/decks/changeFavorite`,
+      {
+        method: "post",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(opts),
+      }
+    );
+
+    setIsFavorite(isFavNow);
+  };
+
+  const addToMyDecks = async() => {
+    const opts = { fk_deck: deckData.id, fk_user: sessionUser };
+    const isFavorite = await fetch(
+      `http://localhost:3000/api/decks/addToMyDecks`,
+      {
+        method: "post",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(opts),
+      }
+    );
+  };
 
   return (
     <div>
@@ -93,20 +138,42 @@ export default function mytest({ deckData, cardsData }: any) {
           <div className="wrapper">
             <div className="mydiv-11">
               <div >
-                <Button style={{ width: '40%', height: '40px', marginLeft: '15px' }} variant="contained" color="primary">
-                  Jouer
+                <Link as = {`/decks/${deckData.id}`} href = "/decks/[decks]">
+                  <Button style={{ width: '40%', height: '40px', marginLeft: '15px' }} variant="contained" color="primary">
+                    Jouer
+                  </Button>
+                </Link>
+
+                {sessionUser == deckData.fk_user?
+                <Link as = {`/decks/edit/${deckData.id}`} href = "/decks/edit/[decks]">
+                  <Button style={{ width: '40%', height: '40px', marginLeft: '15px' }} variant="contained" color="secondary">
+                    Éditer
+                  </Button>
+                </Link>
+                :
+                <Button style={{ width: '70%', height: '40px', marginLeft: '15px',marginTop:'15px' }} 
+                variant="contained" 
+                color="secondary"
+                onClick={addToMyDecks}>
+                    Ajouter à mes decks
                 </Button>
-                <Button style={{ width: '40%', height: '40px', marginLeft: '15px' }} variant="contained" color="secondary">
-                  Éditer
-                </Button>
+                }
               </div>
             </div>
             <div className="mydiv-22">
               <div className="wrapper" style={{ float: 'right' }}>
-                <PopShareDeck></PopShareDeck>
-                <Checkbox icon={<StarBorderIcon />} checkedIcon={<StarIcon />} name="checkedH" />
+                <PopShareDeck>
+                  {deckData}
+                </PopShareDeck>
+                <Checkbox 
+                icon={<StarBorderIcon />} 
+                checkedIcon={<StarIcon />} 
+                name="checkedH" 
+                checked = {isFavorite}
+                onChange={handleCheckFav}
+                />
                 <IconButton aria-label="delete" aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
-                  <MoreVertIcon />
+                  <MoreVertIcon/>
                 </IconButton>
                 <Menu
                   id="simple-menu"

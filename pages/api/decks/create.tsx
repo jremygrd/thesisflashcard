@@ -26,6 +26,22 @@ export default async function (req:NextApiRequest, res: NextApiResponse) {
             }
         })
 
+
+        const stack_list = await prisma.stack_list.create({
+            data:{
+                users : {
+                    connect :{
+                        id : stackData.fk_user
+                    }
+                },
+                stacks:{
+                    connect:{
+                        id: uuidstack
+                    }
+                }
+            }
+        })
+
         const uuidcard = create_UUID();
 
         const blankCard= await prisma.$queryRaw(`insert into cards values ('${uuidcard}',

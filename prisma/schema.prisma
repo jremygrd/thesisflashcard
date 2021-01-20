@@ -64,6 +64,7 @@ model stacks {
   emoji           String?
   description     String?
   fk_user         String?
+  private         Boolean?          @default(false)
   users           users?            @relation(fields: [fk_user], references: [id])
   cards_stacks    cards_stacks[]
   exam_list       exam_list[]
@@ -135,11 +136,12 @@ model exam {
 }
 
 model stack_list {
-  id         String  @id @default(dbgenerated())
+  id         String   @id @default(dbgenerated())
   fk_userid  String?
   fk_stackid String?
-  stacks     stacks? @relation(fields: [fk_stackid], references: [id])
-  users      users?  @relation(fields: [fk_userid], references: [id])
+  favorite   Boolean? @default(false)
+  stacks     stacks?  @relation(fields: [fk_stackid], references: [id])
+  users      users?   @relation(fields: [fk_userid], references: [id])
 }
 
 model exam_list {

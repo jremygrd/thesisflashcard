@@ -194,7 +194,7 @@ const ExamList = ( examList:any) => {
           </div>
         </div>
 
-        {decks?
+        {decks.length > 0?
         <>
           {decks.map(({title,id,exam_date,next_session}:any) => (
             <div className={styles.deck} key = {id} onClick = {()=>setLoading(true)}>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef,useState } from 'react';
 import { firebaseClient } from '../services/firebaseClient';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
@@ -35,13 +35,34 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-export default function PopMail() {
+
+const sessionUser = "1w7K30BqJFTR6rJLKdAP9aasoKM2"
+
+
+export default function PopMail(deckData:any) {
 
     const [open, setOpen] = React.useState(false);
     const [openSucces, setOpenSucces] = React.useState(false);
     const [openError, setOpenError] = React.useState(false);
     const [myerrorText, setMyerrorText] = useState('');
+    const [privateDeck, setPrivateDeck] = React.useState(deckData.children.private);
 
+
+    const toggleDeckPrivacy = async() => {
+    const isPrivateNow = !privateDeck;
+
+    const opts = { fk_deck: deckData.id, fk_user: sessionUser,private:isPrivateNow };
+    const changeFavorite = await fetch(
+      `http://localhost:3000/api/decks/changePrivacy`,
+      {
+        method: "post",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(opts),
+      }
+    );
+
+    setPrivateDeck(!privateDeck);
+  };
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -78,35 +99,77 @@ export default function PopMail() {
             </IconButton>
             {/* Pop up to change mail adress */}
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">Partager mon deck</DialogTitle>
+                <DialogTitle id="form-dialog-title">
+                {sessionUser == deckData.children.fk_user ?
+                    "Partager mon deck":"Partager ce deck"}
+                    
+                    </DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        Vous pouvez rendre votre deck publique, tout le monde pour télécharger votre deck et vous pourrez le partager via un lien.
-          </DialogContentText>
+                    {
+                    sessionUser == deckData.children.fk_user ?
+                    <>
+                        {
+                            privateDeck?
+                            "Votre deck est privé. Vous seul et les personnes qui l'ont déjà téléchargé pouvez l'utiliser"
+                            :
+                            "Votre deck est public. Vous pouvez le partager via le lien ci-dessous"
+                      } </> 
+                    :null}
+                        
+                    </DialogContentText>
+                    {
+                    sessionUser == deckData.children.fk_user ?
                     <div className="wrapper">
-                        <p style={{ margin: '10px 0px 0px 0px' }}>Deck privé : </p>
+                        <p style={{ margin: '10px 0px 0px 0px' }}>
+                        {
+                        privateDeck?
+                            "Deck privé  🔐": 
+                            "Deck public 🔓"
+                        }
+                        </p>
                         <Switch
                             name="SwitchPublic"
-
+                            checked={privateDeck} 
+                            onChange={toggleDeckPrivacy} 
                         />
-                    </div>
-                    <p>Votre deck est privé vous ne pouvez donc pas le partager. Pour ce faire rendez votre deck publique et vous pourrez le partager via un lien. </p>
+                    </div> :null}
+                    <p>
+                    {
+                    sessionUser == deckData.children.fk_user ?
+                        <>
+                    {
+                        privateDeck?
+                        "Votre deck est privé et vous ne pouvez donc pas le partager. Rendez le public pour pouvoir le partager. "
+                        :
+                        "Partagez votre deck via le lien suivant :"
+                    }</>:null
+                        
+                    }
+                    </p>
+                    {
+                    privateDeck?null:
+                   
                     <Card style={{backgroundColor:"#f4edff"}} >
                         <CardContent>
                             <div className="wrapper" >
                                 <OutlinedInput
                                     id="outlined-adornment-amount"
-                                    value="htpp/rverve/crevre.com"
+                                    value={`https://thesisflashcards/decks/details/${deckData.children.id}`}
                                     style={{flex:"8"}}
                                 />
                                 <IconButton aria-label="copy" style={{flex:"1"}}>
-                                    <FileCopyIcon />
+                                    <FileCopyIcon  
+                                    onClick={()=>console.log("copy text pls")}
+                                    />
                                 </IconButton>
                             </div>
 
                         </CardContent>
                     </Card>
+                     }
                 </DialogContent>
+
                 <DialogActions>
                     <Button onClick={handleClose} color="primary">
                         Annuler
