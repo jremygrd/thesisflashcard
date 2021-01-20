@@ -29,17 +29,15 @@ model cards_stacks {
 }
 
 model keywords {
-  id              String            @id @default(dbgenerated())
-  keyword         String?
-  keywords_stacks keywords_stacks[]
+  id      String  @id @default(dbgenerated())
+  keyword String?
 }
 
 model keywords_stacks {
-  id           String    @id @default(dbgenerated())
-  fk_keywordid String?
-  fk_stackid   String?
-  keywords     keywords? @relation(fields: [fk_keywordid], references: [id])
-  stacks       stacks?   @relation(fields: [fk_stackid], references: [id])
+  id         String  @id @default(dbgenerated())
+  keyword    String?
+  fk_stackid String?
+  stacks     stacks? @relation(fields: [fk_stackid], references: [id])
 }
 
 model rights {
@@ -63,6 +61,7 @@ model stacks {
   color           String?
   emoji           String?
   description     String?
+  categorie       String?
   fk_user         String?
   private         Boolean?          @default(false)
   users           users?            @relation(fields: [fk_user], references: [id])

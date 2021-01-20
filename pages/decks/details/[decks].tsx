@@ -41,6 +41,28 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const deckData = await myDeck.json();
 
   const opts = { fk_deck: slug, fk_user: sessionUser };
+
+  const authorjson = await fetch(
+    `http://localhost:3000/api/decks/deckAuthor`,
+    {
+      method: "post",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(opts),
+    }
+  );
+  const author = await authorjson.json();
+
+  const keywordsjson = await fetch(
+    `http://localhost:3000/api/decks/deckkeywords`,
+    {
+      method: "post",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(opts),
+    }
+  );
+  const keywords = await keywordsjson.json();
+  console.log("JDIOEJDEOI",keywords)
+
   const isFavorite = await fetch(
     `http://localhost:3000/api/decks/isFavorite`,
     {
@@ -69,15 +91,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   });
   return {
     props: {
-      deckData, cardsData,isFav
+      deckData, cardsData,isFav,author,keywords
     }
   }
 }
 
 const sessionUser = "1w7K30BqJFTR6rJLKdAP9aasoKM2"
 
-export default function mytest({ deckData, cardsData,isFav }: any) {
-  console.log(isFav,'AFTER')
+export default function mytest({ deckData, cardsData,isFav,author,keywords }: any) {
   // const classes = useStyles();
  // console.log(cardsData);
   const [isFavorite, setIsFavorite] = React.useState(isFav);
@@ -125,14 +146,13 @@ export default function mytest({ deckData, cardsData,isFav }: any) {
         <div className="mydiv-1">
           <img src="/pinguin.jpg" object-fit="contain" height="10%" />
           <h1>{deckData.title}</h1>
-          <h3 style={{ textAlign: 'left', margin: '5px 5px 15px 15px' }}>Catégorie : Animaux</h3>
+          <h4>par {author[0].name}</h4>
+          <h3 style={{ textAlign: 'left', margin: '5px 5px 15px 15px' }}>Catégorie : {deckData.categorie}</h3>
           <div className="wrapper">
             <h3 style={{ textAlign: 'left', margin: '5px 5px 5px 15px' }}>Mots clés :</h3>
-            <Chip label="Pinguin" color="primary" style={{ marginLeft: '7px', marginBottom: '5px' }} />
-            <Chip label="Animal" color="primary" style={{ marginLeft: '7px' }} />
-            <Chip label="Banquise" color="primary" style={{ marginLeft: '7px' }} />
-            <Chip label="Pôle Nord" color="primary" style={{ marginLeft: '7px' }} />
-            <Chip label="Papa Noel" color="primary" style={{ marginLeft: '7px' }} />
+            {keywords.map(({keyword}: any) => (
+            <Chip label={keyword} color="primary" style={{ marginLeft: '7px', marginBottom: '5px' }} />
+            ))}
           </div>
           <p style={{ textAlign: 'left', margin: '15px 5px 15px 15px' }}>{deckData.description}</p>
           <div className="wrapper">

@@ -5,17 +5,14 @@ import {PrismaClient} from "@prisma/client";
 export default async function (req:NextApiRequest, res: NextApiResponse) {
     const prisma = new PrismaClient({log:["query"]});
 
+
     try{
-        //const {decka:deckData} = req.body;
-        console.log(req['query']['id'].toString())
-        const deck = await prisma.stacks.findOne({
-            where:{
-                id : req['query']['id'].toString(),
-            }
-            
-        })
+        var keywords = await prisma.$queryRaw`select keyword from keywords_stacks 
+        where (fk_stackID = ${req.body.fk_deck});`;
+        
         res.status(201);//created
-        res.json(deck);
+        res.json(keywords);
+ 
     }catch (e){
         console.log(e);
         res.status(500);

@@ -33,7 +33,7 @@ export default function ButtonAppBar() {
           <Link href="/test">
           <Button color="inherit">Test</Button>
           </Link>  
-          <Link href="/decks/details/e6c3ee74-0678-44dc-a0a9-90e81ada8fc3">
+          <Link href="/decks/details/08c6859f-eeb4-49c3-ba0c-e4aef1b1d46c">
           <Button color="inherit">ok</Button>
           </Link> 
         </Toolbar>
