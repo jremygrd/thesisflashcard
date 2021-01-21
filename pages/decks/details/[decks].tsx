@@ -35,6 +35,8 @@ import PopShareDeck from '../../components/PopShareDeck';
 import Router, { useRouter } from 'next/router'
 import Link from 'next/link';
 
+import ModalUnsplash from "../../components/ModalUnsplash";
+
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const slug = context.query.decks;
   const myDeck = await fetch(`http://localhost:3000/api/decks/${slug}`);
@@ -61,7 +63,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
   );
   const keywords = await keywordsjson.json();
-  console.log("JDIOEJDEOI",keywords)
 
   const isFavorite = await fetch(
     `http://localhost:3000/api/decks/isFavorite`,
@@ -174,11 +175,17 @@ export default function mytest({ deckData, cardsData,isFav,author,keywords }: an
     );
   };
 
+  console.log(deckData.imageurl.length)
   return (
     <div>
       <div className="wrapper">
         <div className="mydiv-1">
-          <img src="/pinguin.jpg" object-fit="contain" height="10%" />
+          {
+            deckData.imageurl.length < 2 ?
+            <img src="/pinguin.jpg" object-fit="contain" height="10%" />
+            :
+            <img src= {deckData.imageurl} object-fit="contain" height="10%" />
+          }
           <h1>{deckData.title}</h1>
           <h4>par {author[0].name}</h4>
           <h3 style={{ textAlign: 'left', margin: '5px 5px 15px 15px' }}>Catégorie : {deckData.categorie}</h3>
@@ -199,11 +206,15 @@ export default function mytest({ deckData, cardsData,isFav,author,keywords }: an
                 </Link>
 
                 {sessionUser == deckData.fk_user?
+                <>
                 <Link as = {`/decks/edit/${deckData.id}`} href = "/decks/edit/[decks]">
                   <Button style={{ width: '40%', height: '40px', marginLeft: '15px' }} variant="contained" color="secondary">
                     Éditer
                   </Button>
                 </Link>
+
+                <ModalUnsplash>{deckData}</ModalUnsplash>
+                </>
                 :
                 <Button style={{ width: '70%', height: '40px', marginLeft: '15px',marginTop:'15px' }} 
                 variant="contained" 

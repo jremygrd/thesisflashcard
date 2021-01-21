@@ -907,3 +907,98 @@ text-align: left;
   text-align: center;
   color: rgb(0, 0, 0);
 }
+
+
+
+
+/* UNSPLASH */
+
+
+
+.labeluns {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.containeruns {
+  margin: 0 auto;
+  max-width: 1000px;
+  padding: 40px;
+}
+
+.titleuns {
+  font-size: 4.4rem;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif
+}
+
+.formuns {
+  display: grid;
+  
+  margin-bottom: 1rem;
+}
+
+.inputuns {
+  font-size: 1.6rem;
+  padding: 0.5rem 2rem;
+  line-height: 2.8rem;
+  border-radius: 20px;
+  background-color: white;
+  margin-bottom: 1rem;
+}
+
+.buttonuns {
+  background-color: rgba(0, 0, 0, 0.75);
+  color: white;
+  padding: 1rem 2rem;
+  border: 1px solid rgba(0, 0, 0, 0.75);
+  border-radius: 20px;
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: background-color 250ms;
+}
+
+.buttonuns:hover {
+  background-color: rgba(0, 0, 0, 0.85);
+}
+
+.carduns {
+  margin-bottom: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  cursor: pointer;
+}
+
+.cardunsimage {
+  flex: 20%;
+  margin-top: 1rem;
+  border-radius: 10px;
+}
+
+.cardunslist {
+  column-count: 3;
+  overflow-wrap: normal;
+}
+
+.cardunscont{
+  max-height: 400px;
+  max-width: 600px;
+  overflow-y: scroll;
+  
+}
+
+@media (min-width: 768px) {
+  .formuns {
+      grid-template-columns: auto 1fr auto;
+      grid-gap: 1rem;
+      align-items: center;
+  }
+  .inputuns {
+      margin-bottom: 0;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .cardunslist {
+      column-count: 1;
+  }
+}

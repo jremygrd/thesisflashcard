@@ -64,6 +64,7 @@ model stacks {
   categorie       String?
   fk_user         String?
   private         Boolean?          @default(false)
+  imageurl        String?           @default("")
   users           users?            @relation(fields: [fk_user], references: [id])
   cards_stacks    cards_stacks[]
   exam_list       exam_list[]

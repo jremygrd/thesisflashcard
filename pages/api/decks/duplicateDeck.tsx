@@ -17,6 +17,7 @@ export default async function (req:NextApiRequest, res: NextApiResponse) {
                 emoji:"none",
                 description:req.body.deck.description,
                 categorie:req.body.deck.categorie,
+                imageUrl:req.body.deck.imageUrl,
 
                 users : {
                     connect :{

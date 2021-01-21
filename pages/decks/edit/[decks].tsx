@@ -8,6 +8,8 @@ import styles from "../../../styles/Home.module.css";
 import "../../../styles/Home.module.css";
 
 import Drawer from "../../components/Drawer";
+import ModalUnsplash from "../../components/ModalUnsplash";
+
 export type Question = {
   id: string;
   question: string;
@@ -220,6 +222,7 @@ export default function Deck({
       </Head>
 
       <div>
+        <ModalUnsplash>{deckData}</ModalUnsplash>
         <Drawer>
           {questions}
         </Drawer>
