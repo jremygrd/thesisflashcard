@@ -103,6 +103,8 @@ export default function mytest({ deckData, cardsData,isFav,author,keywords }: an
  // console.log(cardsData);
   const [isFavorite, setIsFavorite] = React.useState(isFav);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [router,setRouter] = useState(useRouter());
+
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -110,6 +112,38 @@ export default function mytest({ deckData, cardsData,isFav,author,keywords }: an
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleDuplicate = async() => {
+    handleClose();
+    const opts = { deck: deckData, fk_user: sessionUser};
+
+    const duplicateDeck = await fetch(
+      `http://localhost:3000/api/decks/duplicateDeck`,
+      {
+        method: "post",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(opts),
+      }
+    );
+  };
+
+  const redirectTo = (uuidstack:any)=>{
+    router.push(`/`);
+  }
+
+  const handleDelete = async() => {
+    handleClose();
+    const opts = { deck: deckData, fk_user: sessionUser};
+
+    const deleteDeck = await fetch(
+      `http://localhost:3000/api/decks/deleteDeck`,
+      {
+        method: "post",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(opts),
+      }
+    ).then(res => res.json()).then( res=> redirectTo(res.uuidstack) );;
   };
 
   const handleCheckFav = async() => {
@@ -202,8 +236,8 @@ export default function mytest({ deckData, cardsData,isFav,author,keywords }: an
                   open={Boolean(anchorEl)}
                   onClose={handleClose}
                 >
-                  <MenuItem onClick={handleClose}>Dupliquer le deck</MenuItem>
-                  <MenuItem onClick={handleClose}>Supprimer le deck</MenuItem>
+                  <MenuItem onClick={handleDuplicate}>Dupliquer le deck</MenuItem>
+                  <MenuItem onClick={handleDelete}>Supprimer le deck</MenuItem>
                 </Menu>
               </div>
 
