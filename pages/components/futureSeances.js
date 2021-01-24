@@ -3,18 +3,7 @@ import React, { useState, useEffect } from 'react'
 import styles from '../../styles/Home.module.css'
 
 
-export type Question = {
-    id: string;
-    question: string;
-    answer : string[];
-    tip : string;
-    streak:number;
-    nbGood:number;
-    nbBad:number;
-
-  };
-
-    const FutureSeance = ( children:any) => {
+    const FutureSeance = ( children) => {
     const sessionUser = "1w7K30BqJFTR6rJLKdAP9aasoKM2"
 
     const [deckId, setdeckId] = useState("");
@@ -24,8 +13,6 @@ export type Question = {
     useEffect(() => {   
         startQuiz(); 
     },[children]);
-
-
 
 
     //Initialisation
@@ -83,7 +70,6 @@ export type Question = {
         setDataSession(dataSession);
 
         if(dataSession.length > 3){
-            console.log('hourra')
             var smalldataSession = []
             const maxCards = dataSession[dataSession.length-1].nbCards
 
@@ -128,7 +114,7 @@ export type Question = {
 
     }
     
-    const formatNewSeance = async (day:any) => {
+    const formatNewSeance = async (day) => {
         
         var today = new Date().getTime()
         console.log(getTime(today),day)
@@ -153,7 +139,7 @@ export type Question = {
     <div>
         {dataSession.length>0 ?
         <div>
-        {dataSession.map((option:any)=>(
+        {dataSession.map((option)=>(
             <div key = {option.day}>
                 <button className={styles.buttonseance} key = {option.day} onClick = {()=>formatNewSeance(option.day)}> 
                 Revenez dans {option.day} jours pour revoir {option.nbCards} cartes</button>    
@@ -168,12 +154,12 @@ export type Question = {
 
 export default FutureSeance
 
-function getScore(card:any, day:number) {
+function getScore(card, day) {
     var score = Math.exp(-day / (5 * card.streak/(card.nbgood+card.nbbad+1) + card.nbgood + 1))
     return score;
 }
 
-function getTime(UNIX_timestamp:any){
+function getTime(UNIX_timestamp){
     var a = new Date(UNIX_timestamp);
     var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
     var year = a.getFullYear();

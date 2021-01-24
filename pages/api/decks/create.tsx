@@ -46,9 +46,9 @@ export default async function (req:NextApiRequest, res: NextApiResponse) {
         const uuidcard = create_UUID();
 
         const blankCard= await prisma.$queryRaw(`insert into cards values ('${uuidcard}',
-        'Exemple of question',
-        'Hint',
-        ARRAY [''],
+        'Un exemple de question',
+        'Indice',
+        ARRAY ['Good answer'],
         ARRAY [''],
         '${stackData.fk_user}')`);
 
