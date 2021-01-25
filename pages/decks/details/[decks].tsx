@@ -32,6 +32,8 @@ import { Menu } from '@material-ui/core';
 import { MenuItem } from '@material-ui/core';
 import PopShareDeck from '../../components/PopShareDeck';
 
+import NavBar from '../../components/NavBar';
+
 import Router, { useRouter } from 'next/router'
 import Link from 'next/link';
 
