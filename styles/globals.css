@@ -2575,6 +2575,15 @@ svg.shinePurpleSmall g {
 
 
 .wrapper {
+  
+  display: flex;  
+  flex-flow: row wrap;
+  flex-wrap: wrap;
+  text-align: center;
+}
+.wrapperCard1 {
+  
+  width: 100%;
   display: flex;  
   flex-flow: row wrap;
   flex-wrap: wrap;
@@ -2620,6 +2629,8 @@ svg.shinePurpleSmall g {
   flex-wrap: wrap;
   width: 100%;
 }
+
+
 
 
 
