@@ -32,6 +32,15 @@ const useStyles = makeStyles((theme: Theme) =>
                 marginTop: theme.spacing(2),
             },
         },
+        paper: {
+            backgroundColor: theme.palette.background.paper,
+            border: "2px solid #000",
+            boxShadow: theme.shadows[5],
+            padding: theme.spacing(2, 4, 3),
+            overflow:'scroll',
+            height:"90%",
+            width:"90%",
+          },
     }),
 );
 
@@ -50,7 +59,7 @@ export default function PopMail(deckData:any) {
 
     const toggleDeckPrivacy = async() => {
     const isPrivateNow = !privateDeck;
-
+    setPrivateDeck(!privateDeck);
     const opts = { fk_deck: deckData.id, fk_user: sessionUser,private:isPrivateNow };
     const changeFavorite = await fetch(
       `http://localhost:3000/api/decks/changePrivacy`,
@@ -61,7 +70,7 @@ export default function PopMail(deckData:any) {
       }
     );
 
-    setPrivateDeck(!privateDeck);
+    
   };
 
     const handleClickOpen = () => {
