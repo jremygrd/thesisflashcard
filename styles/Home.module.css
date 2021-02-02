@@ -923,7 +923,6 @@ text-align: left;
   color: rgb(0, 0, 0);
 }
 
-<<<<<<< Updated upstream
 
 
 
@@ -1017,7 +1016,8 @@ text-align: left;
   .cardunslist {
       column-count: 1;
   }
-=======
+}
+
 .cardAroundSettings{
   position:flex;
 
@@ -1051,6 +1051,8 @@ text-align: left;
   transition: all 0.8s ease;
   box-shadow: var(--shadowBig);
   border-radius: 1rem;
+  overflow-y: hidden;
+  overflow-y: scroll;
 }
 
 /* .Carte:hover{
@@ -1109,5 +1111,4 @@ text-align: left;
   background:rgb(226, 226, 255); 
   border-radius: 10px 100px / 120px;;
   padding:10px;
->>>>>>> Stashed changes
 }
