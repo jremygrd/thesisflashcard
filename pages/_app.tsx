@@ -8,9 +8,8 @@ import NavBar from './components/NavBar';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <AuthProvider>
-      {/* <ButtonAppBar /> */}
-      <NavBar/>
+    <AuthProvider>  
+      <NavBar />
       <Component {...pageProps} />
     </AuthProvider>
   );

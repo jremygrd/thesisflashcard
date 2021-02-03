@@ -152,7 +152,7 @@ const handleDrawerClose = () =>
   const getDrawerChoices = () => {
 
       return (
-        <>
+        <div >
         <Link href="/"
           {...{
             color: "inherit",
@@ -179,7 +179,7 @@ const handleDrawerClose = () =>
             >
               <MenuItem>Mon profil</MenuItem>
           </Link>
-        </>
+        </div>
       );
   };
 
@@ -201,7 +201,7 @@ const handleDrawerClose = () =>
 
 
   return (
-    <div className={classes.grow}>
+    <div className={classes.grow} style={{flex:'1'}}>
       <AppBar position="static" style={{ background: ' linear-gradient(45deg,#4cb7ff 30%, #4C5BFF 90%) ' }}>
         <Toolbar>
         
@@ -259,6 +259,7 @@ const handleDrawerClose = () =>
           </Button>
 
           <Button
+          href='/testCards'
           variant="contained"
           color="primary"
           size="large"

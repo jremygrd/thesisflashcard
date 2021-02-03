@@ -1,6 +1,8 @@
 body {
-  margin: 0px;
+  width: fit-content;
+  min-width: 100%;
   padding: 0px;
+  margin:0px;
   --text: #050000 !important;
   --lightText: #697386 !important;
   --bg: white !important;
@@ -2589,11 +2591,41 @@ svg.shinePurpleSmall g {
   flex-wrap: wrap;
   text-align: center;
 }
+.wrapperHidden {
+  display: flex;  
+  flex-flow: row wrap;
+  flex-wrap: wrap;
+  text-align: center;
+  overflow: hidden;
+}
 
 .mydiv-1 {
   background: white;
   flex: 3;
   min-width: 410px;
+}
+.mydiv-leftCard {
+  background: white;
+  min-width: 425px;
+  max-width: 425px;
+  overflow: hidden;
+}
+.divCardLeft{
+  background:rgba(175, 181, 255, 0.288);
+  height: 100%;
+  height: -webkit-calc(100% - 250px);
+  height: -moz-calc(100% - 250px);
+  height: calc(100% - 250px);
+  overflow-x: hidden;
+  position: fixed;
+  width: 425px;
+  /* padding-bottom: 100px; */
+}
+
+.mydiv-deckTitle {
+  background: rgb(192, 197, 255);
+  flex: 1;
+  min-width: 375px;
 }
 
 .mydiv-2 {
@@ -2601,9 +2633,20 @@ svg.shinePurpleSmall g {
   flex: 8;
   min-width: 410px;
 }
+.mydiv-rightCard {
+  background: rgb(241, 241, 241);
+  flex: 1;
+  height: 100%;
+}
 .mydiv-11 {
   flex: 3;
   text-align: left;
+}
+.mydiv-1left {
+  flex: 3;
+  text-align: left;
+  max-height: 50px;
+  overflow: hidden;
 }
 
 .mydiv-22 {

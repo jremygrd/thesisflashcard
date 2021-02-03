@@ -1051,8 +1051,6 @@ text-align: left;
   transition: all 0.8s ease;
   box-shadow: var(--shadowBig);
   border-radius: 1rem;
-  overflow-y: hidden;
-  overflow-y: scroll;
 }
 
 /* .Carte:hover{

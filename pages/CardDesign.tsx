@@ -71,7 +71,7 @@ export default function RecipeReviewCard() {
     };
 
     return (
-        <div>
+        <div >
             <h1 style={{ textAlign: "center" }}>Titre</h1>
 
             {/* <div className="wrapper"> */}
