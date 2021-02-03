@@ -31,6 +31,7 @@ import StarIcon from '@material-ui/icons/Star';
 import { Menu } from '@material-ui/core';
 import { MenuItem } from '@material-ui/core';
 import PopShareDeck from '../../components/PopShareDeck';
+import UploadFile from '../../components/UploadFile';
 
 import NavBar from '../../components/NavBar';
 
@@ -108,6 +109,8 @@ export default function mytest({ deckData, cardsData,isFav,author,keywords }: an
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [router,setRouter] = useState(useRouter());
 
+  const [imageUrl, setImageUrl] = React.useState(deckData.imageurl);
+
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -151,7 +154,7 @@ export default function mytest({ deckData, cardsData,isFav,author,keywords }: an
 
   const handleCheckFav = async() => {
     const isFavNow = !isFavorite;
-
+    setIsFavorite(isFavNow);
     const opts = { fk_deck: deckData.id, fk_user: sessionUser,favorite:isFavNow };
     const changeFavorite = await fetch(
       `http://localhost:3000/api/decks/changeFavorite`,
@@ -162,7 +165,7 @@ export default function mytest({ deckData, cardsData,isFav,author,keywords }: an
       }
     );
 
-    setIsFavorite(isFavNow);
+    
   };
 
   const addToMyDecks = async() => {
@@ -177,17 +180,27 @@ export default function mytest({ deckData, cardsData,isFav,author,keywords }: an
     );
   };
 
-  console.log(deckData.imageurl.length)
+  const callbackImageUrl = (url:string) =>{
+    setImageUrl(url);
+  }
+
+
   return (
     <div>
       <div className="wrapper">
         <div className="mydiv-1">
+          
           {
             deckData.imageurl.length < 2 ?
-            <img src="/pinguin.jpg" object-fit="contain" height="10%" />
+            <img src="/pinguin.jpg" object-fit="contain" height="20rem" />
             :
-            <img src= {deckData.imageurl} object-fit="contain" height="10%" />
+            <div  style={{ maxHeight: '11.5rem', overflow:'hidden'}}>
+            <div className="fill">
+              <img src= {imageUrl} />
+            </div>
+            </div>
           }
+          
           <h1>{deckData.title}</h1>
           <h4>par {author[0].name}</h4>
           <h3 style={{ textAlign: 'left', margin: '5px 5px 15px 15px' }}>Catégorie : {deckData.categorie}</h3>
@@ -215,7 +228,9 @@ export default function mytest({ deckData, cardsData,isFav,author,keywords }: an
                   </Button>
                 </Link>
 
-                <ModalUnsplash>{deckData}</ModalUnsplash>
+                <ModalUnsplash>{deckData}{callbackImageUrl}</ModalUnsplash>
+
+                {/* <UploadFile>{deckData}</UploadFile> */}
                 </>
                 :
                 <Button style={{ width: '70%', height: '40px', marginLeft: '15px',marginTop:'15px' }} 
@@ -269,7 +284,7 @@ export default function mytest({ deckData, cardsData,isFav,author,keywords }: an
                         <p style={{ fontWeight: 'bold' }}>{question}</p>
                       </div>
                       <div className="mydiv-222">
-                        <img src="/pinguin.jpg" object-fit="contain" style={{ height: '150px', margin: '-16px -16px 0 0', float: 'right' }} />
+                        <img src={imageUrl} object-fit="contain" style={{ height: '150px', margin: '-16px -16px 0 0', float: 'right' }} />
                       </div>
 
                     </ExpansionPanelSummary>

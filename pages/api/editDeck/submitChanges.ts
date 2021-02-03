@@ -57,7 +57,7 @@ export default async function (req:NextApiRequest, res: NextApiResponse) {
     
 
     function doubleQuotes(str : string){
-        str = str.replace("'","''")
+        str = str.replace(/'/g,"''")
         return str;
     }
 }

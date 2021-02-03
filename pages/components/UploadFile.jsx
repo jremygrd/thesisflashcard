@@ -11,8 +11,6 @@ import Unsplash, { toJson } from "unsplash-js";
 
 const sessionUser = '1w7K30BqJFTR6rJLKdAP9aasoKM2'
 
-import Unsplash2 from "../Unsplash/unsplash"
-
 
 const unsplash = new Unsplash({
   accessKey: 'ZvfuxnWlIQv6i-LuLQRzre4ikKph1Cld4OIl3f1eUWQ'
@@ -30,16 +28,12 @@ const useStyles = makeStyles((theme) =>
       border: "2px solid #000",
       boxShadow: theme.shadows[5],
       padding: theme.spacing(2, 4, 3),
-      overflow:'scroll',
-      height:"90%",
-      width:"90%",
     },
   })
 );
 
 
 export default function ModalUnsplash(deckData) {
-  console.log(deckData.children[1]);
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => {
@@ -51,7 +45,7 @@ export default function ModalUnsplash(deckData) {
   };
 
   const setImage= async (url) =>{
-    const opts = { fk_deck: deckData.children[0].id, fk_user: sessionUser,imageUrl:url};
+    const opts = { fk_deck: deckData.children.id, fk_user: sessionUser,imageUrl:url};
 
     const authorjson = await fetch(
       `http://localhost:3000/api/decks/setUnsplash`,
@@ -62,7 +56,7 @@ export default function ModalUnsplash(deckData) {
       }
     );
     handleClose()
-    deckData.children[0].imageUrl = url;
+    deckData.children.imageUrl = url;
   }
 
   const searchPhotos = async (e) => {
@@ -102,7 +96,7 @@ export default function ModalUnsplash(deckData) {
         <Fade in={open}>
           <div className={classes.paper}>
             <>
-              {/* <form className={styles.formuns} onSubmit={searchPhotos}>
+              <form className={styles.formuns} onSubmit={searchPhotos}>
                 {" "}
                 <label className={styles.labeluns} htmlFor="query">
                   {" "}
@@ -136,8 +130,7 @@ export default function ModalUnsplash(deckData) {
                   </div>
                 ))}{" "}
               </div>
-              </div> */}
-              <Unsplash2> deckData = {deckData.children[0].id} handleClose = {handleClose} handleUpdate={deckData.children[1]}</Unsplash2>
+              </div>
             </>
           </div>
         </Fade>

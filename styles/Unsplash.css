@@ -1,0 +1,13 @@
+body {
+    font-family: 'Quicksand', sans-serif;
+  }
+  
+  .bg-pink {
+    background-color: #f2dede;
+  }
+  
+  .high-res-img {
+      width: auto;
+      max-height: calc(100vh - 150px);
+      overflow-y: auto;
+  }
