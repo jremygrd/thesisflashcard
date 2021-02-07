@@ -14,10 +14,12 @@ model cards {
   bad_options  String[]
   answer       String[]
   fk_user      String?
+  imageurl     String?        @default("")
   users        users?         @relation(fields: [fk_user], references: [id])
   answerofcard answerofcard[]
   cards_stacks cards_stacks[]
   cards_users  cards_users[]
+  note         note[]
 }
 
 model cards_stacks {
@@ -150,4 +152,12 @@ model exam_list {
   fk_stackid String?
   exam       exam?   @relation(fields: [fk_examid], references: [id])
   stacks     stacks? @relation(fields: [fk_stackid], references: [id])
+}
+
+model note {
+  id         String  @id @default(dbgenerated())
+  error_name String?
+  text_error String?
+  fk_card    String?
+  cards      cards?  @relation(fields: [fk_card], references: [id])
 }

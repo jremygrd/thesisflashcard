@@ -95,6 +95,18 @@ export default function test() {
                         </div>
                     </Card>
                     </Button>
+                    <Button style={{margin:'0px', padding:'0px'}}>
+                    <Card style={{ float: 'left', width: '98%', margin: '1%', maxHeight: "100px", border: "1px solid" }}>
+                        <div className="wrapper">
+                            <div className="mydiv-11">
+                                <p style={{ fontWeight: 'bold', padding: '6px' }}>1: Quelcdferfe est la capital de la France ?</p>
+                            </div>
+                            <div className="mydiv-222">
+                                <img src="/pinguin.jpg" object-fit="contain" style={{ height: '100px', margin: '-16px -16px 0 0', float: 'right' }} />
+                            </div>
+                        </div>
+                    </Card>
+                    </Button>
                 </div>
                 <Card style={{ float: 'left', width: '415px', maxHeight: "100px", position: 'fixed', bottom: '0px', left: '0px', margin: '5px', backgroundColor: 'blue' }}>
                     <Button

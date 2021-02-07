@@ -9,11 +9,12 @@ class Unsplash extends Component {
   constructor(props) {
   const{deckData,handleClose} = props   
     super(props)
-    console.log("eodddeded",props.children)
+    // console.log("eodddeded",props.children)
     this.state = {
         id:props.children[1],
         close:props.children[3],
         update:props.children[5],
+        changeDeckimage:props.children[6],
       gallery: [],
       currentQuery: '',
       searchedQuery: '',
@@ -36,7 +37,7 @@ class Unsplash extends Component {
     axios.get(`${this.ROOT}photos${this.KEY}${this.PERPAGE}&page=1`)
       .then(res => {
         let results = res.data
-        console.log('results = ', results)
+        // console.log('results = ', results)
         this.setState(() => {
           return { gallery: [...results] }
         })
@@ -46,7 +47,7 @@ class Unsplash extends Component {
   
   launchModal = (index) => {
     this.setState((prevState) => {
-    console.log(prevState.gallery[index].urls.regular)
+    // console.log(prevState.gallery[index].urls.regular)
 
     this.state.update(prevState.gallery[index].urls.regular)
     this.setImage(prevState.gallery[index].urls.regular)
@@ -65,6 +66,11 @@ class Unsplash extends Component {
     
   }
   setImage= async (url) =>{
+
+    if(this.changeDeckimage)
+    {
+
+   
     const opts = { fk_deck: this.state.id, fk_user: '1w7K30BqJFTR6rJLKdAP9aasoKM2',imageUrl:url};
 
     const authorjson = await fetch(
@@ -75,6 +81,7 @@ class Unsplash extends Component {
         body: JSON.stringify(opts),
       }
     );
+  }
    
   }
 
@@ -85,7 +92,7 @@ class Unsplash extends Component {
       axios.get(`${this.ROOT}search/photos${this.KEY}&query=${this.state.searchedQuery}${this.PERPAGE}&page=${this.state.page}`)
         .then(res => {
           let results = res.data.results
-          console.log('results = ', results)
+          // console.log('results = ', results)
           this.setState((prevState) => {
             return { gallery: [...prevState.gallery, ...results] }
           })
@@ -105,7 +112,7 @@ class Unsplash extends Component {
   }
   handleSubmit = (e) => {
     e.preventDefault()
-    console.log('currentQuery: ', this.state.currentQuery)
+    // console.log('currentQuery: ', this.state.currentQuery)
     this.setState((prevState) => {
       return {searchedQuery: prevState.currentQuery}
     })

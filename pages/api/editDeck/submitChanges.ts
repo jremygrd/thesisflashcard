@@ -36,7 +36,8 @@ export default async function (req:NextApiRequest, res: NextApiResponse) {
     question = '${doubleQuotes(req.body.question)}',
     tip = '${doubleQuotes(req.body.tip)}',
     answer = ARRAY ${ans},
-    bad_options = ARRAY ${bad}
+    bad_options = ARRAY ${bad},
+    imageurl = '${req.body.imageurl}'
     where id = '${req.body.id}'`;
 
 

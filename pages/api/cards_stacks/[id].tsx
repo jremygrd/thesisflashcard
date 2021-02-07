@@ -14,7 +14,7 @@ export default async function (req:NextApiRequest, res: NextApiResponse) {
         //const result2 = await prisma.$queryRaw`SELECT * FROM cards WHERE id in (SELECT fk_cardid FROM cards_stacks WHERE fk_stackid = ${req.query.id})`;
 
 
-        const topx2 = await prisma.$queryRaw`select cards.id,question,tip,bad_options,answer,cards.fk_user,streak,streakct,nbGood,nbBad from cards
+        const topx2 = await prisma.$queryRaw`select cards.id,question,tip,bad_options,answer,cards.fk_user,streak,streakct,nbGood,nbBad,imageurl from cards
             join cards_users cu on cards.id = cu.fk_card
             join cards_stacks cs on cards.id = cs.fk_cardID
         where cs.fk_stackid = ${req.query.id}

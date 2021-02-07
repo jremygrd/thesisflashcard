@@ -3,7 +3,7 @@ import styles from '../../../../styles/Home.module.css'
 
 const Gallery = (props) => {
   const { gallery, loadMore, launchModal, selectedImage, searchedQuery } = props
-  console.log('gallery = ', gallery)
+  // console.log('gallery = ', gallery)
   return (
     <div className="contentUS">
       <section className="gridUS">

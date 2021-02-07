@@ -8,7 +8,7 @@ import styles from "../../styles/Home.module.css";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Unsplash, { toJson } from "unsplash-js";
-
+import {Button } from '@material-ui/core';
 const sessionUser = '1w7K30BqJFTR6rJLKdAP9aasoKM2'
 
 import Unsplash2 from "../Unsplash/unsplash"
@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) =>
 
 
 export default function ModalUnsplash(deckData) {
-  console.log(deckData.children[1]);
+  // console.log(deckData.children);
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => {
@@ -51,6 +51,9 @@ export default function ModalUnsplash(deckData) {
   };
 
   const setImage= async (url) =>{
+
+    if (deckData.children[2])
+    {
     const opts = { fk_deck: deckData.children[0].id, fk_user: sessionUser,imageUrl:url};
 
     const authorjson = await fetch(
@@ -61,6 +64,8 @@ export default function ModalUnsplash(deckData) {
         body: JSON.stringify(opts),
       }
     );
+
+  }
     handleClose()
     deckData.children[0].imageUrl = url;
   }
@@ -84,9 +89,7 @@ export default function ModalUnsplash(deckData) {
 
   return (
     <div>
-      <button type="button" onClick={handleOpen}>
-        Change picture
-      </button>
+      <Button onClick = {handleOpen} variant="contained">Librairie d'images</Button>
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -102,42 +105,7 @@ export default function ModalUnsplash(deckData) {
         <Fade in={open}>
           <div className={classes.paper}>
             <>
-              {/* <form className={styles.formuns} onSubmit={searchPhotos}>
-                {" "}
-                <label className={styles.labeluns} htmlFor="query">
-                  {" "}
-                  📷
-                </label>
-                <input
-                  type="text"
-                  name="query"
-                  className={styles.inputuns}
-                  placeholder={`Try "dog" or "apple"`}
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                />
-                <button type="submit" className={styles.buttonuns}>
-                  Search
-                </button>
-              </form>
-              <div  className={styles.cardunscont}>
-              <div className={styles.cardunslist}>
-              
-                {pics.map((pic) => (
-                  <div className={styles.carduns} key={pic.id}>
-                    <img
-                      className={styles.cardunsimage}
-                      alt={pic.alt_description}
-                      src={pic.urls.full}
-                      width="50%"
-                      height="50%"
-                      onClick={() => setImage(pic.urls.full)}
-                    ></img>
-                  </div>
-                ))}{" "}
-              </div>
-              </div> */}
-              <Unsplash2> deckData = {deckData.children[0].id} handleClose = {handleClose} handleUpdate={deckData.children[1]}</Unsplash2>
+              <Unsplash2> deckData = {deckData.children[0].id} handleClose = {handleClose} handleUpdate={deckData.children[1]}{deckData.children[2]}</Unsplash2>
             </>
           </div>
         </Fade>
