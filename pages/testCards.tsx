@@ -13,11 +13,18 @@ import FileCopyIcon from '@material-ui/icons/FileCopy';
 import FindInPageIcon from '@material-ui/icons/FindInPage';
 import DeleteSweepIcon from '@material-ui/icons/DeleteSweep';
 import PopEditDeckInfo from './components/PopEditDeckInfo';
+import React, { useState } from "react";
 
-import React from 'react';
+import Dropzone from '../pages/components/Dropzone'
+import Lightbox from 'react-image-lightbox';
+
 export default function test() {
-
+    const [isPicOpen, setisPicOpen] = useState(false);
     const [value, setValue] = React.useState('Controlled');
+
+    const [fileNames, setFileNames] = useState([]);
+    const handleDrop = (acceptedFiles: { map: (arg0: (file: any) => any) => React.SetStateAction<never[]>; }) =>
+      setFileNames(acceptedFiles.map(file => file.name));
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setValue(event.target.value);
@@ -104,8 +111,8 @@ export default function test() {
             </div>
             <div className="mydiv-rightCard" style={{ height: 'calc(100vh - 64px)' }} >
                 <Card elevation={7} style={{ width: '80%', margin: '0 auto', marginTop: '30px', paddingBottom: '20px', overflowY: 'scroll', maxHeight: 'calc(100vh - 130px)', maxWidth: '800px' }}>
-
-                    <img src="/pinguin.jpg" object-fit="contain" style={{ height: '100px', margin: '20px 0 0 0' }} />
+                    <Dropzone></Dropzone>
+                    <img onClick={() => setisPicOpen(true)} src="/pinguin.jpg" object-fit="contain" style={{ height: '100px', margin: '20px 0 0 0' }} className="item"/>
                     {/* <p style={{ margin: '10px 0 0 0' }}>Déposez une image de votre ordinateur ici</p> */}
                     <div className="wrapper" style={{ margin: '10px 0 0 0' }}>
                         <div style={{ flex: '1' }}>
@@ -237,6 +244,12 @@ export default function test() {
                                 </Button>
                 </Card>
             </div>
+            {isPicOpen && (
+          <Lightbox
+            mainSrc={"/pinguin.jpg"}
+            onCloseRequest={() => setisPicOpen(false)}
+          />
+        )}
         </div>
     )
 }

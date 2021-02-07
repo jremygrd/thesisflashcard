@@ -6,6 +6,9 @@ import { AuthProvider } from './services/auth';
 import type { AppProps } from 'next/app';
 import NavBar from './components/NavBar';
 
+import Lightbox from 'react-image-lightbox';
+import 'react-image-lightbox/style.css';
+
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <AuthProvider>  
