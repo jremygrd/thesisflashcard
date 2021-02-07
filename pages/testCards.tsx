@@ -118,9 +118,9 @@ export default function test() {
                         <div style={{ flex: '1' }}>
                             <Button variant="contained">Librairie d'images</Button>
                         </div>
-                        <div style={{ flex: '1' }}>
+                        {/* <div style={{ flex: '1' }}>
                             <Button variant="contained">Téléverser une image</Button>
-                        </div>
+                        </div> */}
                     </div>
                     <Divider style={{ margin: '20px 0 0 0', height: '2px', background: 'black' }} />
                     <div style={{ width: '80%', margin: '0 auto', marginTop: '20px', paddingBottom: '20px' }}>
