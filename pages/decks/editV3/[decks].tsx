@@ -109,7 +109,6 @@ export default function DecksEdit({ cardsData, deckData, sessionUser }: any) {
         setAllOptions(updatedAll)
 
         let tempQuest = [...questions];
-        idx = tempQuest[actualQuestionIndex].answer.indexOf(val);
         tempQuest[actualQuestionIndex].answer[idx] = e.target.value;
         setQuestions(tempQuest)
       }
@@ -120,26 +119,25 @@ export default function DecksEdit({ cardsData, deckData, sessionUser }: any) {
         setAllOptions(updatedAll)
 
         let tempQuest = [...questions];
-        idx = tempQuest[actualQuestionIndex].bad_options.indexOf(val);
         tempQuest[actualQuestionIndex].bad_options[idx] = e.target.value;
         setQuestions(tempQuest)
       }
 
 
-      function deleteOption(val: any) {
+      function deleteOption(val: any,idx:any) {
         let tempQuest = [...questions];
         let updatedAll = [...allOptions];
-        updatedAll = updatedAll.filter((checked_option: any) => checked_option !== val);
+        updatedAll.splice(idx,1);
         setAllOptions(updatedAll);
 
         if (tempQuest[actualQuestionIndex].answer.includes(val)){
-
-            tempQuest[actualQuestionIndex].answer = tempQuest[actualQuestionIndex].answer.filter((checked_option: any) => checked_option !== val);
+            
+            tempQuest[actualQuestionIndex].answer.splice(idx,1);
             setQuestions(tempQuest)
 
         }else{
 
-            tempQuest[actualQuestionIndex].bad_options = tempQuest[actualQuestionIndex].bad_options.filter((checked_option: any) => checked_option !== val);
+            tempQuest[actualQuestionIndex].bad_options.splice(idx,1);
             setQuestions(tempQuest)
         }
       }
@@ -227,6 +225,26 @@ export default function DecksEdit({ cardsData, deckData, sessionUser }: any) {
         
       };
 
+      const duplicateCard = ()=>{
+
+        handleCloseMenu()
+        let tempQuest = [...questions];
+        const newid = create_UUID();
+
+        const blank = {
+            id: newid,
+            question: questions[actualQuestionIndex].question,
+            tip: questions[actualQuestionIndex].tip,
+            bad_options: questions[actualQuestionIndex].bad_options,
+            answer: questions[actualQuestionIndex].answer,
+            fk_user: sessionUser,
+            imageurl : questions[actualQuestionIndex].imageurl
+          };
+          tempQuest.splice(actualQuestionIndex+1,0,blank);
+          setQuestions(tempQuest);
+        
+      }
+
       const callbackImageUrl = (url:string) =>{
         let tempQuest = [...questions];
         tempQuest[actualQuestionIndex].imageurl = url;
@@ -248,8 +266,15 @@ export default function DecksEdit({ cardsData, deckData, sessionUser }: any) {
         );
 
       }
+
+
+      const hasError = (quest:any) =>{
+          if(quest.question.length == 0){
+              return true;
+          }
+      }
     const s = "search"
-    console.log(s.includes("sea"))
+    //console.log(s.includes("sea"))
     return (
         <div className="wrapperHidden" >
             <div className="mydiv-leftCard">
@@ -295,9 +320,9 @@ export default function DecksEdit({ cardsData, deckData, sessionUser }: any) {
 
                     val.question.toLocaleLowerCase().includes(search.toLocaleLowerCase())?
                     <Button onClick={()=>changeCard(idx)} 
-                    style={{margin:'0px', padding:'0px', width:'100%',backgroundColor:idx==actualQuestionIndex?'blue':'transparent'}}>
+                    style={{margin:'0px', padding:'0px', width:'100%',backgroundColor:idx==actualQuestionIndex?'#4cb7ff':'transparent'}}>
     
-                    <Card style={{ float: 'left', width: '98%', margin: '1%', maxHeight: "100px", border: "1px solid" }}>
+                    <Card style={{ float: 'left', width: '98%', margin: '1%', maxHeight: "100px", border: "1px solid",backgroundColor:hasError(val)?'#ffe8e8':'white'}}>
                         <div className="wrapper">
                             <div className="mydiv-11">
                                 <p style={{ fontWeight: 'bold', padding: '6px'}}>{idx+1} : {val.question}</p>
@@ -362,9 +387,29 @@ export default function DecksEdit({ cardsData, deckData, sessionUser }: any) {
                         </Card>
                         <div className="wrapper" style={{ marginTop: '15px' }}>
                             <div style={{ flex: '1' }}>
-                                <Card style={{ marginTop: '8px', backgroundColor: 'blue' }}>
-                                    <p style={{ margin: '10px', color: 'white' }}>1 bonne réponse sélectionnée</p>
-                                </Card>
+                               
+                                    {
+                                        questions[actualQuestionIndex].question.length == 0?
+                                        <Card style={{ marginTop: '8px', backgroundColor: 'red' }}>
+                                            <p style={{ margin: '10px', color: 'white' }}>La carte doit avoir une question</p>
+                                       </Card>
+                                        :
+                                       questions[actualQuestionIndex].answer.length == 0?
+                                       <Card style={{ marginTop: '8px', backgroundColor: 'red' }}>
+                                            <p style={{ margin: '10px', color: 'white' }}>Sélectionnez au moins une bonne réponse</p>
+                                       </Card>
+                                       :
+                                       questions[actualQuestionIndex].answer.length == 1?
+                                       <Card style={{ marginTop: '8px', backgroundColor: '#4cb7ff' }}>
+                                            <p style={{ margin: '10px', color: 'white' }}>1 bonne réponse sélectionnée</p>
+                                       </Card>
+                                       :
+                                       <Card style={{ marginTop: '8px', backgroundColor: '#4cb7ff' }}>
+                                            <p style={{ margin: '10px', color: 'white' }}>{questions[actualQuestionIndex].answer.length} bonnes réponses sélectionnées</p>
+                                       </Card>
+
+                                    }
+                                    
                             </div>
                             <div style={{ flex: '1', float: 'right', textAlign: 'right' }}>
                                 <IconButton aria-label="indice" onClick={handleClickClueOpen}>
@@ -390,12 +435,12 @@ export default function DecksEdit({ cardsData, deckData, sessionUser }: any) {
                                         </Card>
                                     </DialogContent>
                                     <DialogActions>
-                                        <Button onClick={handleCloseClue} color="primary">
+                                        {/* <Button onClick={handleCloseClue} color="primary">
                                             Annuler
                                          </Button>
                                         <Button onClick={handleCloseClue} color="primary">
                                             Sauvegarder
-                                        </Button>
+                                        </Button> */}
                                     </DialogActions>
                                 </Dialog>
                                 <IconButton aria-label="more" onClick={handleClickMenu}>
@@ -408,7 +453,7 @@ export default function DecksEdit({ cardsData, deckData, sessionUser }: any) {
                                     open={Boolean(anchorEl)}
                                     onClose={handleCloseMenu}
                                 >
-                                    <MenuItem onClick={handleCloseMenu}>
+                                    <MenuItem onClick={duplicateCard}>
                                         <ListItemIcon>
                                             <FileCopyIcon />
                                         </ListItemIcon>
@@ -435,8 +480,8 @@ export default function DecksEdit({ cardsData, deckData, sessionUser }: any) {
                                 
                                 allOptions.map((val: any, idx: any) => (
 
-                                    <Card elevation={3} style={{ flex: '1 0 35%', minWidth: '250px', margin: '10px 10px 0 10px', position: 'relative', overflow: 'visible', backgroundColor: 'rgb(220, 255, 220)' }}>
-                                    <IconButton onClick={() => deleteOption(val)} aria-label="indice" style={{ height: '5px', width: '5px', top: '-10px', left: '-10px', position: 'absolute' }}>
+                                    <Card elevation={3} style={{ flex: '1 0 35%', minWidth: '250px', margin: '10px 10px 0 10px', position: 'relative', overflow: 'visible', backgroundColor:questions[actualQuestionIndex].answer.includes(val)? 'rgb(220, 255, 220)':'white' }}>
+                                    <IconButton onClick={() => deleteOption(val,idx)} aria-label="indice" style={{ height: '5px', width: '5px', top: '-10px', left: '-10px', position: 'absolute' }}>
                                         <CancelIcon  style={{ height: '17px', width: '17px', color: 'red' }} />
                                     </IconButton>
                                     <div className="wrapper">
