@@ -23,6 +23,7 @@
   margin-bottom: auto;
 }
 
+
 .grid{
   flex: 1;
   width: 80%;
@@ -31,6 +32,29 @@
   align-items: center;
   margin-top: auto;
   margin-bottom: auto;
+}
+
+.gridTitle{
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.grid2{
+  flex: 2;
+  display: flex;
+  flex-direction: row;
+  align-items: start;
+  margin-top: auto;
+  margin-bottom: auto;
+  grid-column-gap: 25px;
+  grid-row: 1/2;
+  width: 90%;
+  margin-left: 5%;
+  margin-right: 5%;
 }
 
 
@@ -177,6 +201,34 @@
 }
 .tabbody.active {
   display: block;
+}
+
+.tabbody2 {
+  height: auto;
+  position: relative;
+  padding : 1em;
+  margin-top: 2%;
+  background-color: #ffffff;
+  box-shadow: 0px 5px 10px #7c8395;
+  color:  #1d10d1;
+  border-radius: 30px;
+  font-size: 1rem;
+  width: 15%;
+  max-width: 200px;
+  min-width: 200px;
+}
+
+.tabbody3 {
+  height: auto;
+  position: relative;
+  padding : 1em;
+  margin-top: 2%;
+  background-color: #ffffff;
+  box-shadow: 0px 5px 10px #7c8395;
+  color:  #1d10d1;
+  border-radius: 30px;
+  font-size: 1rem;
+  width: 75%;
 }
 
 .rowlogin {
@@ -562,7 +614,15 @@ text-align: left;
   margin: 100px auto;
 }
 
-
+.bannerimgCardInit {
+  position: absolute;
+  background-image: url(https://images.unsplash.com/photo-1582727657635-c771002bdada?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max&ixid=eyJhcHBfaWQiOjE0NTg5fQ);
+  height: 10rem;
+  width: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
 .suggestion:hover{
   background-color: cornflowerblue;
 }
