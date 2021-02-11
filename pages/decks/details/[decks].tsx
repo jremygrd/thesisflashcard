@@ -228,7 +228,7 @@ export default function mytest({ deckData, cardsData,isFav,author,keywords }: an
                   </Button>
                 </Link>
 
-                <ModalUnsplash>{deckData}{callbackImageUrl}</ModalUnsplash>
+                <ModalUnsplash>{deckData}{callbackImageUrl}{true}</ModalUnsplash>
 
                 {/* <UploadFile>{deckData}</UploadFile> */}
                 </>

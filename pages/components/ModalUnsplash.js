@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) =>
 
 
 export default function ModalUnsplash(deckData) {
-  // console.log(deckData.children);
+  console.log(deckData.children);
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => {

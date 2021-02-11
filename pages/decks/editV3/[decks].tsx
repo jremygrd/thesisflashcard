@@ -328,7 +328,17 @@ export default function DecksEdit({ cardsData, deckData, sessionUser }: any) {
                                 <p style={{ fontWeight: 'bold', padding: '6px'}}>{idx+1} : {val.question}</p>
                             </div>
                             <div className="mydiv-222">
-                                <img src={questions[idx].imageurl} object-fit="contain" style={{ height: '100px', margin: '-16px -16px 0 0', float: 'right' }} />
+                                {
+                                    questions[idx].imageurl.length > 5 ?
+                                    <img src={questions[idx].imageurl}  style={{ height: '100px', margin: '0 0 0 0', float: 'right', width:"100px", objectFit:"cover"}} />
+                                    :
+                                    deckData.imageurl.length > 5 ?
+
+                                    <img src={deckData.imageurl}  style={{ height: '100px', margin: '0 0 0 0', float: 'right', width:"100px", objectFit:"cover"}} />
+                                    :
+                                    <img src={'/pinguin.jpg'}  style={{ height: '100px', margin: '0 0 0 0', float: 'right', width:"100px", objectFit:"cover"}} />
+                                }
+                                
                             </div>
                         </div>
                     </Card>
@@ -407,7 +417,6 @@ export default function DecksEdit({ cardsData, deckData, sessionUser }: any) {
                                        <Card style={{ marginTop: '8px', backgroundColor: '#4cb7ff' }}>
                                             <p style={{ margin: '10px', color: 'white' }}>{questions[actualQuestionIndex].answer.length} bonnes réponses sélectionnées</p>
                                        </Card>
-
                                     }
                                     
                             </div>
