@@ -102,7 +102,7 @@ export default function PopMail(deckData:any) {
     };
 
     return (
-        <body>
+        <>
             <IconButton aria-label="share" onClick={handleClickOpen}>
                 <ShareIcon />
             </IconButton>
@@ -201,6 +201,6 @@ export default function PopMail(deckData:any) {
                     </Alert>
                 </Snackbar>
             </div>
-        </body>
+        </>
     )
 }

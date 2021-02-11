@@ -3,6 +3,7 @@ body {
   min-width: 100%;
   padding: 0px;
   margin:0px;
+  background: rgb(241, 241, 241);
   --text: #050000 !important;
   --lightText: #697386 !important;
   --bg: white !important;
@@ -2600,18 +2601,17 @@ svg.shinePurpleSmall g {
 }
 
 .mydiv-1 {
-  background: white;
+  /* background: white; */
   flex: 3;
   min-width: 410px;
 }
 .mydiv-leftCard {
-  background: white;
+  background: rgb(175, 181, 255, 0.288);
   min-width: 425px;
   max-width: 425px;
   overflow: hidden;
 }
 .divCardLeft{
-  background:rgba(175, 181, 255, 0.288);
   height: 100%;
   height: -webkit-calc(100% - 250px);
   height: -moz-calc(100% - 250px);

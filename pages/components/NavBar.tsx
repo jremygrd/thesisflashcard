@@ -201,8 +201,8 @@ const handleDrawerClose = () =>
 
 
   return (
-    <div className={classes.grow} style={{flex:'1'}}>
-      <AppBar position="static" style={{ background: ' linear-gradient(45deg,#4cb7ff 30%, #4C5BFF 90%) ' }}>
+    <div className={classes.grow} style={{flex:'1', zIndex:(30), position:'relative'}}>
+      <AppBar position="static" style={{ background: ' linear-gradient(45deg,#4cb7ff 30%, #4C5BFF 90%) ', height:'4rem'}}>
         <Toolbar>
         
 
