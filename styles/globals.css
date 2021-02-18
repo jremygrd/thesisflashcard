@@ -2576,6 +2576,11 @@ svg.shinePurpleSmall g {
   background: var(--offBg);
 }
 
+.chip{
+  background-color: green;
+  color:green;
+  background-image: montag;
+}
 
 .wrapper {
   
@@ -2799,3 +2804,4 @@ svg.shinePurpleSmall g {
   background-color: #f5f8ff;
   color: #000000;
 }
+
