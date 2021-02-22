@@ -1,11 +1,12 @@
 import { Button, Card, Chip, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, IconButton, InputLabel, MenuItem, Paper, Select, Switch, TextField, Typography } from "@material-ui/core";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import SettingsIcon from '@material-ui/icons/Settings';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import ChipInput from 'material-ui-chip-input';
 import Dropzone from '../../pages/components/Dropzone'
-
+import { AnyNaptrRecord } from "dns";
+import ModalUnsplash from '../components/ModalUnsplash'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -26,31 +27,73 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-export default function popDeckInfo(this: any) {
-    const [open, setOpen] = React.useState(false);
+export default function popDeckInfo (openParent:any) {
+
+
+    const [open, setOpen] = React.useState(openParent.children[0]);
+
+    const [deckData, setDeckData] = React.useState(openParent.children[2]);
+
+    let tags = []
+    for(var i = 0;i<openParent.children[3].length;i++){tags.push(openParent.children[3][i].keyword)}
+    const [tagsArray, setTags] = React.useState(tags);
+
+
+    useEffect(()=>{
+        setOpen(openParent.children[0])
+    })
+
+    const handleAddChip = (chip:any) =>{
+        let tempTags = [...tagsArray];
+        tempTags.push(chip)
+        setTags(tempTags)
+    }
+
+    const handleDeleteChip = (chip:any, index:any) =>{
+        let tempTags = [...tagsArray];
+        tempTags.splice(index,1);
+        setTags(tempTags)
+    }
+
 
     const handleClickOpen = () => {
         setOpen(true);
+        openParent.children[1](true)
     };
 
     const handleClose = () => {
         setOpen(false);
+        openParent.children[1](false)
     };
     const classes = useStyles();
-
-    const handleDeleteChip = () => {
-        console.info('You clicked the delete icon.');
-    };
 
     function myChip() {
 
     }
 
+    function setTitle(val:any){
+        let tempTitle = JSON.parse(JSON.stringify(deckData));
+        tempTitle.title = val;
+        setDeckData(tempTitle);
+      }
+
+      function setDescription(val:any){
+        let tempTitle = JSON.parse(JSON.stringify(deckData));
+        tempTitle.description = val;
+        setDeckData(tempTitle);
+      }
+
+      const callbackImageUrl = (url:string) =>{
+        let tempTitle = JSON.parse(JSON.stringify(deckData));
+        tempTitle.imageurl = url;
+        setDeckData(tempTitle);
+      }
+
     return (
         <div>
-            <IconButton aria-label="delete" style={{ float: 'right', color: 'black', marginTop: '0px', height: '35px' }} onClick={handleClickOpen} >
+            {/* <IconButton aria-label="delete" style={{ float: 'right', color: 'black', marginTop: '0px', height: '35px' }} onClick={handleClickOpen} >
                 <SettingsIcon />
-            </IconButton>
+            </IconButton> */}
             <Dialog maxWidth='xl' open={open} onClose={handleClose} aria-labelledby="form-dialog-title" PaperProps={{ style: { borderRadius: 10 } }}>
                 <DialogContent style={{ padding: '0px', height: '80%', backgroundColor: 'rgb(227, 230, 255)' }}>
                     {/* Ecrire ici le html */}
@@ -58,7 +101,11 @@ export default function popDeckInfo(this: any) {
                     <div>
                         <img src="/montagne.jpg" style={{ minWidth: '320px', width: '60vh', maxHeight: '200px', objectFit: 'cover' }} />
                     </div>
-                    <Button variant="contained" style={{width:'100%'}}>Librairie d'images</Button>
+                    <div className="wrapper" style={{ margin: '-40px 0 0 0' }}>
+                        <div style={{ flex: '1' }}>
+                    <ModalUnsplash>{deckData}{callbackImageUrl}{false}</ModalUnsplash>
+                    </div>
+                    </div>
                     <div style={{ width: '80%', margin: 'auto', maxWidth: '60vh' }}>
                         <Card elevation={5} style={{ width: '100%', margin: 'auto', marginTop: '20px' }}>
                             <TextField
@@ -66,6 +113,8 @@ export default function popDeckInfo(this: any) {
                                 placeholder="Titre du deck"
                                 variant="outlined"
                                 style={{ width: '100%', height: '100%' }}
+                                value={deckData.title}
+                                onChange={(e) => setTitle(e.target.value)}
                             />
                         </Card>
                         <div className="wrapper" style={{ marginTop: '20px' }}>
@@ -95,7 +144,13 @@ export default function popDeckInfo(this: any) {
                                 </div> */}
                                 <ChipInput style={{marginTop:'15px', marginLeft:'10px'}} classes={{
                                     chip : classes.chip,
-                                }}></ChipInput>
+                                }}
+                                value={tagsArray}
+                                onAdd={(chip) => handleAddChip(chip)}
+                                onDelete={(chip, index) => handleDeleteChip(chip, index)}
+                                >
+                                   
+                                </ChipInput>
                             </div>
                         </div>
                         <Card elevation={5} style={{ width: '100%', height: '110px', marginTop: '15px' }}>
@@ -106,6 +161,8 @@ export default function popDeckInfo(this: any) {
                                 variant="outlined"
                                 rows={4}
                                 style={{ width: '100%', height: '100%' }}
+                                value={deckData.description}
+                                onChange={(e) => setDescription(e.target.value)}
                             />
                         </Card>
                         <div className="wrapper" style={{ width: '100%', marginTop: '15px' }}>
@@ -135,3 +192,4 @@ export default function popDeckInfo(this: any) {
         </div>
     );
 }
+

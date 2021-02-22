@@ -47,7 +47,7 @@ const Transition = React.forwardRef(function Transition(
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function DecksEdit({ cardsData, deckData, sessionUser }: any) {
+export default function DecksEdit({ cardsData, deckData, sessionUser, keywords }: any) {
     const isMobile = useMediaQuery("(max-width: 800px)");
     const [isPicOpen, setisPicOpen] = useState(false);
     const [value, setValue] = React.useState('Controlled');
@@ -103,6 +103,14 @@ export default function DecksEdit({ cardsData, deckData, sessionUser }: any) {
 
     const handleCloseSearch = () => {
         setOpenSearch(false);
+    };
+    const [isOpenEditDeckInfo,setisOpenEditDeckInfo]=useState(false);
+    const handleOpenEdit = () => {
+        setisOpenEditDeckInfo(true);
+    };
+
+    const handleCloseEdit = () => {
+        setisOpenEditDeckInfo(false);
     };
 
     const [deckTitle, setDeckTitle] = useState(deckData.title);
@@ -328,8 +336,14 @@ export default function DecksEdit({ cardsData, deckData, sessionUser }: any) {
                                 <div style={{ flex: '1' }}>
                                     <h3 style={{ marginLeft: '7px', color: 'black', textAlign: 'left' }}>{deckTitle}</h3>
                                 </div>
-                                <div style={{ width: '50px' }}>
-                                    <PopEditDeckInfo/>
+                                <div style={{ width: '50px', marginTop:'12px' }}>
+                                <IconButton aria-label="delete" style={{ float: 'right', color: 'black', marginTop: '0px', height: '35px' }} onClick={handleOpenEdit} >
+                                    <SettingsIcon />
+                                </IconButton>
+                                    <PopEditDeckInfo>
+                                        {isOpenEditDeckInfo}{setisOpenEditDeckInfo}{deckData}{keywords}
+                                    </PopEditDeckInfo>
+      
                                 </div>
                             </div>
                         </div>
@@ -406,7 +420,7 @@ export default function DecksEdit({ cardsData, deckData, sessionUser }: any) {
 
             </div>
             <div className="mydiv-rightCard" style={{ height: 'calc(100vh - 64px)' }} >
-                <Card elevation={7} style={{ width: '80%', margin: '0 auto', marginTop: '30px', paddingBottom: '20px', overflowY: 'scroll', maxHeight: 'calc(100vh - 130px)', maxWidth: '800px' }}>
+                <Card elevation={7} style={{ width: '80%', margin: '0 auto', marginTop: '30px', paddingBottom: '20px', overflowY: 'scroll', maxHeight: 'calc(100vh - 130px)', maxWidth: '600px' }}>
                     <Dropzone></Dropzone>
                     {
                         questions[actualQuestionIndex].imageurl.length > 5 ?
@@ -774,7 +788,12 @@ export default function DecksEdit({ cardsData, deckData, sessionUser }: any) {
             <div style={{ float: 'left', width: '100%', height: '35px', maxHeight: "35px", position: 'fixed', bottom: '100px', left: '0px', margin: '0px', backgroundColor: 'rgb(192, 197, 255)' }}>
                 <div className="wrapper">
                     <div style={{ width: '50px', float: 'left' }}>
-                        <PopEditDeckInfo />
+                    <IconButton aria-label="delete" style={{ float: 'right', color: 'black', marginTop: '0px', height: '35px' }} onClick={handleOpenEdit} >
+                                    <SettingsIcon />
+                                </IconButton>
+                                    <PopEditDeckInfo>
+                                        {isOpenEditDeckInfo}{setisOpenEditDeckInfo}{deckData}{keywords}
+                                    </PopEditDeckInfo>
                     </div>
                     <div style={{ width: 'calc(100% - 100px)', float: 'left', textAlign: 'left' }}>
                         <p style={{ fontWeight: 'bold', marginTop: '10px' }}>{deckTitle}</p>
@@ -930,14 +949,24 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         body: JSON.stringify(opts),
       }
     );
-  
     const cardsData = await cardsByIds.json();
+
+    const keywordsjson = await fetch(
+        `http://localhost:3000/api/decks/deckkeywords`,
+        {
+        method: "post",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(opts),
+        }
+    );
+    const keywords = await keywordsjson.json();
   
     return {
       props: {
         deckData,
         cardsData,
         sessionUser,
+        keywords
       },
     };
   };
