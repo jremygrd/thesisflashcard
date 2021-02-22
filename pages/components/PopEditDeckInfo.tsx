@@ -89,6 +89,29 @@ export default function popDeckInfo (openParent:any) {
         setDeckData(tempTitle);
       }
 
+      async function saveDeck(idx:any){
+        let tempTitle = JSON.parse(JSON.stringify(deckData));
+        tempTitle.tags = tagsArray;
+
+
+        const upload = await fetch(
+            `http://localhost:3000/api/editDeck/deckInfoUpdate`,
+            {
+              method: "post",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(tempTitle),
+            }
+        );
+        handleClose();
+
+      }
+
+      const toggleDeckPrivacy = () => {
+      let tempTitle = JSON.parse(JSON.stringify(deckData));
+      tempTitle.private = !tempTitle.private;
+      setDeckData(tempTitle);
+      }
+
     return (
         <div>
             {/* <IconButton aria-label="delete" style={{ float: 'right', color: 'black', marginTop: '0px', height: '35px' }} onClick={handleClickOpen} >
@@ -99,7 +122,13 @@ export default function popDeckInfo (openParent:any) {
                     {/* Ecrire ici le html */}
                     <Dropzone></Dropzone>
                     <div>
-                        <img src="/montagne.jpg" style={{ minWidth: '320px', width: '60vh', maxHeight: '200px', objectFit: 'cover' }} />
+                        {
+                            deckData.imageurl.length > 5 ?
+                            <img src={deckData.imageurl}  style={{ minWidth: '320px', width: '60vh', maxHeight: '200px', objectFit: 'cover' }} />
+                            :
+                            <img src="/montagne.jpg" style={{ minWidth: '320px', width: '60vh', maxHeight: '200px', objectFit: 'cover' }} />
+                        }
+                        
                     </div>
                     <div className="wrapper" style={{ margin: '-40px 0 0 0' }}>
                         <div style={{ flex: '1' }}>
@@ -167,12 +196,18 @@ export default function popDeckInfo (openParent:any) {
                         </Card>
                         <div className="wrapper" style={{ width: '100%', marginTop: '15px' }}>
                             <div style={{ flex: '1', float: 'right', textAlign: 'right' }}>
-                                <Typography style={{ fontSize: '18px', marginTop: '4px' }}>Publique :</Typography>
+                                <Typography style={{ fontSize: '18px', marginTop: '4px' }}>
+                                    
+                                    Public
+                                    
+                                    </Typography>
                             </div>
                             <div style={{ flex: '1', float: 'left', textAlign: 'left' }}>
                                 <Switch
                                     name="checkedA"
                                     inputProps={{ 'aria-label': 'secondary checkbox' }}
+                                    checked={deckData.private} 
+                                    onChange={toggleDeckPrivacy} 
                                 />
                             </div>
 
@@ -184,7 +219,7 @@ export default function popDeckInfo (openParent:any) {
                     <Button onClick={handleClose} color="primary">
                         Annuler
                 </Button>
-                    <Button onClick={handleClose} color="primary">
+                    <Button onClick={saveDeck} color="primary">
                         Sauvegarder
                 </Button>
                 </DialogActions>
