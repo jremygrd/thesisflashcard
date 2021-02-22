@@ -13,6 +13,7 @@ export default function Dropzone() {
     <>
       <ReactDropzone onDrop={handleDrop} accept="image/*">
         {({ getRootProps, getInputProps, isDragAccept, isDragReject }) => (
+          // <div {...getRootProps({ className: "dropzone" })} style={{backgroundImage:'url(/phone.jpg)', backgroundRepeat:'no-repeat', height:'200px', backgroundSize:'cover'}}>
           <div {...getRootProps({ className: "dropzone" })}>
             <input {...getInputProps()} />
             <p>Déposez une image ou cliquez pour la sélectionner</p>
