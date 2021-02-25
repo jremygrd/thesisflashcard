@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { firebaseClient } from '../services/firebaseClient';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
@@ -27,16 +27,20 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-export default function PopMail() {
+export default function PopMail(openParent:any) {
 
-  const [open, setOpen] = React.useState(false);
+  const [isOpenChangeMail, setisOpenChangeMail] = React.useState(openParent.children[0]);;
   const [openSucces, setOpenSucces] = React.useState(false);
   const [openError,setOpenError] = React.useState(false);
   const [myerrorText, setMyerrorText] = useState(''); 
 
+  useEffect(()=>{
+    setisOpenChangeMail(openParent.children[0])
+})
 
   const handleClickOpen = () => {
-    setOpen(true);
+    setisOpenChangeMail(true);
+    openParent.children[1](true)
   };
   const handleClickOpenSucces = () => {
     setOpenSucces(true);
@@ -46,7 +50,8 @@ export default function PopMail() {
   };
 
   const handleClose = () => {
-    setOpen(false);
+    setisOpenChangeMail(false);
+    openParent.children[1](false)
   }; 
   const handleCloseError = (event?: React.SyntheticEvent, reason?: string) => {
     if (reason === 'clickaway') {
@@ -73,7 +78,8 @@ export default function PopMail() {
         userAuth?.updateEmail(newEmail).then (async function() {
           // Update successful.
           console.log("update email success")
-          setOpen(false);
+          setisOpenChangeMail(false);
+          openParent.children[1](false);
           setOpenSucces(true);
           var myuser = {myid: userAuth?.uid, email: newEmail}
           const user = await fetch(
@@ -102,8 +108,9 @@ export default function PopMail() {
          setOpenError(true);
         }
         if(error.code == "auth/invalid-email") {
+          console.log("ok")
           setMyerrorText("Adresse mail incorrecte");
-         setOpenError(true);
+          setOpenError(true);
         }
         if(error.code == "auth/user-mismatch") {
           setMyerrorText("L'adresse mail indiquée ne correspond pas avec l'adresse mail sur laquel vous êtes connecté");
@@ -120,15 +127,15 @@ export default function PopMail() {
 
   return (
     <div>
-      <Button variant="contained" color="secondary" onClick={handleClickOpen}>
+      {/* <Button variant="contained" color="secondary" onClick={handleClickOpen}>
         Changer Mail
-      </Button>
+      </Button> */}
           {/* Pop up to change mail adress */}
-    <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
+    <Dialog open={isOpenChangeMail} onClose={handleClose} aria-labelledby="form-dialog-title">
+        <DialogTitle id="form-dialog-title">Changer d'adresse mail de connexion</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Pour changer votre mot de passe taper votre ancienne adresse mail et mot de passe d'abord
+            Pour changer votre adresse mail de connexion veuillez rentrez vos anciennes informations de connexion avant.
           </DialogContentText>
           <TextField
             autoFocus
