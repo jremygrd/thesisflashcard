@@ -3,7 +3,8 @@ import styles from '../styles/Home.module.css'
 import Link from 'next/link';
 import { firebaseClient } from './services/firebaseClient';
 import next, { GetServerSideProps, GetServerSidePropsContext } from 'next';
-import nookies from 'nookies'
+import nookies from "nookies";
+
 import { firebaseAdmin } from './services/firebaseAdmin';
 
 const createUser=async (firstName:any,email:any) => {

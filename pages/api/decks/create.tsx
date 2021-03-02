@@ -14,9 +14,11 @@ export default async function (req:NextApiRequest, res: NextApiResponse) {
             data:{
                 id:uuidstack,
                 title: stackData.title,
+                description:stackData.description,
+                imageurl:stackData.imageurl,
+                private:stackData.private,
                 color:"none",
                 emoji:"none",
-                description:"none",
                 categorie:"none",
 
                 users : {

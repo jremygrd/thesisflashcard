@@ -98,7 +98,7 @@ export default function Home({userData}:any) {
       }}> 
         Sauvegarder
       </Button>
-      <PopUpdateMail/>
+      {/* <PopUpdateMail/> */}
       <PopUpdatePassword/>
       <Button
         onClick={async () => {

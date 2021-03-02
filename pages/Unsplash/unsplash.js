@@ -28,6 +28,7 @@ class Unsplash extends Component {
     }
   }
   
+  
   ROOT = `https://api.unsplash.com/`
   KEY ="?client_id=Ec1n2AKEb00jiprb4C_6LFncc57yZHxst8TYXNPvp7s"
   PERPAGE = `&per_page=30`
@@ -66,6 +67,7 @@ class Unsplash extends Component {
     
   }
   setImage= async (url) =>{
+    console.log(this.changeDeckimage,"de")
 
     if(this.changeDeckimage)
     {

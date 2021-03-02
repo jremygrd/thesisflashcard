@@ -82,7 +82,7 @@ const ExamList = ( examList:any) => {
   async function submitExam(){
     var myDate = ""+selectedDate?.getDate()+"-"+selectedDate?.getMonth()+"-"+selectedDate?.getFullYear()
     var myDat = myDate.split("-");
-    var newDate = new Date( myDat[2], myDat[1], myDat[0],16,13);
+    var newDate = new Date( parseInt(myDat[2]), parseInt(myDat[1]), parseInt(myDat[0]),16,13);
     const upload = await fetch(`http://localhost:3000/api/exams/create`,
           {
             method: "post",

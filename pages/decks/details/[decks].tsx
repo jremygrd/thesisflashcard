@@ -188,11 +188,12 @@ export default function mytest({ deckData, cardsData,isFav,author,keywords }: an
   return (
     <div>
       <div className="wrapper">
-        <div className="mydiv-1">
+        <div className="mydiv-1" style = {{paddingLeft:'32px', paddingTop:'16px', paddingRight:'32px', paddingBottom:'16px'}}>
+          <div  style ={{backgroundColor:"white", borderRadius:'5px', boxShadow:' 0 2px 5px 0 rgba(0,0,0,0.2)' }}>
           
           {
             deckData.imageurl.length < 2 ?
-            <img src="/pinguin.jpg" object-fit="contain" height="20rem" />
+            <img src="/pinguin.jpg" object-fit="contain" height="20rem" style ={{borderRadius:'5px 5px 0px 0px'}} />
             :
             <div  style={{ maxHeight: '11.5rem', overflow:'hidden'}}>
             <div className="fill">
@@ -211,7 +212,7 @@ export default function mytest({ deckData, cardsData,isFav,author,keywords }: an
             ))}
           </div>
           <p style={{ textAlign: 'left', margin: '15px 5px 15px 15px' }}>{deckData.description}</p>
-          <div className="wrapper">
+          <div className="wrapper" style = {{paddingBottom:'8px'}}>
             <div className="mydiv-11">
               <div >
                 <Link as = {`/decks/${deckData.id}`} href = "/decks/[decks]">
@@ -228,7 +229,7 @@ export default function mytest({ deckData, cardsData,isFav,author,keywords }: an
                   </Button>
                 </Link>
 
-                <ModalUnsplash>{deckData}{callbackImageUrl}</ModalUnsplash>
+                {/* <ModalUnsplash>{deckData}{callbackImageUrl}{true}</ModalUnsplash> */}
 
                 {/* <UploadFile>{deckData}</UploadFile> */}
                 </>
@@ -243,7 +244,7 @@ export default function mytest({ deckData, cardsData,isFav,author,keywords }: an
               </div>
             </div>
             <div className="mydiv-22">
-              <div className="wrapper" style={{ float: 'right' }}>
+              <div className="wrapper" style={{ float: 'right', flexWrap:'nowrap'}}>
                 <PopShareDeck>
                   {deckData}
                 </PopShareDeck>
@@ -272,7 +273,9 @@ export default function mytest({ deckData, cardsData,isFav,author,keywords }: an
             </div>
           </div>
         </div>
-        <div className="mydiv-2">
+        </div>
+        <div className="mydiv-2" style = {{ paddingTop:'16px'}}>
+          <div style = {{borderRadius:'5px',border:'1px solid transparent', backgroundColor:"#f4f4f4", boxShadow:' 0 2px 5px 0 rgba(0,0,0,0.2)'}}>
           {cardsData.map(({ question, bad_options, answer, qcm }: any, index: any) => (
             <Card style={{ margin: '15px' }} >
               <CardContent>
@@ -320,6 +323,7 @@ export default function mytest({ deckData, cardsData,isFav,author,keywords }: an
               </CardContent>
             </Card>
           ))}
+          </div>
         </div>
       </div>
     </div>

@@ -3,7 +3,7 @@ import styles from '../styles/Home.module.css'
 import React, { useState,useEffect } from 'react';
 import DeckList from '../pages/components/DeckList'
 import ExamList from '../pages/components/ExamList'
-import ModalCreateDeck from './components/ModalCreateDeck'
+import ModalCreateDeck from './components/ModalCreateDeck2'
 import ModalCreateExam from './components/ModalCreateExam'
 
 export default function Home({deckData,sessionUser,examList}:any) {
