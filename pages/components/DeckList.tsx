@@ -44,7 +44,7 @@ const DeckList = ( deckData :any) => {
               </a>
             </Link>
 
-            <Link as = {`/decks/edit/${id}`} href = "/decks/edit/[decks]">
+            <Link as = {`/decks/editV3/${id}`} href = "/decks/editV3/[decks]">
               <a>
                 <p>Edit deck</p>
               </a>

@@ -65,6 +65,15 @@ export default function DecksEdit({ cardsData, deckData, sessionUser }: any) {
         setOpen(false);
     };
 
+    const handleClickPreviewOpen = () => {
+        setOpen(true);
+    }
+
+    const handlePreviewClose = () =>
+    {
+        setOpen(false)
+    }
+
 
     const [deckTitle, setDeckTitle] = useState(deckData.title);
     const [deckimgurl, setdeckimgurl] = useState(deckData.imageurl);
@@ -76,6 +85,9 @@ export default function DecksEdit({ cardsData, deckData, sessionUser }: any) {
     const [actualQuestionIndex, setActualQuestionIndex] = useState(0);
     const [allOptions, setAllOptions] = useState(questions[actualQuestionIndex].answer.concat(questions[actualQuestionIndex].bad_options));
     const [cardimageurl, setcardimageurl] = useState(questions[actualQuestionIndex].imageurl);
+
+    console.log(questions)
+    console.log(allOptions)
 
     const addAnswer = () => {
         let tempQuest = [...questions];
@@ -126,20 +138,24 @@ export default function DecksEdit({ cardsData, deckData, sessionUser }: any) {
 
       function deleteOption(val: any,idx:any) {
         let tempQuest = [...questions];
+        tempQuest[actualQuestionIndex].answer = tempQuest[actualQuestionIndex].answer.filter(x => x != "")
+        tempQuest[actualQuestionIndex].bad_options = tempQuest[actualQuestionIndex].bad_options.filter(x => x != "")
         let updatedAll = [...allOptions];
         updatedAll.splice(idx,1);
         setAllOptions(updatedAll);
-
+        console.log("bonjour", tempQuest[actualQuestionIndex])
         if (tempQuest[actualQuestionIndex].answer.includes(val)){
             
             tempQuest[actualQuestionIndex].answer.splice(idx,1);
             setQuestions(tempQuest)
 
         }else{
-
-            tempQuest[actualQuestionIndex].bad_options.splice(idx,1);
+            console.log("coucou", idx);
+            tempQuest[actualQuestionIndex].bad_options.splice(idx - tempQuest[actualQuestionIndex].answer.length, 1);
             setQuestions(tempQuest)
+            console.log("fgdsftgs77retfhgs",tempQuest[actualQuestionIndex])
         }
+        console.log("au revoir", tempQuest[actualQuestionIndex]);
       }
 
       const changeCard = (idx:any) =>{
@@ -162,7 +178,7 @@ export default function DecksEdit({ cardsData, deckData, sessionUser }: any) {
 
 
       useEffect(() => {
-        setAllOptions(questions[actualQuestionIndex].answer.concat(questions[actualQuestionIndex].bad_options))
+        setAllOptions(questions[actualQuestionIndex].answer.concat(questions[actualQuestionIndex].bad_options).filter(x => x != ""))
       },[actualQuestionIndex]);
 
       useEffect(() => {
@@ -254,6 +270,8 @@ export default function DecksEdit({ cardsData, deckData, sessionUser }: any) {
       async function saveQuestion(idx:any){
         let tempQuest = [...questions];
         const toUpload = tempQuest[idx];
+        console.log(allOptions);
+        console.log(toUpload);
 
 
         const upload = await fetch(
@@ -459,7 +477,7 @@ export default function DecksEdit({ cardsData, deckData, sessionUser }: any) {
                                         </ListItemIcon>
                                         <ListItemText primary="Dupliquer la carte" />
                                     </MenuItem>
-                                    <MenuItem onClick={handleCloseMenu}>
+                                    <MenuItem onClick={handleClickPreviewOpen}>
                                         <ListItemIcon>
                                             <FindInPageIcon />
                                         </ListItemIcon>
@@ -532,6 +550,7 @@ export default function DecksEdit({ cardsData, deckData, sessionUser }: any) {
                         style={{ backgroundColor: 'green', color: 'white', marginTop: '20px' }}
                         endIcon={<SaveIcon />}
                         onClick = {()=>saveQuestion(actualQuestionIndex)}
+
                     >
                         Enregistrer la carte
                                 </Button>
