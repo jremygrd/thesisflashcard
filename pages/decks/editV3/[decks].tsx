@@ -328,7 +328,7 @@ export default function DecksEdit({ cardsData, deckData, sessionUser }: any) {
                                 <p style={{ fontWeight: 'bold', padding: '6px'}}>{idx+1} : {val.question}</p>
                             </div>
                             <div className="mydiv-222">
-                                <img src={questions[idx].imageurl} object-fit="contain" style={{ height: '100px', margin: '-16px -16px 0 0', float: 'right' }} />
+                                <img src={questions[idx].imageurl} object-fit="none" style={{ height: '100px', margin: '-0 -0 0 0', float: 'right', objectFit:"cover", width:'100px'}} />
                             </div>
                         </div>
                     </Card>
