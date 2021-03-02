@@ -403,9 +403,7 @@ export default function DecksEdit({ cardsData, deckData, sessionUser, keywords }
                                 <p style={{ fontWeight: 'bold', padding: '6px'}}>{idx+1} : {val.question}</p>
                             </div>
                             <div className="mydiv-222">
-<<<<<<< HEAD
                                 <img src={questions[idx].imageurl} object-fit="none" style={{ height: '100px', margin: '-0 -0 0 0', float: 'right', objectFit:"cover", width:'100px'}} />
-=======
                                 {
                                     questions[idx].imageurl.length > 5 ?
                                     <img src={questions[idx].imageurl}  style={{ height: '100px', margin: '0 0 0 0', float: 'right', width:"100px", objectFit:"cover"}} />
@@ -417,7 +415,6 @@ export default function DecksEdit({ cardsData, deckData, sessionUser, keywords }
                                     <img src={'/pinguin.jpg'}  style={{ height: '100px', margin: '0 0 0 0', float: 'right', width:"100px", objectFit:"cover"}} />
                                 }
                                 
->>>>>>> b58bed9c5acbe37155ce458728218cc4b03f092f
                             </div>
                         </div>
                     </Card>
