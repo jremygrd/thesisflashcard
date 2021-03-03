@@ -5,6 +5,7 @@ import HelpIcon from '@material-ui/icons/Help';
 import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
+import NavigateBackIcon from '@material-ui/icons/NavigateBefore';
 import AddIcon from '@material-ui/icons/Add';
 import ReportIcon from '@material-ui/icons/Report';
 import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
@@ -225,6 +226,34 @@ const CardQuiz = ( children:any) => {
         }
     };
 
+
+    // A FAIRE
+    const prevQuestion = () => {
+        // Move on to the next question if not the last question
+        
+        setFlip(false);
+        setIsChecked([]);
+        setFlip(false);
+        setSubmitted(true);
+        setAnswerCorrect(false);
+        setInputText("");
+        setIndiceOpened(false);
+        if (number !=0){
+        const nextQ = number - 1;
+        setNumber(nextQ);
+        if(questions[number].streak > 3 && questions[number].streakct > 3){
+            setCheckboxes(false);
+        }else{ setCheckboxes(true)}
+        
+        }
+
+        if (number-1 === -1) {
+        
+        } else {
+        setNumber(number-1);
+        }
+    };
+
     //Gérer un checkbox check
     const handleSingleCheck = (e:any) =>{
         if(!submitted){
@@ -332,7 +361,13 @@ const CardQuiz = ( children:any) => {
         {children.children?
         <>
             {!noMoreCards?
-            <>
+            
+            <div style={{display:'flex', flexDirection:'row', justifyContent:'center'}}>
+                <div className = {styles.nextCardButton}>
+                    <IconButton aria-label="grid"  onClick={prevQuestion}>
+                        <NavigateBackIcon fontSize="small"/>
+                    </IconButton>
+                </div>
                 <div className = {flip?styles.flipme:""}>
                     <div className = {styles.wrapperCard}>
                         <div className = {styles.carda} >
@@ -397,7 +432,7 @@ const CardQuiz = ( children:any) => {
                     </div>
 
                 </div>
-                <div className = {styles.sideButtons}>
+                {/* <div className = {styles.sideButtons}>
                     {checkboxes?
                     <IconButton aria-label="grid" onClick = {switchCheckboxes}>
                         <TextFieldsIcon fontSize="small"/>
@@ -430,13 +465,13 @@ const CardQuiz = ( children:any) => {
                     :null
                     
                     }
-                </div>
+                </div> */}
                 <div className = {styles.nextCardButton}>
                     <IconButton aria-label="grid"  onClick={nextQuestion}>
                         <NavigateNextIcon fontSize="small"/>
                     </IconButton>
                 </div>
-            </>:
+            </div>:
             <div className={styles.carda}>
                 <div className={styles.cardaface}>
                 {isExam?
