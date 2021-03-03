@@ -90,6 +90,15 @@ export default function DecksEdit({ cardsData, deckData, sessionUser, keywords }
         setOpen(false);
     };
 
+    const handleClickPreviewOpen = () => {
+        setOpen(true);
+    }
+
+    const handlePreviewClose = () =>
+    {
+        setOpen(false)
+    }
+
 
     const handleCloseClueMobile = () => {
         setOpenClue(false);
@@ -123,6 +132,9 @@ export default function DecksEdit({ cardsData, deckData, sessionUser, keywords }
     const [actualQuestionIndex, setActualQuestionIndex] = useState(0);
     const [allOptions, setAllOptions] = useState(questions[actualQuestionIndex].answer.concat(questions[actualQuestionIndex].bad_options));
     const [cardimageurl, setcardimageurl] = useState(questions[actualQuestionIndex].imageurl);
+
+    console.log(questions)
+    console.log(allOptions)
 
     const addAnswer = () => {
         let tempQuest = [...questions];
@@ -173,20 +185,24 @@ export default function DecksEdit({ cardsData, deckData, sessionUser, keywords }
 
       function deleteOption(val: any,idx:any) {
         let tempQuest = [...questions];
+        tempQuest[actualQuestionIndex].answer = tempQuest[actualQuestionIndex].answer.filter(x => x != "")
+        tempQuest[actualQuestionIndex].bad_options = tempQuest[actualQuestionIndex].bad_options.filter(x => x != "")
         let updatedAll = [...allOptions];
         updatedAll.splice(idx,1);
         setAllOptions(updatedAll);
-
+        console.log("bonjour", tempQuest[actualQuestionIndex])
         if (tempQuest[actualQuestionIndex].answer.includes(val)){
             
             tempQuest[actualQuestionIndex].answer.splice(idx,1);
             setQuestions(tempQuest)
 
         }else{
-
-            tempQuest[actualQuestionIndex].bad_options.splice(idx,1);
+            console.log("coucou", idx);
+            tempQuest[actualQuestionIndex].bad_options.splice(idx - tempQuest[actualQuestionIndex].answer.length, 1);
             setQuestions(tempQuest)
+            console.log("fgdsftgs77retfhgs",tempQuest[actualQuestionIndex])
         }
+        console.log("au revoir", tempQuest[actualQuestionIndex]);
       }
 
       const changeCard = (idx:any) =>{
@@ -209,7 +225,7 @@ export default function DecksEdit({ cardsData, deckData, sessionUser, keywords }
 
 
       useEffect(() => {
-        setAllOptions(questions[actualQuestionIndex].answer.concat(questions[actualQuestionIndex].bad_options))
+        setAllOptions(questions[actualQuestionIndex].answer.concat(questions[actualQuestionIndex].bad_options).filter(x => x != ""))
       },[actualQuestionIndex]);
 
       useEffect(() => {
@@ -301,6 +317,8 @@ export default function DecksEdit({ cardsData, deckData, sessionUser, keywords }
       async function saveQuestion(idx:any){
         let tempQuest = [...questions];
         const toUpload = tempQuest[idx];
+        console.log(allOptions);
+        console.log(toUpload);
 
 
         const upload = await fetch(
@@ -385,6 +403,7 @@ export default function DecksEdit({ cardsData, deckData, sessionUser, keywords }
                                 <p style={{ fontWeight: 'bold', padding: '6px'}}>{idx+1} : {val.question}</p>
                             </div>
                             <div className="mydiv-222">
+                                <img src={questions[idx].imageurl} object-fit="none" style={{ height: '100px', margin: '-0 -0 0 0', float: 'right', objectFit:"cover", width:'100px'}} />
                                 {
                                     questions[idx].imageurl.length > 5 ?
                                     <img src={questions[idx].imageurl}  style={{ height: '100px', margin: '0 0 0 0', float: 'right', width:"100px", objectFit:"cover"}} />
@@ -525,7 +544,7 @@ export default function DecksEdit({ cardsData, deckData, sessionUser, keywords }
                                         </ListItemIcon>
                                         <ListItemText primary="Dupliquer la carte" />
                                     </MenuItem>
-                                    <MenuItem onClick={handleCloseMenu}>
+                                    <MenuItem onClick={handleClickPreviewOpen}>
                                         <ListItemIcon>
                                             <FindInPageIcon />
                                         </ListItemIcon>
@@ -598,6 +617,7 @@ export default function DecksEdit({ cardsData, deckData, sessionUser, keywords }
                         style={{ backgroundColor: 'green', color: 'white', marginTop: '20px' }}
                         endIcon={<SaveIcon />}
                         onClick = {()=>saveQuestion(actualQuestionIndex)}
+
                     >
                         Enregistrer la carte
                                 </Button>
