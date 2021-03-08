@@ -7,9 +7,9 @@ import nookies from "nookies";
 
 import { firebaseAdmin } from './services/firebaseAdmin';
 
-const createUser=async (firstName:any,email:any) => {
+const createUser=async (firstName:any,email:any, lastName:any ) => {
   var user2 = firebaseClient.auth().currentUser;
-  var myuser = {myid: user2?.uid, name: firstName.firstName, email: email.email}
+  var myuser = {myid: user2?.uid, name: firstName.firstName,surname:lastName, email: email.email}
   const user = await fetch(
   `http://localhost:3000/api/users/create`,
   {
@@ -129,7 +129,7 @@ export default (_props: any) => {
         await firebaseClient
           .auth()
           .createUserWithEmailAndPassword(email, pass);
-        createUser({firstName},{email});
+        createUser({firstName},{email},{lastName});
         window.location.href = '/';
 
       }} 
@@ -145,3 +145,6 @@ export default (_props: any) => {
 </div>
     )
 }
+
+
+

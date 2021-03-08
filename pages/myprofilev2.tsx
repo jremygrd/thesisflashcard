@@ -22,6 +22,30 @@ import { InferGetServerSidePropsType, GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import PopUpdateMail from '../pages/components/PopUpdateMail';
 
+
+
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+function Alert(props: AlertProps) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+  }
+  
+  const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+      root: {
+        width: '100%',
+        '& > * + *': {
+          marginTop: theme.spacing(2),
+        },
+      },
+    }),
+  );
+
+
+
+
+
 export async function getServerSideProps(ctx: GetServerSidePropsContext) {
     try {
         const cookies = nookies.get(ctx);
@@ -78,10 +102,10 @@ function a11yProps(index: any) {
     };
 }
 
-const updateUser = async (firstName: any, email: any) => {
+const updateUser = async (firstName: any, email: any,category:any, selectedDate:any, surname:any) => {
     var userAuth = firebaseClient.auth().currentUser;
     console.log(userAuth?.uid, firstName, email)
-    var myuser = { myid: userAuth?.uid, name: firstName, email: email }
+    var myuser = { myid: userAuth?.uid, name: firstName, email: email, type:category, birthdate: new Date(selectedDate).getTime(),surname:surname }
     const user = await fetch(
         `http://localhost:3000/api/users/edit`,
         {
@@ -93,9 +117,12 @@ const updateUser = async (firstName: any, email: any) => {
 
 
 export default function profile({ userData }: any) {
-    const [email, setEmail] = useState('');
-    const [name, setName] = useState(userData.name);
+    const [email, setEmail] = useState(userData[0].email);
+    const [name, setName] = useState(userData[0].name);
+    const [surname, setSurname] = useState(userData[0].surname);
 
+
+    
     const [value, setValue] = React.useState(0);
 
     const handleChangeTab = (event: React.ChangeEvent<{}>, newValue: number) => {
@@ -113,21 +140,39 @@ export default function profile({ userData }: any) {
         console.log("launched");
         setisOpenChangeMail(true);
     };
-
+    var s = new Date(userData[0].birthdate)
     const [selectedDate, setSelectedDate] = React.useState<Date | null>(
-        new Date('2014-08-18T21:11:54'),
+        s,
     );
 
     const handleDateChange = (date: Date | null) => {
         setSelectedDate(date);
     };
 
-    const [category, setCategory] = React.useState('');
+    const [category, setCategory] = React.useState(userData[0].type);
 
     const handleChangeCategory = (event: React.ChangeEvent<{ value: unknown }>) => {
         setCategory(event.target.value as string);
     };
 
+
+  const [openSucces, setOpenSucces] = React.useState(false);
+  const [openError,setOpenError] = React.useState(false);
+  const [myerrorText, setMyerrorText] = useState(''); 
+  const handleCloseError = (event?: React.SyntheticEvent, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+   setOpenError(false);
+  };
+  const handleCloseSucces = (event?: React.SyntheticEvent, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpenSucces(false);
+  };
 
     return (
 
@@ -196,7 +241,16 @@ export default function profile({ userData }: any) {
 
                                 </div>
                                 <div style={{ width: '50%' }}>
-                                    <TextField id="standard-basic" label="Nom de Famille" style={{ width: '85%', float: 'right' }} />
+                                {/* <TextField id="standard-basic" label="Nom de Famille" style={{ width: '85%', float: 'right' }} /> */}
+                                    <TextField
+                                        id="standard-basic"
+                                        label="Nom de Famille"
+                                        style={{ width: '85%', float: 'right' }}
+                                        onChange={(e) => setSurname(e.target.value)}
+                                        value={surname}
+                                    />
+
+
                                     <FormControl style={{ width: '85%', float: 'right', textAlign: 'left', marginTop: '35px' }}>
                                         <InputLabel id="demo-simple-select-label">Je suis un(e)</InputLabel>
                                         <Select
@@ -205,9 +259,9 @@ export default function profile({ userData }: any) {
                                             value={category}
                                             onChange={handleChangeCategory}
                                         >
-                                            <MenuItem value={10}>Étudiant</MenuItem>
-                                            <MenuItem value={20}>Professeur</MenuItem>
-                                            <MenuItem value={30}>Particuler</MenuItem>
+                                            <MenuItem value={"Étudiant"}>Étudiant</MenuItem>
+                                            <MenuItem value={"Professeur"}>Professeur</MenuItem>
+                                            <MenuItem value={"Particuler"}>Particuler</MenuItem>
                                         </Select>
                                     </FormControl>
                                 </div>
@@ -219,9 +273,9 @@ export default function profile({ userData }: any) {
                                         color="primary"
                                         style={{ float: 'right', marginLeft: '15px', marginRight: '5px' }}
                                         onClick={async () => {
-                                            updateUser((document.getElementById("nameBox") as HTMLInputElement).value, userData.email);
-                                            setName((document.getElementById("nameBox") as HTMLInputElement).value);
-                                            userData.name = (document.getElementById("nameBox") as HTMLInputElement).value;
+                                            updateUser(name, email, category, selectedDate,surname);
+                                            // setName((document.getElementById("nameBox") as HTMLInputElement).value);
+                                            // userData.name = (document.getElementById("nameBox") as HTMLInputElement).value;
                                         }}
                                     >Enregistrer</Button>
                                     <Button
@@ -230,7 +284,7 @@ export default function profile({ userData }: any) {
                                         style={{ float: 'right' }}
                                         onClick={async () => {
                                             setName(userData.name);
-                                            (document.getElementById("nameBox") as HTMLInputElement).value = userData.name;
+                                            // (document.getElementById("nameBox") as HTMLInputElement).value = userData.name;
                                         }}
                                     >Annuler</Button>
 
@@ -255,7 +309,7 @@ export default function profile({ userData }: any) {
                                         <InputLabel >Email</InputLabel>
                                         <Input
                                             id="standard-adornment-password"
-                                            value={userData.email}
+                                            value={email}
                                             endAdornment={
                                                 <InputAdornment position="end">
                                                     <IconButton
@@ -265,7 +319,7 @@ export default function profile({ userData }: any) {
                                                         <EditIcon />
                                                     </IconButton>
                                                     <PopUpdateMail>
-                                                        {isOpenChangeMail}{setisOpenChangeMail}
+                                                        {isOpenChangeMail}{setisOpenChangeMail}{setOpenSucces}{setOpenError}{setMyerrorText}{setEmail}
                                                     </PopUpdateMail>
                                                 </InputAdornment>
                                             }
@@ -297,6 +351,24 @@ export default function profile({ userData }: any) {
                     </SwipeableViews>
                 </div>
             </Card>
+
+
+
+            <div className={useStyles().root}>
+                <Snackbar open={openSucces} autoHideDuration={6000} onClose={handleCloseSucces}>
+                <Alert onClose={handleCloseSucces} severity="success">
+                    Votre adresse mail a bien été changée
+                </Alert>
+                </Snackbar>
+                <Snackbar open={openError} autoHideDuration={6000} onClose={handleCloseError}>
+                <Alert onClose={handleCloseError} severity="error">
+                    {myerrorText}
+                </Alert>
+                </Snackbar>
+            </div>
+
+
+
         </div>
 
 

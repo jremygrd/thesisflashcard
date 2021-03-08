@@ -78,6 +78,9 @@ model users {
   id                   String         @id
   name                 String?
   email                String?
+  surname              String?
+  type                 String?        @default("")
+  birthdate            Int?
   rights               Int?
   answerofcard         answerofcard[]
   cards                cards[]

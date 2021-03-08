@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export default function PopMail(openParent:any) {
-
+  console.log(openParent)
   const [isOpenChangeMail, setisOpenChangeMail] = React.useState(openParent.children[0]);;
   const [openSucces, setOpenSucces] = React.useState(false);
   const [openError,setOpenError] = React.useState(false);
@@ -47,6 +47,7 @@ export default function PopMail(openParent:any) {
   };
   const handleClickOpenError = () => {
    setOpenError(true);
+   openParent.children[3](true)
   };
 
   const handleClose = () => {
@@ -59,6 +60,7 @@ export default function PopMail(openParent:any) {
     }
 
    setOpenError(false);
+   openParent.children[3](false)
   };
   const handleCloseSucces = (event?: React.SyntheticEvent, reason?: string) => {
     if (reason === 'clickaway') {
@@ -66,6 +68,7 @@ export default function PopMail(openParent:any) {
     }
 
     setOpenSucces(false);
+    openParent.children[2](false)
   };
 
 
@@ -78,9 +81,11 @@ export default function PopMail(openParent:any) {
         userAuth?.updateEmail(newEmail).then (async function() {
           // Update successful.
           console.log("update email success")
+          openParent.children[5](newEmail)
           setisOpenChangeMail(false);
           openParent.children[1](false);
           setOpenSucces(true);
+          openParent.children[2](true)
           var myuser = {myid: userAuth?.uid, email: newEmail}
           const user = await fetch(
           `http://localhost:3000/api/users/edit`,
@@ -93,11 +98,15 @@ export default function PopMail(openParent:any) {
           // error in new mail
           if(error.code == "auth/email-already-in-use") {
             setMyerrorText("Cette adresse mail est déjà utilisée");
+            openParent.children[4]("Cette adresse mail est déjà utilisée")
            setOpenError(true);
+           openParent.children[3](true)
           }
           else if(error.code == "auth/invalid-email") {
             setMyerrorText("Format de l'adresse mail invalide");
+            openParent.children[4]("Format de l'adresse mail invalide")
            setOpenError(true);
+           openParent.children[3](true)
           }
           console.log(error)
         });
@@ -105,27 +114,36 @@ export default function PopMail(openParent:any) {
         // Error in re-auth
         if(error.code == "auth/wrong-password") {
           setMyerrorText("Mot de passe invalide");
+          openParent.children[4]("Mot de passe invalide")
          setOpenError(true);
+         openParent.children[3](true)
         }
         if(error.code == "auth/invalid-email") {
           console.log("ok")
           setMyerrorText("Adresse mail incorrecte");
+          openParent.children[4]("Adresse mail incorrecte")
           setOpenError(true);
+          openParent.children[3](true)
         }
         if(error.code == "auth/user-mismatch") {
-          setMyerrorText("L'adresse mail indiquée ne correspond pas avec l'adresse mail sur laquel vous êtes connecté");
+        setMyerrorText("L'adresse mail indiquée ne correspond pas avec l'adresse mail sur laquel vous êtes connecté");
+        openParent.children[4]("L'adresse mail indiquée ne correspond pas avec l'adresse mail sur laquel vous êtes connecté")
          setOpenError(true);
+         openParent.children[3](true)
         }
         console.log(error);
       });
     }
     else{
       setMyerrorText("Les 2 adresses mails ne correspondent pas");
+      openParent.children[4]("Les 2 adresses mails ne correspondent pas")
      setOpenError(true);
+     openParent.children[3](true)
     }
   }
 
   return (
+    <>
     <div>
       {/* <Button variant="contained" color="secondary" onClick={handleClickOpen}>
         Changer Mail
@@ -181,8 +199,11 @@ export default function PopMail(openParent:any) {
           </Button>
         </DialogActions>
       </Dialog>
-      <div className={useStyles().root}>
-        <Snackbar open={openSucces} autoHideDuration={6000} onClose={handleCloseSucces}>
+
+    </div>
+
+    <div className={useStyles().root}>
+        {/* <Snackbar open={openSucces} autoHideDuration={6000} onClose={handleCloseSucces}>
           <Alert onClose={handleCloseSucces} severity="success">
             Votre adresse mail a bien été changée
           </Alert>
@@ -191,8 +212,8 @@ export default function PopMail(openParent:any) {
           <Alert onClose={handleCloseError} severity="error">
             {myerrorText}
           </Alert>
-        </Snackbar>
+        </Snackbar> */}
       </div>
-    </div>
+    </>
   )
 }

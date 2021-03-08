@@ -10,7 +10,10 @@ export default async function (req:NextApiRequest, res: NextApiResponse) {
                 id:req.body.myid,
                 name:req.body.name,
                 email:req.body.email,
-                rights:1
+                surname:req.body.surname.lastName,
+                type:'',
+                birthdate:new Date().getTime(),
+                rights:0
             }
         })
 

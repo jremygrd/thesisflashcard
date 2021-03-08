@@ -11,7 +11,10 @@ export default async function (req:NextApiRequest, res: NextApiResponse) {
                 id:req.body.myid,
                 name:req.body.name,
                 email:req.body.email,
-                rights:1
+                rights:1,
+                surname:req.body.surname,
+                type:req.body.type,
+                birthdate:req.body.birthdate,
             },
             where: {
                 id:req.body.myid

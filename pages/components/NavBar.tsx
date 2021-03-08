@@ -153,7 +153,7 @@ const handleDrawerClose = () =>
 
       return (
         <div >
-        <Link href="/"
+        <Link href="/acceuil"
           {...{
             color: "inherit",
             style: { textDecoration: "none" },
@@ -171,7 +171,7 @@ const handleDrawerClose = () =>
           <MenuItem>Librarie</MenuItem>
           </Link>
 
-          <Link href="/myprofile"
+          <Link href="/myprofilev2"
               {...{
                 color: "inherit",
                 style: { textDecoration: "none" },
@@ -195,7 +195,9 @@ const handleDrawerClose = () =>
       onClose={handleMenuClose}
     >
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+      <Link href="/myprofilev2">
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      </Link>
     </Menu>
   );
 
@@ -248,7 +250,9 @@ const handleDrawerClose = () =>
           </Typography>
 
           <div className={classes.leftbutton}>
+
           <Button
+          href='/acceuil'
           variant="contained"
           color="primary"
           size="large"

@@ -223,7 +223,7 @@ export default function mytest({ deckData, cardsData,isFav,author,keywords }: an
 
                 {sessionUser == deckData.fk_user?
                 <>
-                <Link as = {`/decks/edit/${deckData.id}`} href = "/decks/edit/[decks]">
+                <Link as = {`/decks/editV3/${deckData.id}`} href = "/decks/editV3/[decks]">
                   <Button style={{ width: '40%', height: '40px', marginLeft: '15px' }} variant="contained" color="secondary">
                     Éditer
                   </Button>
