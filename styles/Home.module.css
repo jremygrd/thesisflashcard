@@ -414,10 +414,9 @@
 .carda {
   box-shadow: var(--shadowBig);
   position: relative; /* Required to absolutely position the child faces */
-  width: 380px;
-  height:550px;
-  margin-bottom: 1rem;
-  margin-left: 1rem;
+  width: 95vw;
+  max-width: 800px;
+  height:calc(100vh - 180px);
   text-align: center;
   border-radius: 1rem;
   display:flex;
@@ -441,6 +440,9 @@
   background-color: rgb(255, 255, 255);
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
+  /* overflow-y: scroll; */
+  overflow: auto;
+  position:relative;
   
  
 }
@@ -1087,7 +1089,6 @@ text-align: left;
   height:100%;
 
   margin: auto auto;
-  padding:10px;
 
 }
 

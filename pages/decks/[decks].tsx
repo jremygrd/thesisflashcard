@@ -6,6 +6,7 @@ import styles from '../../styles/Home.module.css'
 import '../../styles/Home.module.css'
 
 import CardQuiz from '../components/CardQuiz';
+import CardQuizv2 from '../components/CardQuizv2';
 
 export type Question = {
   id: string;
@@ -31,13 +32,13 @@ export default function Deck({cardsData,deckData,shuffled, sessionUser}:any){
           {deckData.title}
         </h1>
         
-        <CardQuiz>
+        <CardQuizv2>
           {cardsData}
           {shuffled}
           {deckData}
           {false} 
           {false}
-        </CardQuiz>
+        </CardQuizv2>
       </main>
     </div>
 

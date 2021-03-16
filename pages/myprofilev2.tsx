@@ -21,6 +21,7 @@ import { firebaseClient } from './services/firebaseClient';
 import { InferGetServerSidePropsType, GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import PopUpdateMail from '../pages/components/PopUpdateMail';
+import PopUpdatePassword2 from '../pages/components/PopUpdatePassword2';
 
 
 
@@ -336,11 +337,7 @@ export default function profile({ userData }: any) {
                                             value="password123"
                                             endAdornment={
                                                 <InputAdornment position="end">
-                                                    <IconButton
-                                                        aria-label="change mail"
-                                                    >
-                                                        <EditIcon />
-                                                    </IconButton>
+                                                    <PopUpdatePassword2/>
                                                 </InputAdornment>
                                             }
                                         />

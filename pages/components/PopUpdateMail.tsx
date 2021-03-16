@@ -210,7 +210,8 @@ export default function PopMail(openParent:any) {
         </Snackbar>
         <Snackbar open={openError} autoHideDuration={6000} onClose={handleCloseError}>
           <Alert onClose={handleCloseError} severity="error">
-            {myerrorText}
+            {/* {myerrorText} */}
+            erreur
           </Alert>
         </Snackbar> */}
       </div>
