@@ -372,8 +372,6 @@
 }
 
 .btnCard {
-  position: absolute;
-  bottom: 0;
   width: 100%;
   border: black;
   font-size: 1rem;
@@ -384,10 +382,15 @@
   border-radius: 0px 0px 20px 20px;
 }
 
-.btnCardBack {
+.divBtnCard {
   position: absolute;
   bottom: 0;
   left: 0;
+  width: 100%;
+}
+
+
+.btnCardBack {
   width: 100%;
   border: black;
   font-size: 1rem;
@@ -441,7 +444,7 @@
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   /* overflow-y: scroll; */
-  overflow: auto;
+  /* overflow: hidden; */
   position:relative;
   
  

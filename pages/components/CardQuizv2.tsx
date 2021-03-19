@@ -31,6 +31,8 @@ import FileCopyIcon from '@material-ui/icons/FileCopy';
 import FindInPageIcon from '@material-ui/icons/FindInPage';
 import DeleteSweepIcon from '@material-ui/icons/DeleteSweep';
 import DoneOutlineIcon from '@material-ui/icons/DoneOutline';
+import CloseIcon from '@material-ui/icons/Close';
+import WarningIcon from '@material-ui/icons/Warning';
 
 
 export type Question = {
@@ -413,6 +415,7 @@ const CardQuizv2 = (children: any) => {
                                 <div className={styles.wrapperCard}>
                                     <div className={styles.carda} >
                                         <div className={styles.cardaface}>
+                                            <div style={{ overflowY: 'auto', maxHeight: 'calc(100% - 40px)' }}>
                                             <h1 style={{ margin: '10px 5px 20px 5px' }}>Quel est la capital de la France ?</h1>
                                             <img src="/pinguin.jpg" object-fit="contain" style={{ height: '20vh', margin: '-15px 0 0 0' }} className="item" />
                                             <div className="wrapper" style={{ marginTop: '15px' }}>
@@ -450,21 +453,9 @@ const CardQuizv2 = (children: any) => {
                                                     >
                                                         <MenuItem onClick={handleCloseMenu}>
                                                             <ListItemIcon>
-                                                                <FileCopyIcon />
+                                                                <WarningIcon />
                                                             </ListItemIcon>
-                                                            <ListItemText primary="Dupliquer la carte" />
-                                                        </MenuItem>
-                                                        <MenuItem onClick={handleCloseMenu}>
-                                                            <ListItemIcon>
-                                                                <FindInPageIcon />
-                                                            </ListItemIcon>
-                                                            <ListItemText primary="Prévisualisation" />
-                                                        </MenuItem>
-                                                        <MenuItem onClick={handleCloseMenu} style={{ backgroundColor: 'red' }}>
-                                                            <ListItemIcon>
-                                                                <DeleteSweepIcon />
-                                                            </ListItemIcon>
-                                                            <ListItemText primary="Supprimer la carte" />
+                                                            <ListItemText primary="Signaler une erreur" />
                                                         </MenuItem>
                                                     </Menu>
                                                 </div>
@@ -473,16 +464,13 @@ const CardQuizv2 = (children: any) => {
                                                 <Card elevation={3} style={{ flex: '1 0 35%', minWidth: '200px', margin: '10px 10px 0 10px', position: 'relative', overflow: 'visible', backgroundColor: 'rgb(245, 245, 245)' }}>
                                                     <div className="wrapper">
                                                         <div style={{ float: 'left', width: '80%' }}>
-                                                            <InputBase
-                                                                placeholder='Réponse 1'
-                                                                multiline
-                                                                style={{ width: '100%', float: 'left', margin: '3px 0 0 15px' }}
-                                                                value="Marseille"
-                                                            />
+                                                            <Typography style={{ width: '100%', float: 'left', margin: '8px 0 0 10px', textAlign: 'left' }}>
+                                                                Marseille
+                                                            </Typography>
                                                         </div>
                                                         <div style={{ width: '20%', display: 'flex', justifyContent: 'flex-end', float: 'right' }}>
                                                             <Checkbox
-                                                                defaultChecked
+                                                                id="chid"
                                                                 color="primary"
                                                                 style={{ float: 'right' }}
                                                             />
@@ -492,12 +480,9 @@ const CardQuizv2 = (children: any) => {
                                                 <Card elevation={3} style={{ flex: '1 0 35%', minWidth: '200px', margin: '10px 10px 0 10px', position: 'relative', overflow: 'visible', backgroundColor: 'rgb(245, 245, 245)' }}>
                                                     <div className="wrapper">
                                                         <div style={{ float: 'left', width: '80%' }}>
-                                                            <InputBase
-                                                                placeholder='Réponse 1'
-                                                                multiline
-                                                                style={{ width: '100%', float: 'left', margin: '3px 0 0 15px' }}
-                                                                value="Lyon"
-                                                            />
+                                                            <Typography style={{ width: '100%', float: 'left', margin: '8px 0 0 10px', textAlign: 'left' }}>
+                                                                Marseille
+                                                            </Typography>
                                                         </div>
                                                         <div style={{ width: '20%', display: 'flex', justifyContent: 'flex-end', float: 'right' }}>
                                                             <Checkbox
@@ -511,12 +496,9 @@ const CardQuizv2 = (children: any) => {
                                                 <Card elevation={3} style={{ flex: '1 0 35%', minWidth: '200px', margin: '10px 10px 0 10px', position: 'relative', overflow: 'visible', backgroundColor: 'rgb(220, 255, 220)' }}>
                                                     <div className="wrapper">
                                                         <div style={{ float: 'left', width: '80%' }}>
-                                                            <InputBase
-                                                                placeholder='Réponse 1'
-                                                                multiline
-                                                                style={{ width: '100%', float: 'left', margin: '3px 0 0 15px' }}
-                                                                value="Paris"
-                                                            />
+                                                            <Typography style={{ width: '100%', float: 'left', margin: '8px 0 0 10px', textAlign: 'left' }}>
+                                                                Marseille
+                                                            </Typography>
                                                         </div>
                                                         <div style={{ width: '20%', display: 'flex', justifyContent: 'flex-end', float: 'right' }}>
                                                             <Checkbox
@@ -528,134 +510,90 @@ const CardQuizv2 = (children: any) => {
                                                     </div>
                                                 </Card>
                                             </div>
+                                            </div>
+                                            
 
                                         </div>
-                                        <div className={`${styles.cardaback}`} style={{backgroundColor:'rgb(220, 255, 220)'}}>
-                                            {/* <div style={{width:'100%', height:'50px', backgroundColor:'red'}} ></div> */}
-                                            <h1 style={{ margin: '10px 5px 20px 5px' }}>Quel est la capital de la France ?</h1>
-                                            <img src="/pinguin.jpg" object-fit="contain" style={{ height: '20vh', margin: '-15px 0 0 0' }} className="item" />
-                                            <div className="wrapper" style={{ marginTop: '15px' }}>
-                                                <div style={{ flex: '1' }}>
-                                                    {/* <Card style={{ marginTop: '8px', marginLeft: '20px', backgroundColor: 'red', maxWidth: '250px' }}>
-                                                        <p style={{ margin: '10px', color: 'white' }}>Raté vous ferez mieux la prochaine fois ;)</p>
-                                                    </Card> */}
-                                                    {/* <Card style={{ marginTop: '8px', marginLeft: '20px', maxWidth: '250px' }}>
-                                                        <p style={{ margin: '10px', color: 'black' }}>Bien joué vous avez la bonne réponse</p>
-                                                    </Card> */}
-                                                    {/* <Typography>Bravo</Typography> */}
+                                        <div className={`${styles.cardaback}`} style={{ backgroundColor: 'rgb(220, 255, 220)' }}>
+                                            <div style={{ overflowY: 'auto', maxHeight: 'calc(100% - 105px)' }}>
+
+
+                                                {/* <div style={{width:'100%', height:'50px', backgroundColor:'red'}} ></div> */}
+                                                <h1 style={{ margin: '10px 5px 20px 5px' }}>Quel est la capital de la France ?</h1>
+                                                <img src="/pinguin.jpg" object-fit="contain" style={{ height: '20vh', margin: '-15px 0 0 0' }} className="item" />
+                                                <div className="wrapper" style={{ margin: '20px 10px 0 10px' }}>
+                                                    <Card elevation={3} style={{ flex: '1 0 35%', minWidth: '200px', margin: '10px 10px 0 10px', position: 'relative', overflow: 'visible', backgroundColor: 'rgb(255, 160, 160)' }}>
+                                                        <div className="wrapper">
+                                                            <div style={{ float: 'left', width: '80%' }}>
+                                                                <Typography style={{ width: '100%', float: 'left', margin: '8px 0 0 10px', textAlign: 'left' }}>
+                                                                    Marseille
+                                                            </Typography>
+                                                            </div>
+                                                            <div style={{ width: '20%', display: 'flex', justifyContent: 'flex-end', float: 'right' }}>
+                                                                <Checkbox
+                                                                    checked={false}
+                                                                    color="primary"
+                                                                    style={{ float: 'right' }}
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    </Card>
+                                                    <Card elevation={3} style={{ flex: '1 0 35%', minWidth: '200px', margin: '10px 10px 0 10px', position: 'relative', overflow: 'visible', backgroundColor: 'rgb(255, 160, 160)' }}>
+                                                        <div className="wrapper">
+                                                            <div style={{ float: 'left', width: '80%' }}>
+                                                                <Typography style={{ width: '100%', float: 'left', margin: '8px 0 0 10px', textAlign: 'left' }}>
+                                                                    Marseille
+                                                            </Typography>
+                                                            </div>
+                                                            <div style={{ width: '20%', display: 'flex', justifyContent: 'flex-end', float: 'right' }}>
+                                                                <Checkbox
+                                                                    checked={true}
+                                                                    color="primary"
+                                                                    style={{ float: 'right' }}
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    </Card>
+                                                    <Card elevation={3} style={{ flex: '1 0 35%', minWidth: '200px', margin: '10px 10px 0 10px', position: 'relative', overflow: 'visible', backgroundColor: 'rgb(87, 206, 8)' }}>
+                                                        <div className="wrapper">
+                                                            <div style={{ float: 'left', width: '80%' }}>
+                                                                <Typography style={{ width: '100%', float: 'left', margin: '8px 0 0 10px', textAlign: 'left' }}>
+                                                                    Marseille
+                                                            </Typography>
+                                                            </div>
+                                                            <div style={{ width: '20%', display: 'flex', justifyContent: 'flex-end', float: 'right' }}>
+                                                                <Checkbox
+                                                                    checked={true}
+                                                                    color="primary"
+                                                                    style={{ float: 'right' }}
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    </Card>
                                                 </div>
-                                                <div style={{ flex: '1', float: 'right', textAlign: 'right' }}>
-                                                    <IconButton aria-label="indice" onClick={handleClickClueOpen}>
-                                                        <EmojiObjectsIcon style={{ height: '35px', width: '35px', color: 'orange' }} />
-                                                    </IconButton>
-                                                    <Dialog open={openClue} onClose={handleCloseClue} aria-labelledby="form-dialog-title">
-                                                        <DialogTitle id="form-dialog-title">Indice</DialogTitle>
-                                                        <DialogContent>
-                                                            <DialogContentText>
-                                                                C'est au milieu de la france...
-                                        </DialogContentText>
-                                                        </DialogContent>
-                                                        <DialogActions>
-                                                            <Button onClick={handleCloseClue} color="primary">
-                                                                Fermer
-                                         </Button>
-                                                        </DialogActions>
-                                                    </Dialog>
-                                                    <IconButton aria-label="more" onClick={handleClickMenu}>
-                                                        <DehazeIcon style={{ height: '35px', width: '35px' }} />
-                                                    </IconButton>
-                                                    <Menu
-                                                        id="simple-menu"
-                                                        anchorEl={anchorEl}
-                                                        keepMounted
-                                                        open={Boolean(anchorEl)}
-                                                        onClose={handleCloseMenu}
-                                                    >
-                                                        <MenuItem onClick={handleCloseMenu}>
-                                                            <ListItemIcon>
-                                                                <FileCopyIcon />
-                                                            </ListItemIcon>
-                                                            <ListItemText primary="Dupliquer la carte" />
-                                                        </MenuItem>
-                                                        <MenuItem onClick={handleCloseMenu}>
-                                                            <ListItemIcon>
-                                                                <FindInPageIcon />
-                                                            </ListItemIcon>
-                                                            <ListItemText primary="Prévisualisation" />
-                                                        </MenuItem>
-                                                        <MenuItem onClick={handleCloseMenu} style={{ backgroundColor: 'red' }}>
-                                                            <ListItemIcon>
-                                                                <DeleteSweepIcon />
-                                                            </ListItemIcon>
-                                                            <ListItemText primary="Supprimer la carte" />
-                                                        </MenuItem>
-                                                    </Menu>
+
+                                            </div>
+                                            <div className={styles.divBtnCard}>
+                                                {/* <Divider variant="inset" style={{marginBottom:'10px'}} /> */}
+                                                <div className="wrapper" style={{ width: '100%', marginBottom: '20px' }}>
+                                                    <DoneOutlineIcon style={{ margin: 'auto', fontSize: '30px', marginRight: '0px', color: 'green' }} />
+                                                    <h2 style={{ margin: 'auto', marginRight: '10px', marginLeft: '10px' }}>Bonne réponse</h2>
+                                                    <DoneOutlineIcon style={{ margin: 'auto', fontSize: '30px', marginLeft: '0px', color: 'green' }} />
+                                                    {/* <WarningIcon style={{ margin: 'auto', marginRight: '0px', fontSize:'30px', color:'red' }} />
+                                                    <h2 style={{ margin: 'auto', marginRight: '10px', marginLeft:'10px' }}>Mauvaise réponse</h2>
+                                                    <WarningIcon style={{ margin: 'auto', marginLeft: '0px', fontSize:'30px', color:'red' }} /> */}
+
                                                 </div>
+
+
+                                                <button className={styles.btnCardBack} onClick={submitFlip}>Retourner</button>
                                             </div>
-                                            <div className="wrapper" style={{ margin: '20px 10px 0 10px' }}>
-                                                <Card elevation={3} style={{ flex: '1 0 35%', minWidth: '200px', margin: '10px 10px 0 10px', position: 'relative', overflow: 'visible', backgroundColor: 'rgb(255, 160, 160)' }}>
-                                                    <div className="wrapper">
-                                                        <div style={{ float: 'left', width: '80%' }}>
-                                                            <InputBase
-                                                                placeholder='Réponse 1'
-                                                                multiline
-                                                                style={{ width: '100%', float: 'left', margin: '3px 0 0 15px' }}
-                                                                // value="Marseille"
-                                                            />
-                                                        </div>
-                                                        <div style={{ width: '20%', display: 'flex', justifyContent: 'flex-end', float: 'right' }}>
-                                                            <Checkbox
-                                                                checked={false}
-                                                                color="primary"
-                                                                style={{ float: 'right' }}
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                </Card>
-                                                <Card elevation={3} style={{ flex: '1 0 35%', minWidth: '200px', margin: '10px 10px 0 10px', position: 'relative', overflow: 'visible', backgroundColor: 'rgb(255, 160, 160)' }}>
-                                                    <div className="wrapper">
-                                                        <div style={{ float: 'left', width: '80%' }}>
-                                                            <InputBase
-                                                                placeholder='Réponse 1'
-                                                                multiline
-                                                                style={{ width: '100%', float: 'left', margin: '3px 0 0 15px' }}
-                                                                value="Lyon"
-                                                            />
-                                                        </div>
-                                                        <div style={{ width: '20%', display: 'flex', justifyContent: 'flex-end', float: 'right' }}>
-                                                            <Checkbox
-                                                                checked={true}
-                                                                color="primary"
-                                                                style={{ float: 'right' }}
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                </Card>
-                                                <Card elevation={3} style={{ flex: '1 0 35%', minWidth: '200px', margin: '10px 10px 0 10px', position: 'relative', overflow: 'visible', backgroundColor: 'rgb(87, 206, 8)' }}>
-                                                    <div className="wrapper">
-                                                        <div style={{ float: 'left', width: '80%' }}>
-                                                            <InputBase
-                                                                placeholder='Réponse 1'
-                                                                multiline
-                                                                style={{ width: '100%', float: 'left', margin: '3px 0 0 15px' }}
-                                                                value="Paris"
-                                                            />
-                                                        </div>
-                                                        <div style={{ width: '20%', display: 'flex', justifyContent: 'flex-end', float: 'right' }}>
-                                                            <Checkbox
-                                                                checked={true}
-                                                                color="primary"
-                                                                style={{ float: 'right' }}
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                </Card>
-                                            </div>
-                                            <h2>Bonne réponse !</h2>
-                                            <DoneOutlineIcon/>
-                                            <button className={styles.btnCardBack} onClick={submitFlip}>Retourner</button>
+
                                         </div>
+                                        <div className={styles.divBtnCard}>
                                         <button className={styles.btnCard} onClick={submitFlip}>Retourner</button>
+                                            </div>
+                                        
                                     </div>
                                 </div>
 
