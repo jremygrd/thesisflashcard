@@ -266,12 +266,12 @@ export default function DecksEdit({ cardsData, deckData, sessionUser, keywords }
             question: "",
             tip: "",
             bad_options: [],
-            answer: [],
+            answer: [" "],
             fk_user: sessionUser,
             imageurl : ""
           };
           
-          tempQuest.push(blank);
+          await tempQuest.push(blank);
           setQuestions(tempQuest);
           changeCard(tempQuest.indexOf(blank))
 
@@ -393,7 +393,7 @@ export default function DecksEdit({ cardsData, deckData, sessionUser, keywords }
                         <div className="mydiv-222">
                             {
                                 deckimgurl.length > 5 ? 
-                                <img src={deckimgurl} object-fit="contain" style={{ height: '50px', margin: '5px', float: 'right' }} />
+                                <img src={deckimgurl} onClick={()=>console.log(questions)} object-fit="contain" style={{ height: '50px', margin: '5px', float: 'right' }} />
                                 :
                                 <img src="/pinguin.jpg" object-fit="contain" style={{ height: '50px', margin: '5px', float: 'right' }} />
                             }

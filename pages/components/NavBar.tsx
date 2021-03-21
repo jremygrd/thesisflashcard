@@ -216,15 +216,16 @@ const handleDrawerClose = () =>
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
+       <Link href="/myprofilev2">
       <MenuItem onClick={handleMenuClose}>Mon profil</MenuItem>
-      <Link href="/myprofilev2">
+      </Link>
       <MenuItem 
        onClick={async () => {
         await firebaseClient.auth().signOut();
         window.location.href = '/';
       }}
       >Se déconnecter</MenuItem>
-      </Link>
+      
     </Menu>
   );
 

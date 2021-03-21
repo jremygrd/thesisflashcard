@@ -201,19 +201,17 @@ export default function PopMail(openParent:any) {
 
     </div>
 
-    <div className={useStyles().root}>
-        {/* <Snackbar open={openSucces} autoHideDuration={6000} onClose={handleCloseSucces}>
+    <Snackbar open={openSucces} autoHideDuration={6000} onClose={handleCloseSucces}>
           <Alert onClose={handleCloseSucces} severity="success">
             Votre adresse mail a bien été changée
           </Alert>
         </Snackbar>
         <Snackbar open={openError} autoHideDuration={6000} onClose={handleCloseError}>
           <Alert onClose={handleCloseError} severity="error">
-            {/* {myerrorText} */}
+            {myerrorText}
             erreur
           </Alert>
-        </Snackbar> */}
-      </div>
+        </Snackbar>
     </>
   )
 }

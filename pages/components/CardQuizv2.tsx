@@ -33,6 +33,7 @@ import DeleteSweepIcon from '@material-ui/icons/DeleteSweep';
 import DoneOutlineIcon from '@material-ui/icons/DoneOutline';
 import CloseIcon from '@material-ui/icons/Close';
 import WarningIcon from '@material-ui/icons/Warning';
+import Lightbox from 'react-image-lightbox';
 
 
 export type Question = {
@@ -44,6 +45,7 @@ export type Question = {
     streakct: number;
     nbGood: number;
     nbBad: number;
+    imageurl:string;
 };
 
 
@@ -61,9 +63,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 const CardQuizv2 = (children: any) => {
-    const option = "Test"
-    const sessionUser = "1w7K30BqJFTR6rJLKdAP9aasoKM2"
-
+    const sessionUser = children.children[5]
     const [shuffled, setShuffled] = useState([[]]); //Les réponses possibles mélangées 
     const [questions, setQuestions] = useState<Question[]>([]); //le Json des cartes montrées à l'user
     const [totalQuests, setTotalQuests] = useState(0);   //nb total de questions chargées
@@ -83,6 +83,8 @@ const CardQuizv2 = (children: any) => {
 
     const [isExam, setIsExam] = useState(false);
     const [isLongTerme, setIsLongTerme] = useState(false);
+
+    const [isPicOpen, setisPicOpen] = useState(false);
 
 
     //SNACKBAR
@@ -284,6 +286,20 @@ const CardQuizv2 = (children: any) => {
 
     }
 
+    const handleSingleCheck2 = (option: any) => {
+        console.log(questions[number])
+        if (!submitted) {
+            if (isChecked.includes(option)) {
+                setIsChecked(isChecked.filter(checked_option => checked_option !== option))
+            }
+            else {
+                isChecked.push(option);
+                setIsChecked([...isChecked]);
+            }
+        }
+
+    }
+
     //Permettre à l'user de charger plus de questions. 
     //Recalcul des scores avec les cartes jouées + import des nouvelles
 
@@ -319,6 +335,8 @@ const CardQuizv2 = (children: any) => {
             var d = []
             var newshuffled: any[] = []
             for (var i = 0; i < len; i++) {
+                cardsData[i].bad_options = cardsData[i].bad_options.filter((x:any)=>x!="")
+                cardsData[i].answer = cardsData[i].answer.filter((x:any)=>x!="")
                 d = (cardsData[i].bad_options.concat(cardsData[i].answer));
                 newshuffled.push(shuffle(d))
                 d = []
@@ -416,12 +434,12 @@ const CardQuizv2 = (children: any) => {
                                     <div className={styles.carda} >
                                         <div className={styles.cardaface}>
                                             <div style={{ overflowY: 'auto', maxHeight: 'calc(100% - 40px)' }}>
-                                            <h1 style={{ margin: '10px 5px 20px 5px' }}>Quel est la capital de la France ?</h1>
-                                            <img src="/pinguin.jpg" object-fit="contain" style={{ height: '20vh', margin: '-15px 0 0 0' }} className="item" />
-                                            <div className="wrapper" style={{ marginTop: '15px' }}>
+                                            <h1 style={{ margin: '10px 5px 20px 5px' }}>{questions[number].question}</h1>
+                                            <img src={questions[number].imageurl } onClick={() => setisPicOpen(true)} object-fit="contain" style={{ height: '20vh', margin: '-15px 0 0 0' }} className="item" />
+                                            <div className="wrapper" style={{ marginTop: '15px'}}>
                                                 <div style={{ flex: '1' }}>
                                                     <Card style={{ marginTop: '8px', marginLeft: '20px', backgroundColor: 'rgb(230, 230, 255)', maxWidth: '250px' }}>
-                                                        <p style={{ margin: '10px', color: 'black' }}>1 bonne réponse sélectionnée</p>
+                                                        <p style={{ margin: '10px', color: 'black' }}>{isChecked.length}{isChecked.length > 1? " réponses sélectionnées" : " réponse sélectionnée"} </p>
                                                     </Card>
                                                 </div>
                                                 <div style={{ flex: '1', float: 'right', textAlign: 'right' }}>
@@ -460,128 +478,88 @@ const CardQuizv2 = (children: any) => {
                                                     </Menu>
                                                 </div>
                                             </div>
-                                            <div className="wrapper" style={{ margin: '20px 10px 0 10px' }}>
-                                                <Card elevation={3} style={{ flex: '1 0 35%', minWidth: '200px', margin: '10px 10px 0 10px', position: 'relative', overflow: 'visible', backgroundColor: 'rgb(245, 245, 245)' }}>
-                                                    <div className="wrapper">
-                                                        <div style={{ float: 'left', width: '80%' }}>
+                                            <div className="wrapper" style={{ margin: '20px 10px 10px 10px' }}>
+                                                
+                                                {shuffled[number].map((option:any)=>(
+                                                    <Card elevation={3} style={{ flex: '1 0 35%', minWidth: '200px', margin: '10px 10px 0 10px', position: 'relative', overflow: 'visible', backgroundColor: isChecked.includes(option) ?'rgb(220, 255, 220)':'rgb(245, 245, 245)' }}>
+                                                    <div className="wrapper" onClick = {()=>handleSingleCheck2(option)}>
+                                                        <div style={{ float: 'left', width: '80%' }} >
                                                             <Typography style={{ width: '100%', float: 'left', margin: '8px 0 0 10px', textAlign: 'left' }}>
-                                                                Marseille
+                                                            {option}
                                                             </Typography>
                                                         </div>
                                                         <div style={{ width: '20%', display: 'flex', justifyContent: 'flex-end', float: 'right' }}>
                                                             <Checkbox
                                                                 id="chid"
                                                                 color="primary"
+                                                                value = {option}
                                                                 style={{ float: 'right' }}
+                                                                // onChange = {handleSingleCheck} commented because we do it on the full wrapper instead
+                                                                checked={isChecked.includes(option)}
                                                             />
                                                         </div>
                                                     </div>
                                                 </Card>
-                                                <Card elevation={3} style={{ flex: '1 0 35%', minWidth: '200px', margin: '10px 10px 0 10px', position: 'relative', overflow: 'visible', backgroundColor: 'rgb(245, 245, 245)' }}>
-                                                    <div className="wrapper">
-                                                        <div style={{ float: 'left', width: '80%' }}>
-                                                            <Typography style={{ width: '100%', float: 'left', margin: '8px 0 0 10px', textAlign: 'left' }}>
-                                                                Marseille
-                                                            </Typography>
-                                                        </div>
-                                                        <div style={{ width: '20%', display: 'flex', justifyContent: 'flex-end', float: 'right' }}>
-                                                            <Checkbox
-                                                                defaultChecked
-                                                                color="primary"
-                                                                style={{ float: 'right' }}
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                </Card>
-                                                <Card elevation={3} style={{ flex: '1 0 35%', minWidth: '200px', margin: '10px 10px 0 10px', position: 'relative', overflow: 'visible', backgroundColor: 'rgb(220, 255, 220)' }}>
-                                                    <div className="wrapper">
-                                                        <div style={{ float: 'left', width: '80%' }}>
-                                                            <Typography style={{ width: '100%', float: 'left', margin: '8px 0 0 10px', textAlign: 'left' }}>
-                                                                Marseille
-                                                            </Typography>
-                                                        </div>
-                                                        <div style={{ width: '20%', display: 'flex', justifyContent: 'flex-end', float: 'right' }}>
-                                                            <Checkbox
-                                                                defaultChecked
-                                                                color="primary"
-                                                                style={{ float: 'right' }}
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                </Card>
+                                                 ))}
                                             </div>
                                             </div>
                                             
 
                                         </div>
-                                        <div className={`${styles.cardaback}`} style={{ backgroundColor: 'rgb(220, 255, 220)' }}>
+                                        <div className={`${styles.cardaback}`} style={{ backgroundColor: answerCorrect? 'rgb(220, 255, 220)':'rgb(255, 255, 255)' }}>
                                             <div style={{ overflowY: 'auto', maxHeight: 'calc(100% - 105px)' }}>
 
 
                                                 {/* <div style={{width:'100%', height:'50px', backgroundColor:'red'}} ></div> */}
-                                                <h1 style={{ margin: '10px 5px 20px 5px' }}>Quel est la capital de la France ?</h1>
-                                                <img src="/pinguin.jpg" object-fit="contain" style={{ height: '20vh', margin: '-15px 0 0 0' }} className="item" />
-                                                <div className="wrapper" style={{ margin: '20px 10px 0 10px' }}>
-                                                    <Card elevation={3} style={{ flex: '1 0 35%', minWidth: '200px', margin: '10px 10px 0 10px', position: 'relative', overflow: 'visible', backgroundColor: 'rgb(255, 160, 160)' }}>
-                                                        <div className="wrapper">
-                                                            <div style={{ float: 'left', width: '80%' }}>
-                                                                <Typography style={{ width: '100%', float: 'left', margin: '8px 0 0 10px', textAlign: 'left' }}>
-                                                                    Marseille
+                                                <h1 style={{ margin: '10px 5px 20px 5px' }}>{questions[number].question}</h1>
+                                                <img src={questions[number].imageurl} object-fit="contain" onClick={() => setisPicOpen(true)} style={{ height: '20vh', margin: '-15px 0 0 0' }} className="item" />
+                                                <div className="wrapper" style={{ margin: '20px 10px 10px 10px' }}>
+
+                                                {shuffled[number].map((option:any)=>(
+                                                    <Card elevation={3} style={{ flex: '1 0 35%', minWidth: '200px', margin: '10px 10px 0 10px', position: 'relative', overflow: 'visible', backgroundColor: questions[number].answer.includes(option) ?'rgb(87, 206, 8)':'rgb(255, 160, 160)' }}>
+                                                    <div className="wrapper">
+                                                        <div style={{ float: 'left', width: '80%' }} >
+                                                            <Typography style={{ width: '100%', float: 'left', margin: '8px 0 0 10px', textAlign: 'left' }}>
+                                                            {option}
                                                             </Typography>
-                                                            </div>
-                                                            <div style={{ width: '20%', display: 'flex', justifyContent: 'flex-end', float: 'right' }}>
-                                                                <Checkbox
-                                                                    checked={false}
-                                                                    color="primary"
-                                                                    style={{ float: 'right' }}
-                                                                />
-                                                            </div>
                                                         </div>
-                                                    </Card>
-                                                    <Card elevation={3} style={{ flex: '1 0 35%', minWidth: '200px', margin: '10px 10px 0 10px', position: 'relative', overflow: 'visible', backgroundColor: 'rgb(255, 160, 160)' }}>
-                                                        <div className="wrapper">
-                                                            <div style={{ float: 'left', width: '80%' }}>
-                                                                <Typography style={{ width: '100%', float: 'left', margin: '8px 0 0 10px', textAlign: 'left' }}>
-                                                                    Marseille
-                                                            </Typography>
-                                                            </div>
-                                                            <div style={{ width: '20%', display: 'flex', justifyContent: 'flex-end', float: 'right' }}>
-                                                                <Checkbox
-                                                                    checked={true}
-                                                                    color="primary"
-                                                                    style={{ float: 'right' }}
-                                                                />
-                                                            </div>
+                                                        <div style={{ width: '20%', display: 'flex', justifyContent: 'flex-end', float: 'right' }}>
+                                                            <Checkbox
+                                                                id="chid"
+                                                                color="primary"
+                                                                value = {option}
+                                                                style={{ float: 'right' }}
+                                                                // onChange = {handleSingleCheck} commented because we do it on the full wrapper instead
+                                                                checked={isChecked.includes(option)}
+                                                            />
                                                         </div>
-                                                    </Card>
-                                                    <Card elevation={3} style={{ flex: '1 0 35%', minWidth: '200px', margin: '10px 10px 0 10px', position: 'relative', overflow: 'visible', backgroundColor: 'rgb(87, 206, 8)' }}>
-                                                        <div className="wrapper">
-                                                            <div style={{ float: 'left', width: '80%' }}>
-                                                                <Typography style={{ width: '100%', float: 'left', margin: '8px 0 0 10px', textAlign: 'left' }}>
-                                                                    Marseille
-                                                            </Typography>
-                                                            </div>
-                                                            <div style={{ width: '20%', display: 'flex', justifyContent: 'flex-end', float: 'right' }}>
-                                                                <Checkbox
-                                                                    checked={true}
-                                                                    color="primary"
-                                                                    style={{ float: 'right' }}
-                                                                />
-                                                            </div>
-                                                        </div>
-                                                    </Card>
+                                                    </div>
+                                                </Card>
+                                                 ))}
+
+
+                                                    
                                                 </div>
 
                                             </div>
                                             <div className={styles.divBtnCard}>
                                                 {/* <Divider variant="inset" style={{marginBottom:'10px'}} /> */}
+                                               
                                                 <div className="wrapper" style={{ width: '100%', marginBottom: '20px' }}>
+                                                {answerCorrect? 
+                                                <>
                                                     <DoneOutlineIcon style={{ margin: 'auto', fontSize: '30px', marginRight: '0px', color: 'green' }} />
                                                     <h2 style={{ margin: 'auto', marginRight: '10px', marginLeft: '10px' }}>Bonne réponse</h2>
                                                     <DoneOutlineIcon style={{ margin: 'auto', fontSize: '30px', marginLeft: '0px', color: 'green' }} />
-                                                    {/* <WarningIcon style={{ margin: 'auto', marginRight: '0px', fontSize:'30px', color:'red' }} />
+                                                    </>
+                                                    :
+                                                    <>
+                                                    <WarningIcon style={{ margin: 'auto', marginRight: '0px', fontSize:'30px', color:'red' }} />
                                                     <h2 style={{ margin: 'auto', marginRight: '10px', marginLeft:'10px' }}>Mauvaise réponse</h2>
-                                                    <WarningIcon style={{ margin: 'auto', marginLeft: '0px', fontSize:'30px', color:'red' }} /> */}
+                                                    <WarningIcon style={{ margin: 'auto', marginLeft: '0px', fontSize:'30px', color:'red' }} /> 
+                                                    </>
+                                                    
+                                                }
 
                                                 </div>
 
@@ -638,11 +616,13 @@ const CardQuizv2 = (children: any) => {
                                 </IconButton>
                             </div> */}
                             <div className="wrapper">
-                                <IconButton aria-label="delete">
+                                <IconButton aria-label="delete" onClick={nextQuestion}>
                                     <NavigateNextIcon />
                                 </IconButton>
                             </div>
                         </div> :
+                         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+                             <div className="wrapper">
                         <div className={styles.carda}>
                             <div className={styles.cardaface}>
                                 {isExam ?
@@ -666,11 +646,7 @@ const CardQuizv2 = (children: any) => {
 
                             </div>
                             <button className={styles.btnCardBack} onClick={fetchMore}>Continuer</button>
-
-                            <div className={styles.sideButtons}>
-                                <IconButton aria-label="grid" onClick={startQuiz}>
-                                    <ReplayIcon fontSize="small" />
-                                </IconButton>
+                            </div>
                             </div>
                         </div>
                     }
@@ -682,6 +658,13 @@ const CardQuizv2 = (children: any) => {
                     Cartes chargées!
         </Alert>
             </Snackbar>
+
+            {isPicOpen && (
+          <Lightbox
+            mainSrc={questions[number].imageurl}
+            onCloseRequest={() => setisPicOpen(false)}
+          />
+        )}
 
         </div>
     )

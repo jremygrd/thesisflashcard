@@ -8,6 +8,9 @@ import '../../styles/Home.module.css'
 import CardQuiz from '../components/CardQuiz';
 import CardQuizv2 from '../components/CardQuizv2';
 
+import nookies from 'nookies';
+import { firebaseAdmin } from '../services/firebaseAdmin';
+import { InferGetServerSidePropsType, GetServerSidePropsContext } from 'next';
 export type Question = {
   id: string;
   question: string;
@@ -38,6 +41,7 @@ export default function Deck({cardsData,deckData,shuffled, sessionUser}:any){
           {deckData}
           {false} 
           {false}
+          {sessionUser}
         </CardQuizv2>
       </main>
     </div>
@@ -50,11 +54,12 @@ export default function Deck({cardsData,deckData,shuffled, sessionUser}:any){
 
 
 
-export const getServerSideProps: GetServerSideProps = async context =>  {
-    const sessionUser = "1w7K30BqJFTR6rJLKdAP9aasoKM2" //JEAN 
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+    const cookies = nookies.get(context);
+    const token = await firebaseAdmin.auth().verifyIdToken(cookies.token);
+    const sessionUser = token.uid
     const  slug  = context.query.decks;
-
-
+    console.log(slug)
     const opts = {fk_deck:slug,
                   fk_user : sessionUser};
                   
@@ -65,7 +70,11 @@ export const getServerSideProps: GetServerSideProps = async context =>  {
     // });
 
 
-    const deckById = await fetch (`http://localhost:3000/api/decks/${slug}`);
+    const deckById = await fetch (`http://localhost:3000/api/decks/${slug}`,{
+      method : 'post',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(opts)
+    });
     const deckData = await deckById.json();
 
     const cardsByIds = await fetch (`http://localhost:3000/api/cards_stacks/${slug}`,{
@@ -75,12 +84,15 @@ export const getServerSideProps: GetServerSideProps = async context =>  {
     });
 
     const cardsData = await cardsByIds.json();
+    console.log(cardsData)
     const len = cardsData.length;
 
     
     var d = []
     var shuffled = []
     for(var i =0;i<len;i++){
+      cardsData[i].bad_options = cardsData[i].bad_options.filter((x:any)=>x!="")
+      cardsData[i].answer = cardsData[i].answer.filter((x:any)=>x!="")
       d = (cardsData[i].bad_options.concat(cardsData[i].answer));
       shuffled.push(shuffle(d))
       d = []
