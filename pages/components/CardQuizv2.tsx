@@ -632,7 +632,7 @@ const CardQuizv2 = (children: any) => {
 
                                         <div>
                                             <FutureSeance>
-                                                {children.children[2]}
+                                                {children.children[2]}{sessionUser}
                                             </FutureSeance>
                                         </div>
 

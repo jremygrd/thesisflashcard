@@ -3,8 +3,8 @@ import React, { useState, useEffect } from 'react'
 import styles from '../../styles/Home.module.css'
 
 
-    const FutureSeance = ( children) => {
-    const sessionUser = "1w7K30BqJFTR6rJLKdAP9aasoKM2"
+    const FutureSeance = (children) => {
+    
 
     const [deckId, setdeckId] = useState("");
     const [dataSession, setDataSession] = useState([]);
@@ -22,7 +22,9 @@ import styles from '../../styles/Home.module.css'
     }
 
     const getSeanceDate = async () =>{
-        const  slug  = children.children.id;
+        console.log(children)
+        const  slug  = children.children[0].id;
+        const sessionUser = children.children[1]
         const opts = {fk_deck:slug,
             fk_user : sessionUser};
             
@@ -121,9 +123,9 @@ import styles from '../../styles/Home.module.css'
         today += 1000*60*60*24*day
         console.log(getTime(today),day)
         
-        const  slug  = children.children.id;
+        const  slug  = children.children[0].id;
         const opts = {fk_deck:slug,
-            fk_user : sessionUser,
+            fk_user :  children.children[1],
             newseance : today};
             
         const setNewSeance = await fetch (`http://localhost:3000/api/exams/setNewSeance`,{
@@ -169,3 +171,4 @@ function getTime(UNIX_timestamp){
     var time = date + ' ' + month + ' ' + year ;
     return time;
   }
+

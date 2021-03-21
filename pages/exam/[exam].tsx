@@ -4,9 +4,14 @@ import next, { GetServerSideProps } from 'next';
 import Head from 'next/head'
 import styles from '../../styles/Home.module.css'
 import '../../styles/Home.module.css'
+import CardQuizv2 from '../components/CardQuizv2';
 
 import CardQuiz from '../components/CardQuiz';
 import { ViewArraySharp } from '@material-ui/icons';
+
+import nookies from 'nookies';
+import { firebaseAdmin } from '../services/firebaseAdmin';
+import { InferGetServerSidePropsType, GetServerSidePropsContext } from 'next';
 
 export type Question = {
   id: string;
@@ -31,13 +36,14 @@ export default function Deck({cardsData,shuffled, examData,sessionUser,isLongTer
         </h1>
 
         
-        <CardQuiz>
+        <CardQuizv2>
           {cardsData}
           {shuffled}
           {examData}
           {true}
           {isLongTerme}
-        </CardQuiz>
+          {sessionUser}
+        </CardQuizv2>
       </main>
     </div>
 
@@ -48,12 +54,24 @@ export default function Deck({cardsData,shuffled, examData,sessionUser,isLongTer
 }
 
 
-export const getServerSideProps: GetServerSideProps = async context =>  {
-    const sessionUser = "1w7K30BqJFTR6rJLKdAP9aasoKM2" //JEAN 
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+    const cookies = nookies.get(context);
+    const token = await firebaseAdmin.auth().verifyIdToken(cookies.token);
+    const sessionUser = token.uid //JEAN 
     const  slug  = context.query.exam;
 
-    const examById = await fetch (`http://localhost:3000/api/exams/${slug}`);
+    const opts = {
+      fk_deck:slug,
+      fk_user : sessionUser
+      };
+      
+    const examById = await fetch (`http://localhost:3000/api/exams/${slug}`,{
+      method : 'post',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(opts)
+    });
     const examData = await examById.json();
+    
     
     var today = new Date().getTime();
     var examDate = examData.exam_date;
@@ -61,22 +79,22 @@ export const getServerSideProps: GetServerSideProps = async context =>  {
     if (examDate - today > 2*24*60*60 ){
       isLongTerme = true
     }
-
-    const opts = {
+    const opts2 = {
       fk_deck:slug,
       fk_user : sessionUser,
       isLongTerme : isLongTerme};
 
+
     const setScores = await fetch (`http://localhost:3000/api/exams/updateScore`,{
       method : 'post',
       headers:{'Content-Type':'application/json'},
-      body: JSON.stringify(opts)
+      body: JSON.stringify(opts2)
     });
 
     const cardsByIds = await fetch (`http://localhost:3000/api/exams/cardsExam`,{
       method : 'post',
       headers:{'Content-Type':'application/json'},
-      body: JSON.stringify(opts)
+      body: JSON.stringify(opts2)
     });
 
     const cardsData = await cardsByIds.json();
@@ -85,6 +103,8 @@ export const getServerSideProps: GetServerSideProps = async context =>  {
     var d = []
     var shuffled = []
     for(var i =0;i<len;i++){
+      cardsData[i].bad_options = cardsData[i].bad_options.filter((x:any)=>x!="")
+      cardsData[i].answer = cardsData[i].answer.filter((x:any)=>x!="")
       d = (cardsData[i].bad_options.concat(cardsData[i].answer));
       shuffled.push(shuffle(d))
       d = []
