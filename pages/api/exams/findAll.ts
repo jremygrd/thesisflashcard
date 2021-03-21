@@ -5,9 +5,13 @@ import {PrismaClient} from "@prisma/client";
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
     const prisma = new PrismaClient({log:["query"]});
-
+    let id = req.body.id
     try{
         const exams = await prisma.exam.findMany({
+            where:{
+                fk_userid:id
+            }
+
 
         })
 

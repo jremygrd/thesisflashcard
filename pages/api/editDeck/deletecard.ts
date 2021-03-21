@@ -14,7 +14,7 @@ export default async function (req:NextApiRequest, res: NextApiResponse) {
 
     try{
         console.log(req.body)
-        const quest = await prisma.$queryRaw(`delete from cards where id= '${req.body.id}'`);
+        const quest = await prisma.$queryRaw(`delete from cards where id= '${req.body.id}' and fk_user='${req.body.fk_user}'`);
 
         res.status(201);//created
         res.json(quest);

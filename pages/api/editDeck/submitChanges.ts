@@ -7,7 +7,8 @@ import {PrismaClient} from "@prisma/client";
 export default async function (req:NextApiRequest, res: NextApiResponse) {
     const prisma = new PrismaClient({log:["query"]});
     //const {deck:deckData} = req.body;
-
+    let sessionUser = req.body.sessionUser
+    req.body = req.body.toUpload
     //Problème, postresql fais une différence entre les single et double quotes, là ou les double quotes sont 
     //détruites en passant en requête :(((
     //On doit reconstruire nos arrays
@@ -38,7 +39,7 @@ export default async function (req:NextApiRequest, res: NextApiResponse) {
     answer = ARRAY ${ans},
     bad_options = ARRAY ${bad},
     imageurl = '${req.body.imageurl}'
-    where id = '${req.body.id}'`;
+    where id = '${req.body.id}' and fk_user = '${sessionUser}'`;
 
 
     try{

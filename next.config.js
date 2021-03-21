@@ -7,7 +7,9 @@ module.exports = {
         },
         use: ['@svgr/webpack'],
       });
-  
+      config.node = {
+        fs: 'empty'
+      }
       return config;
     },
   };

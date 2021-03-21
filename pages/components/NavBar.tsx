@@ -22,6 +22,10 @@ import { Button } from '@material-ui/core';
 
 import ForwardIcon from '@material-ui/icons/Forward';
 
+import nookies from 'nookies';
+import { firebaseAdmin } from '../services/firebaseAdmin';
+import { firebaseClient } from '../services/firebaseClient';
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     grow: {
@@ -32,10 +36,14 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     title: {
       display: 'flex',
-      marginRight:'5rem',
-      background: 'linear-gradient(45deg,#4cb7ff 30%, #4C5BFF 90%)',
-      padding:"1rem",
-      borderRadius:"20px"
+      marginRight:'2rem',
+      // background: 'linear-gradient(45deg,#4cb7ff 30%, #4C5BFF 90%)',
+      background:'blue',
+      //padding:"2rem",
+      borderRadius:"20px",
+      '&:hover': {
+        cursor: "pointer",
+      }
       
     },
     search: {
@@ -89,6 +97,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     button: {
       margin: theme.spacing(1),
+      color:'white'
     },
 
     leftbutton: {
@@ -179,6 +188,19 @@ const handleDrawerClose = () =>
             >
               <MenuItem>Mon profil</MenuItem>
           </Link>
+
+
+          <Link href="/"
+              {...{
+                color: "inherit",
+                style: { textDecoration: "none" },
+              }}
+            >
+              <MenuItem onClick={async () => {
+        await firebaseClient.auth().signOut();
+        window.location.href = '/';
+      }}>Se déconnecter</MenuItem>
+          </Link>
         </div>
       );
   };
@@ -194,9 +216,14 @@ const handleDrawerClose = () =>
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+      <MenuItem onClick={handleMenuClose}>Mon profil</MenuItem>
       <Link href="/myprofilev2">
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem 
+       onClick={async () => {
+        await firebaseClient.auth().signOut();
+        window.location.href = '/';
+      }}
+      >Se déconnecter</MenuItem>
       </Link>
     </Menu>
   );
@@ -204,7 +231,10 @@ const handleDrawerClose = () =>
 
   return (
     <div className={classes.grow} style={{flex:'1', zIndex:(30), position:'relative'}}>
-      <AppBar position="static" style={{ background: ' linear-gradient(45deg,#4cb7ff 30%, #4C5BFF 90%) ', height:'4rem'}}>
+      <AppBar position="static" style={{ 
+        // background: ' linear-gradient(45deg,#4cb7ff 30%, #4C5BFF 90%) ',
+        background:'blue',
+         height:'4rem'}}>
         <Toolbar>
         
 
@@ -220,9 +250,17 @@ const handleDrawerClose = () =>
             >
             <MenuIcon />
           </IconButton>
-          <Typography className={classes.title} variant="h6" noWrap>
-            Thesis Flashcards
-          </Typography>
+
+           <Button
+          href='/'
+          // variant="contained"
+          // color="primary"
+           size="large"
+          className={classes.button}
+          startIcon={<HomeIcon />}
+          >
+          Thesis x FlashCard
+          </Button>
             <Drawer
             {...{
               anchor: "left",
@@ -243,19 +281,19 @@ const handleDrawerClose = () =>
             color="inherit"
             aria-label="open drawer"
             >
-            <ForwardIcon />
+            {/* <ForwardIcon /> */}
           </IconButton>
           <Typography className={classes.title} variant="h6" noWrap>
-            Visit Thesis
+            Thesis x Flashcards
           </Typography>
 
           <div className={classes.leftbutton}>
 
           <Button
           href='/acceuil'
-          variant="contained"
-          color="primary"
-          size="large"
+          // variant="contained"
+          // color="primary"
+           size="large"
           className={classes.button}
           startIcon={<HomeIcon />}
           >
@@ -264,9 +302,9 @@ const handleDrawerClose = () =>
 
           <Button
           href='/testCards'
-          variant="contained"
-          color="primary"
-          size="large"
+          // variant="contained"
+          // color="primary"
+           size="large"
           className={classes.button}
           startIcon={<StorefrontIcon />}
           >
@@ -278,7 +316,7 @@ const handleDrawerClose = () =>
           <div className={classes.grow} />
 
           <div className={classes.sectionDesktop}>
-            <IconButton aria-label="show 4 new mails" color="inherit">
+            {/* <IconButton aria-label="show 4 new mails" color="inherit">
               <Badge badgeContent={4} color="secondary">
                 <MailIcon />
               </Badge>
@@ -287,7 +325,7 @@ const handleDrawerClose = () =>
               <Badge badgeContent={17} color="secondary">
                 <NotificationsIcon />
               </Badge>
-            </IconButton>
+            </IconButton> */}
             <IconButton
               edge="end"
               aria-label="account of current user"

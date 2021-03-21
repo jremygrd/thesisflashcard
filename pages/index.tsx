@@ -6,8 +6,14 @@ import ExamList from '../pages/components/ExamList'
 import ModalCreateDeck from './components/ModalCreateDeck2'
 import ModalCreateExam from './components/ModalCreateExam'
 
-export default function Home({deckData,sessionUser,examList}:any) {
-  
+import nookies from 'nookies';
+import { firebaseAdmin } from './services/firebaseAdmin';
+import { firebaseClient } from './services/firebaseClient';
+import { InferGetServerSidePropsType, GetServerSidePropsContext } from 'next';
+import { Email } from '@material-ui/icons';
+
+
+export default function Home({deckData,sessionUser,examList,userData}:any) {
 
   const [decksHook, setDecks] = useState(deckData)
   
@@ -74,17 +80,53 @@ export default function Home({deckData,sessionUser,examList}:any) {
 }
 
 
-export async function getServerSideProps() {
-  const allDecks = await fetch ("http://localhost:3000/api/decks/findAll"); //à remplacer par findAllOfUser selon les tables du genre User_Rights
+export async function getServerSideProps(ctx: GetServerSidePropsContext) {
+
+  try{
+
+  
+  const cookies = nookies.get(ctx);
+  const token = await firebaseAdmin.auth().verifyIdToken(cookies.token);
+  const myuser = await fetch ("http://localhost:3000/api/users/" + token.uid);
+  const userData = await myuser.json();
+
+  const allDecks = await fetch(
+    `http://localhost:3000/api/decks/findAll`,
+    {
+      method: "post",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({id:token.uid}),
+    }
+  );
+
+  //const allDecks = await fetch ("http://localhost:3000/api/decks/findAll"); //à remplacer par findAllOfUser selon les tables du genre User_Rights
   const deckData = await allDecks.json();
 
-  const allExams = await fetch ("http://localhost:3000/api/exams/findAll"); //à remplacer par findAllOfUser 
+
+  const allExams = await fetch(
+    `http://localhost:3000/api/exams/findAll`,
+    {
+      method: "post",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({id:token.uid}),
+    }
+  );
+  //const allExams = await fetch ("http://localhost:3000/api/exams/findAll"); //à remplacer par findAllOfUser 
   const examList = await allExams.json();
 
-  const sessionUser = "1w7K30BqJFTR6rJLKdAP9aasoKM2"; //JEAN
+  const sessionUser = token.uid; //JEAN
   return {
     props: {
-      deckData,sessionUser,examList
+      deckData,sessionUser,examList,userData
     }
   }
+} catch (err) {
+  return {
+    redirect: {
+      permanent: false,
+      destination: '/login',
+    },
+    props: {} as never,
+  };
+}
 }

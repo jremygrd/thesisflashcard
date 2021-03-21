@@ -28,7 +28,6 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export default function PopMail(openParent:any) {
-  console.log(openParent)
   const [isOpenChangeMail, setisOpenChangeMail] = React.useState(openParent.children[0]);;
   const [openSucces, setOpenSucces] = React.useState(false);
   const [openError,setOpenError] = React.useState(false);
@@ -216,4 +215,8 @@ export default function PopMail(openParent:any) {
       </div>
     </>
   )
+}
+
+PopMail.getInitialProps = (openParent:any) => {
+  return openParent
 }

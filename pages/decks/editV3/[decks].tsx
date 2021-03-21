@@ -28,6 +28,13 @@ import Lightbox from 'react-image-lightbox';
 
 import { TransitionProps } from '@material-ui/core/transitions';
 
+
+import nookies from 'nookies';
+import { firebaseAdmin } from '../../services/firebaseAdmin';
+import { firebaseClient } from '../../services/firebaseClient';
+import { InferGetServerSidePropsType, GetServerSidePropsContext } from 'next';
+import { Email } from '@material-ui/icons';
+
 export type Question = {
     id: string;
     question: string;
@@ -48,6 +55,7 @@ const Transition = React.forwardRef(function Transition(
 });
 
 export default function DecksEdit({ cardsData, deckData, sessionUser, keywords }: any) {
+    console.log(cardsData,deckData)
     const isMobile = useMediaQuery("(max-width: 800px)");
     const [isPicOpen, setisPicOpen] = useState(false);
     const [value, setValue] = React.useState('Controlled');
@@ -130,8 +138,12 @@ export default function DecksEdit({ cardsData, deckData, sessionUser, keywords }
 
     const [questions, setQuestions] = useState<Question[]>(cardsData);
     const [actualQuestionIndex, setActualQuestionIndex] = useState(0);
-    const [allOptions, setAllOptions] = useState(questions[actualQuestionIndex].answer.concat(questions[actualQuestionIndex].bad_options));
-    const [cardimageurl, setcardimageurl] = useState(questions[actualQuestionIndex].imageurl);
+
+    const [allOptions, setAllOptions] = useState<String[]>([]);
+    const [cardimageurl, setcardimageurl] = useState('');
+
+    
+    
 
     console.log(questions)
     console.log(allOptions)
@@ -190,19 +202,19 @@ export default function DecksEdit({ cardsData, deckData, sessionUser, keywords }
         let updatedAll = [...allOptions];
         updatedAll.splice(idx,1);
         setAllOptions(updatedAll);
-        console.log("bonjour", tempQuest[actualQuestionIndex])
+        // console.log("bonjour", tempQuest[actualQuestionIndex])
         if (tempQuest[actualQuestionIndex].answer.includes(val)){
             
             tempQuest[actualQuestionIndex].answer.splice(idx,1);
             setQuestions(tempQuest)
 
         }else{
-            console.log("coucou", idx);
+            // console.log("coucou", idx);
             tempQuest[actualQuestionIndex].bad_options.splice(idx - tempQuest[actualQuestionIndex].answer.length, 1);
             setQuestions(tempQuest)
-            console.log("fgdsftgs77retfhgs",tempQuest[actualQuestionIndex])
+            // console.log("fgdsftgs77retfhgs",tempQuest[actualQuestionIndex])
         }
-        console.log("au revoir", tempQuest[actualQuestionIndex]);
+        // console.log("au revoir", tempQuest[actualQuestionIndex]);
       }
 
       const changeCard = (idx:any) =>{
@@ -225,11 +237,23 @@ export default function DecksEdit({ cardsData, deckData, sessionUser, keywords }
 
 
       useEffect(() => {
-        setAllOptions(questions[actualQuestionIndex].answer.concat(questions[actualQuestionIndex].bad_options).filter(x => x != ""))
+        try{
+            setAllOptions(questions[actualQuestionIndex].answer.concat(questions[actualQuestionIndex].bad_options).filter(x => x != ""))
+            console.log("ALL",allOptions)
+        }catch(err){
+        }
+            
+
+        
       },[actualQuestionIndex]);
 
       useEffect(() => {
-        setcardimageurl(questions[actualQuestionIndex].imageurl)
+        try{
+            setcardimageurl(questions[actualQuestionIndex].imageurl)
+        }catch(err){
+        }
+            
+
       },[isPicOpen]);
 
 
@@ -242,14 +266,15 @@ export default function DecksEdit({ cardsData, deckData, sessionUser, keywords }
             question: "",
             tip: "",
             bad_options: [],
-            answer: [""],
+            answer: [],
             fk_user: sessionUser,
             imageurl : ""
           };
-        
+          
           tempQuest.push(blank);
           setQuestions(tempQuest);
           changeCard(tempQuest.indexOf(blank))
+
 
           const upload = await fetch(
             `http://localhost:3000/api/editDeck/addcard`,
@@ -319,14 +344,14 @@ export default function DecksEdit({ cardsData, deckData, sessionUser, keywords }
         const toUpload = tempQuest[idx];
         console.log(allOptions);
         console.log(toUpload);
-
+        let all = {}
 
         const upload = await fetch(
             `http://localhost:3000/api/editDeck/submitChanges`,
             {
               method: "post",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(toUpload),
+              body: JSON.stringify({toUpload,sessionUser}),
             }
         );
 
@@ -403,13 +428,12 @@ export default function DecksEdit({ cardsData, deckData, sessionUser, keywords }
                                 <p style={{ fontWeight: 'bold', padding: '6px'}}>{idx+1} : {val.question}</p>
                             </div>
                             <div className="mydiv-222">
-                                <img src={questions[idx].imageurl} object-fit="none" style={{ height: '100px', margin: '-0 -0 0 0', float: 'right', objectFit:"cover", width:'100px'}} />
+                                {/* <img src={questions[idx].imageurl} object-fit="none" style={{ height: '100px', margin: '-0 -0 0 0', float: 'right', objectFit:"cover", width:'100px'}} /> */}
                                 {
-                                    questions[idx].imageurl.length > 5 ?
+                                    questions[idx].imageurl.length > 10 ?
                                     <img src={questions[idx].imageurl}  style={{ height: '100px', margin: '0 0 0 0', float: 'right', width:"100px", objectFit:"cover"}} />
                                     :
-                                    deckData.imageurl.length > 5 ?
-
+                                    deckData.imageurl.length > 10 ?
                                     <img src={deckData.imageurl}  style={{ height: '100px', margin: '0 0 0 0', float: 'right', width:"100px", objectFit:"cover"}} />
                                     :
                                     <img src={'/pinguin.jpg'}  style={{ height: '100px', margin: '0 0 0 0', float: 'right', width:"100px", objectFit:"cover"}} />
@@ -438,6 +462,10 @@ export default function DecksEdit({ cardsData, deckData, sessionUser, keywords }
 
 
             </div>
+
+            {
+                questions[actualQuestionIndex] ?
+            
             <div className="mydiv-rightCard" style={{ height: 'calc(100vh - 64px)' }} >
                 <Card elevation={7} style={{ width: '80%', margin: '0 auto', marginTop: '30px', paddingBottom: '20px', overflowY: 'scroll', maxHeight: 'calc(100vh - 130px)', maxWidth: '600px' }}>
                     <Dropzone></Dropzone>
@@ -480,12 +508,12 @@ export default function DecksEdit({ cardsData, deckData, sessionUser, keywords }
                                             <p style={{ margin: '10px', color: 'white' }}>La carte doit avoir une question</p>
                                        </Card>
                                         :
-                                       questions[actualQuestionIndex].answer.length == 0?
+                                       allOptions.length == 0?
                                        <Card style={{ marginTop: '8px', backgroundColor: 'red' }}>
                                             <p style={{ margin: '10px', color: 'white' }}>Sélectionnez au moins une bonne réponse</p>
                                        </Card>
                                        :
-                                       questions[actualQuestionIndex].answer.length == 1?
+                                       allOptions.length == 1?
                                        <Card style={{ marginTop: '8px', backgroundColor: '#4cb7ff' }}>
                                             <p style={{ margin: '10px', color: 'white' }}>1 bonne réponse sélectionnée</p>
                                        </Card>
@@ -561,8 +589,7 @@ export default function DecksEdit({ cardsData, deckData, sessionUser, keywords }
                         </div>
                         <div className="wrapper" style={{ margin: '0 -10px 0 -10px' }}>
 
-                            {
-                                
+                            {   
                                 allOptions.map((val: any, idx: any) => (
 
                                     <Card elevation={3} style={{ flex: '1 0 35%', minWidth: '250px', margin: '10px 10px 0 10px', position: 'relative', overflow: 'visible', backgroundColor:questions[actualQuestionIndex].answer.includes(val)? 'rgb(220, 255, 220)':'white' }}>
@@ -623,11 +650,16 @@ export default function DecksEdit({ cardsData, deckData, sessionUser, keywords }
                                 </Button>
                 </Card>
             </div>
+        :null}
         </>
         // VERSION MOBILE BELOW
             :
+     
             
             <div className="mydiv-rightCard" style={{ height: 'calc(100vh - 64px)' }} >
+            
+            {
+                questions[actualQuestionIndex] ?
             <Card elevation={7} style={{ width: '95%', margin: '0 auto', marginTop: '15px', paddingBottom: '20px', overflowY: 'scroll', maxHeight: 'calc(100vh - 230px)', maxWidth: '800px', borderRadius: '20px' }}>
                 {
                     questions[actualQuestionIndex].imageurl.length > 5 ?
@@ -805,6 +837,7 @@ export default function DecksEdit({ cardsData, deckData, sessionUser, keywords }
                     Enregistrer la carte
                             </Button>
             </Card>
+        :null}
             <div style={{ float: 'left', width: '100%', height: '35px', maxHeight: "35px", position: 'fixed', bottom: '100px', left: '0px', margin: '0px', backgroundColor: 'rgb(192, 197, 255)' }}>
                 <div className="wrapper">
                     <div style={{ width: '50px', float: 'left' }}>
@@ -899,7 +932,7 @@ export default function DecksEdit({ cardsData, deckData, sessionUser, keywords }
                                         </div>
                                         <div style={{ float: 'right', width: '30%', height: '90px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                                         {
-                                            questions[idx].imageurl.length > 5 ?
+                                            cardimageurl.length > 5 ?
                                             <img src={questions[idx].imageurl}  style={{ height: '100px', margin: '0 0 0 0', float: 'right', width:"100px", objectFit:"cover"}} />
                                             :
                                             deckData.imageurl.length > 5 ?
@@ -921,7 +954,7 @@ export default function DecksEdit({ cardsData, deckData, sessionUser, keywords }
 
                     </div>
                     <div style={{ width: '20%', float: 'right' }}>
-                        <Card elevation={3} style={{ width: '95%', height: '100px', margin: 'auto', backgroundColor: 'rgb(192, 197, 255)' }}>
+                        <Card elevation={3} onClick={()=>addCard()} style={{ width: '95%', height: '100px', margin: 'auto', backgroundColor: 'rgb(192, 197, 255)' }}>
                             <Button
                                 variant="contained"
                                 color="primary"
@@ -952,13 +985,29 @@ export default function DecksEdit({ cardsData, deckData, sessionUser, keywords }
 
 
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-    const sessionUser = "1w7K30BqJFTR6rJLKdAP9aasoKM2"; //JEAN
-    const slug = context.query.decks;
+export async function getServerSideProps(ctx: GetServerSidePropsContext){
+try{
+
+      const cookies = nookies.get(ctx);
+        const token = await firebaseAdmin.auth().verifyIdToken(cookies.token);
+        const myuser = await fetch ("http://localhost:3000/api/users/" + token.uid);
+        const userData = await myuser.json();
+
+        const sessionUser = token.uid; //JEAN
+    const slug = ctx.query.decks;
   
     const opts = { fk_deck: slug, fk_user: sessionUser };
+
+    const deckById = await fetch(
+        `http://localhost:3000/api/decks/${slug}`,
+        {
+          method: "post",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(opts),
+        }
+      );
   
-    const deckById = await fetch(`http://localhost:3000/api/decks/${slug}`);
+    //const deckById = await fetch(`http://localhost:3000/api/decks/${slug}`);
     const deckData = await deckById.json();
   
     const cardsByIds = await fetch(
@@ -980,15 +1029,30 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         }
     );
     const keywords = await keywordsjson.json();
-  
+
+      
     return {
-      props: {
-        deckData,
-        cardsData,
-        sessionUser,
-        keywords
-      },
-    };
+        props: {
+          deckData,
+          cardsData,
+          sessionUser,
+          keywords
+        },
+      };
+    }
+  catch(err){
+    console.log("ERROR",err)
+    return {
+        redirect: {
+          permanent: false,
+          destination: '/',
+        },
+        props: {} as never,
+      };
+  }
+
+    
+
   };
   
 

@@ -83,7 +83,7 @@ const handleDeleteChip = (chip:any, index:any) =>{
   }
   
   const redirectTo = (uuidstack:any)=>{
-    router.push(`/decks/edit/${uuidstack}`);
+    router.push(`/decks/editV3/${uuidstack}`);
   }
 
   const toggleDeckPrivacy = () => {

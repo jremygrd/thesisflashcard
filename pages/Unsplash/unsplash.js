@@ -7,26 +7,37 @@ import SearchBar from './Components/SearchBar';
 
 class Unsplash extends Component {
   constructor(props) {
-  const{deckData,handleClose} = props   
-    super(props)
-    // console.log("eodddeded",props.children)
-    this.state = {
-        id:props.children[1],
-        close:props.children[3],
-        update:props.children[5],
-        changeDeckimage:props.children[6],
-      gallery: [],
-      currentQuery: '',
-      searchedQuery: '',
-      page: 1,
-      selectedImage: {
-        description: '',
-        src: '',
-        username: '',
-        page: '',
-      },
+    
+
+    
+      super(props)
+      if(props.children != null)
+      {
+        if(props.children.deckData){
+          this.state = {
+            id:props.children.deckData,
+            close:props.children.close,
+            update:props.children.fs,
+            changeDeckimage:props.last,
+          gallery: [],
+          currentQuery: '',
+          searchedQuery: '',
+          page: 1,
+          selectedImage: {
+            description: '',
+            src: '',
+            username: '',
+            page: '',
+          },
+        }
+        }
+      }
+      
+      
+      // console.log("eodddeded",props.children)
+      
     }
-  }
+    
   
   
   ROOT = `https://api.unsplash.com/`
@@ -116,9 +127,14 @@ class Unsplash extends Component {
     e.preventDefault()
     // console.log('currentQuery: ', this.state.currentQuery)
     this.setState((prevState) => {
-      return {searchedQuery: prevState.currentQuery}
+      if(prevstate!=null){
+        return {searchedQuery: prevState.currentQuery}
+      }
+      
     })
-    axios.get(`${this.ROOT}search/photos${this.KEY}&query=${this.state.currentQuery}${this.PERPAGE}`)
+    if(prevstate!=null && this.state != null){
+
+      axios.get(`${this.ROOT}search/photos${this.KEY}&query=${this.state.currentQuery}${this.PERPAGE}`)
       .then(res => {
         let results = res.data.results
         this.setState({
@@ -127,16 +143,19 @@ class Unsplash extends Component {
         })
       })
       .catch(error => console.log(error))
+
+    }
+    
   }
 
 
   render() {
     return (
       <div className="App">
-      <SearchBar fetchInitialImages={this.fetchInitialImages} handleChange={this.handleChange} handleSubmit={this.handleSubmit} currentQuery={this.state.currentQuery} />
+      <SearchBar fetchInitialImages={this.fetchInitialImages} handleChange={this.handleChange} handleSubmit={this.handleSubmit} currentQuery={this.state!=null?this.state.currentQuery:''} />
         <div className="container">
-          <h1 className="text-center">{this.state.searchedQuery}</h1>
-          <Gallery gallery={this.state.gallery} loadMore={this.loadMore} launchModal={this.launchModal} selectedImage={this.state.selectedImage} searchedQuery={this.state.searchedQuery} />
+          <h1 className="text-center">{this.state!=null?this.state.searchedQuery:''}</h1>
+          <Gallery gallery={this.state!=null?this.state.gallery:[]} loadMore={this.loadMore} launchModal={this.launchModal} selectedImage={this.state!=null?this.state.selectedImage:''} searchedQuery={this.state!=null?this.state.searchedQuery:''} />
         </div>
       </div>
     );

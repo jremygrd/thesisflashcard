@@ -3,11 +3,12 @@ import styles from '../../../../styles/Home.module.css'
 
 const Gallery = (props) => {
   const { gallery, loadMore, launchModal, selectedImage, searchedQuery } = props
+  console.log('gallery',loadMore)
   // console.log('gallery = ', gallery)
   return (
     <div className="contentUS">
       <section className="gridUS">
-        {gallery.length ? gallery.map( (image, index) => (
+        {gallery!=null ? gallery.map( (image, index) => (
           <div
             key={image.id}
             className={`item item-${Math.ceil(

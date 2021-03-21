@@ -105,11 +105,17 @@ export default function ModalUnsplash(deckData) {
         <Fade in={open}>
           <div className={classes.paper}>
             <>
-              <Unsplash2> deckData = {deckData.children[0].id} handleClose = {handleClose} handleUpdate={deckData.children[1]}{deckData.children[2]}</Unsplash2>
+              {/* <Unsplash2> deckData = {deckData.children[0].id} handleClose = {handleClose} handleUpdate={deckData.children[1]}{deckData.children[2]}</Unsplash2> */}
+              <Unsplash2>{{'deckData':deckData.children[0].id,'close':handleClose,'fs':deckData.children[1],'last':deckData.children[2]}}</Unsplash2>
+            
             </>
           </div>
         </Fade>
       </Modal>
     </div>
   );
+}
+
+ModalUnsplash.getInitialProps = (openParent) => {
+  return openParent
 }

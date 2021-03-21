@@ -36,9 +36,9 @@ export default async function (req:NextApiRequest, res: NextApiResponse) {
       }
       
       function decodeString (text:any) {
-        return text.replace(/&([^;]+);/gm, function (match:any, entity:number) {
-          return entities[entity] || match
-        })
+        // return text.replace(/&([^;]+);/gm, function (match:any, entity:number) {
+        //   return entities[entity] || match
+        // })
       }
 
     function formatAns(array:any){
@@ -79,10 +79,10 @@ export default async function (req:NextApiRequest, res: NextApiResponse) {
         const stack = await prisma.stacks.create({
             data:{
                 id:uuidstack,
-                title: decodeString(questArray[0].question.substring(0,15)),
+                // title: decodeString(questArray[0].question.substring(0,15)),
                 color:"none",
                 emoji:"none",
-                description:decodeString(questArray[0].category.substring(0,15)),
+                // description:decodeString(questArray[0].category.substring(0,15)),
 
                 users : {
                     connect :{
