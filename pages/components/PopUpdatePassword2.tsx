@@ -10,6 +10,8 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
+import { IconButton } from '@material-ui/core';
+import EditIcon from '@material-ui/icons/Edit';
 
 
 function Alert(props: AlertProps) {
@@ -31,8 +33,8 @@ export default function PopMail() {
 
   const [open, setOpen] = React.useState(false);
   const [openSucces, setOpenSucces] = React.useState(false);
-  const [openError,setOpenError] = React.useState(false);
-  const [myerrorText, setMyerrorText] = useState(''); 
+  const [openError, setOpenError] = React.useState(false);
+  const [myerrorText, setMyerrorText] = useState('');
 
 
   const handleClickOpen = () => {
@@ -42,18 +44,18 @@ export default function PopMail() {
     setOpenSucces(true);
   };
   const handleClickOpenError = () => {
-   setOpenError(true);
+    setOpenError(true);
   };
 
   const handleClose = () => {
     setOpen(false);
-  }; 
+  };
   const handleCloseError = (event?: React.SyntheticEvent, reason?: string) => {
     if (reason === 'clickaway') {
       return;
     }
 
-   setOpenError(false);
+    setOpenError(false);
   };
   const handleCloseSucces = (event?: React.SyntheticEvent, reason?: string) => {
     if (reason === 'clickaway') {
@@ -63,53 +65,56 @@ export default function PopMail() {
     setOpenSucces(false);
   };
 
-  const updatePassword=async (email:any,password:any,newPassword:any,newPassword2:any) => {
-    if(newPassword == newPassword2) {
+  const updatePassword = async (email: any, password: any, newPassword: any, newPassword2: any) => {
+    if (newPassword == newPassword2) {
       var userAuth = firebaseClient.auth().currentUser;
       var credential = firebaseClient.auth.EmailAuthProvider.credential(email, password);
-      userAuth?.reauthenticateWithCredential(credential).then(function() {
+      userAuth?.reauthenticateWithCredential(credential).then(function () {
         // User re-authenticated.
-        userAuth?.updatePassword(newPassword).then (async function() {
+        userAuth?.updatePassword(newPassword).then(async function () {
           setOpen(false);
           setOpenSucces(true);
           console.log("Password update succesfull")
           // Update successful.
-        }).catch(function(error) {
+        }).catch(function (error) {
           // error in new password
-          if(error.code == "auth/weak-password") {
+          if (error.code == "auth/weak-password") {
             setMyerrorText("Le nouveau mot de passe doit comporter au moins 6 caractères");
-           setOpenError(true);
+            setOpenError(true);
           }
           console.log(error)
         });
-      }).catch(function(error) {
+      }).catch(function (error) {
         // error in re-auth
-        if(error.code == "auth/wrong-password") {
+        if (error.code == "auth/wrong-password") {
           setMyerrorText("Mot de passe invalide");
-         setOpenError(true);
+          setOpenError(true);
         }
-        if(error.code == "auth/invalid-email") {
+        if (error.code == "auth/invalid-email") {
           setMyerrorText("Adresse mail incorrecte");
-         setOpenError(true);
+          setOpenError(true);
         }
-        if(error.code == "auth/user-mismatch") {
+        if (error.code == "auth/user-mismatch") {
           setMyerrorText("L'adresse mail indiquée ne correspond pas avec l'adresse mail sur laquel vous êtes connecté");
-         setOpenError(true);
+          setOpenError(true);
         }
         console.log(error);
       });
     }
-    else{
+    else {
       setMyerrorText("Les 2 mots de passe ne correspondent pas");
-      setOpenError(true);  
+      setOpenError(true);
     }
   }
 
   return (
     <div>
-      <Button variant="contained" color="secondary" onClick={handleClickOpen}>
-        Changer Mot de passe
-      </Button>
+      <IconButton
+        aria-label="change password"
+        onClick={handleClickOpen}
+      >
+        <EditIcon />
+      </IconButton>
       {/* Pop up to change password */}
       <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
@@ -151,12 +156,14 @@ export default function PopMail() {
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
-          <Button 
-          onClick={() => {updatePassword((document.getElementById("actualMailPop2") as HTMLInputElement).value,
-          (document.getElementById("passwordPop2") as HTMLInputElement).value,
-          (document.getElementById("newPasswordPop2") as HTMLInputElement).value,
-          (document.getElementById("newPassword2Pop2") as HTMLInputElement).value)}} 
-          color="primary">
+          <Button
+            onClick={() => {
+              updatePassword((document.getElementById("actualMailPop2") as HTMLInputElement).value,
+                (document.getElementById("passwordPop2") as HTMLInputElement).value,
+                (document.getElementById("newPasswordPop2") as HTMLInputElement).value,
+                (document.getElementById("newPassword2Pop2") as HTMLInputElement).value)
+            }}
+            color="primary">
             Sauvegarder
           </Button>
         </DialogActions>
@@ -167,8 +174,11 @@ export default function PopMail() {
             Votre mot de passe a bien été changé
           </Alert>
         </Snackbar>
-        <Snackbar open={openError} autoHideDuration={6000} onClose={handleCloseError} >
-          <Alert onClose={handleCloseError} severity="error" style={{width:'500px', position:'absolute', right:'0'}}>
+        <Snackbar    anchorOrigin={{
+      vertical: "center",
+      horizontal: "center"
+   }} open={openError} autoHideDuration={60000} onClose={handleCloseError} >
+          <Alert onClose={handleCloseError} severity="error" style={{minWidth:'500px', position:'absolute', right:'0',zIndex:1, bottom:'0px', visibility:'visible'}}>
             {myerrorText}
           </Alert>
         </Snackbar>

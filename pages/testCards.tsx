@@ -61,7 +61,7 @@ export default function test() {
                                     <h3 style={{ marginLeft: '7px', color: 'black', textAlign: 'left' }}>Titre du deck</h3>
                                 </div>
                                 <div style={{ width: '50px' }}>
-                                    <PopEditDeckInfo/>
+                                    {/* <PopEditDeckInfo/> */}
                                 </div>
                             </div>
                         </div>
@@ -214,6 +214,48 @@ export default function test() {
                             </div>
                         </div>
                         <div className="wrapper" style={{ margin: '0 -10px 0 -10px' }}>
+                            <Card elevation={3} style={{ flex: '1 0 35%', minWidth: '250px', margin: '10px 10px 0 10px', position: 'relative', overflow: 'visible', backgroundColor: 'rgb(220, 255, 220)' }}>
+                                <IconButton aria-label="indice" style={{ height: '5px', width: '5px', top: '-10px', left: '-10px', position: 'absolute' }}>
+                                    <CancelIcon style={{ height: '17px', width: '17px', color: 'red' }} />
+                                </IconButton>
+                                <div className="wrapper">
+                                    <div style={{ float: 'left', width: '80%' }}>
+                                        <InputBase
+                                            placeholder='Réponse 1'
+                                            multiline
+                                            style={{ width: '100%', float: 'left', margin: '3px 0 0 15px' }}
+                                        />
+                                    </div>
+                                    <div style={{ width: '20%', display: 'flex', justifyContent: 'flex-end', float: 'right' }}>
+                                        <Checkbox
+                                            defaultChecked
+                                            color="primary"
+                                            style={{ float: 'right' }}
+                                        />
+                                    </div>
+                                </div>
+                            </Card>
+                            <Card elevation={3} style={{ flex: '1 0 35%', minWidth: '250px', margin: '10px 10px 0 10px', position: 'relative', overflow: 'visible', backgroundColor: 'rgb(220, 255, 220)' }}>
+                                <IconButton aria-label="indice" style={{ height: '5px', width: '5px', top: '-10px', left: '-10px', position: 'absolute' }}>
+                                    <CancelIcon style={{ height: '17px', width: '17px', color: 'red' }} />
+                                </IconButton>
+                                <div className="wrapper">
+                                    <div style={{ float: 'left', width: '80%' }}>
+                                        <InputBase
+                                            placeholder='Réponse 1'
+                                            multiline
+                                            style={{ width: '100%', float: 'left', margin: '3px 0 0 15px' }}
+                                        />
+                                    </div>
+                                    <div style={{ width: '20%', display: 'flex', justifyContent: 'flex-end', float: 'right' }}>
+                                        <Checkbox
+                                            defaultChecked
+                                            color="primary"
+                                            style={{ float: 'right' }}
+                                        />
+                                    </div>
+                                </div>
+                            </Card>
                             <Card elevation={3} style={{ flex: '1 0 35%', minWidth: '250px', margin: '10px 10px 0 10px', position: 'relative', overflow: 'visible', backgroundColor: 'rgb(220, 255, 220)' }}>
                                 <IconButton aria-label="indice" style={{ height: '5px', width: '5px', top: '-10px', left: '-10px', position: 'absolute' }}>
                                     <CancelIcon style={{ height: '17px', width: '17px', color: 'red' }} />
